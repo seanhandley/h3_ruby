@@ -286,4 +286,26 @@ RSpec.describe H3Ruby do
       expect(h3_base_cell).to eq(result)
     end
   end
+
+  describe ".origin_from_unidirectional_edge" do
+    let(:edge) { "11928308280fffff".to_i(16) }
+    subject(:origin_from_unidirectional_edge) { H3Ruby.origin_from_unidirectional_edge(edge) }
+
+    let(:result) { "8928308280fffff".to_i(16) }
+
+    it "returns the expected result" do
+      expect(origin_from_unidirectional_edge).to eq(result)
+    end
+  end
+
+  describe ".destination_from_unidirectional_edge" do
+    let(:edge) { "11928308280fffff".to_i(16) }
+    subject(:destination_from_unidirectional_edge) { H3Ruby.destination_from_unidirectional_edge(edge) }
+
+    let(:result) { "8928308283bffff".to_i(16) }
+
+    it "returns the expected result" do
+      expect(destination_from_unidirectional_edge).to eq(result)
+    end
+  end
 end
