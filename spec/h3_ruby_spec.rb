@@ -292,4 +292,31 @@ RSpec.describe H3Ruby do
 
     it { is_expected.to eq(result) }
   end
+
+  describe ".h3_indexes_neighbors?" do
+    let(:origin) { "8928308280fffff".to_i(16) }
+    let(:destination) { "8928308280bffff".to_i(16) }
+    let(:result) { true }
+
+    subject(:h3_indexes_neighbors?) { H3Ruby.h3_indexes_neighbors?(origin, destination) }
+
+    it { is_expected.to eq(result) }
+
+    context "when the indexes aren't neighbors" do
+      let(:destination) { "89283082993ffff".to_i(16) }
+      let(:result) { false }
+
+      it { is_expected.to eq(result) }
+    end
+  end
+
+  describe ".h3_unidirectional_edge" do
+    let(:origin) { "8928308280fffff".to_i(16) }
+    let(:destination) { "8928308280bffff".to_i(16) }
+    let(:result) { "16928308280fffff".to_i(16) }
+
+    subject(:h3_unidirectional_edge) { H3Ruby.h3_unidirectional_edge(origin, destination) }
+
+    it { is_expected.to eq(result) }
+  end
 end

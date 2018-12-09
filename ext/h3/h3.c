@@ -92,6 +92,15 @@ static VALUE h3_maxH3ToChildrenSize(VALUE mod, VALUE h, VALUE childRes) {
   return INT2NUM(maxH3ToChildrenSize(NUM2LONG(h), NUM2INT(childRes)));
 }
 
+static VALUE h3_h3IndexesAreNeighbors(VALUE mod, VALUE origin, VALUE destination) {
+  int neighbors = h3IndexesAreNeighbors(NUM2LONG(origin), NUM2LONG(destination));
+  return neighbors != 0 ? Qtrue : Qfalse; 
+}
+
+static VALUE h3_getH3UnidirectionalEdge(VALUE mod, VALUE origin, VALUE destination) {
+  return LONG2NUM(getH3UnidirectionalEdge(NUM2LONG(origin), NUM2LONG(destination)));
+}
+
 void H3_EXPORT(h3ToGeo)(H3Index h3, GeoCoord *g);
 
 /* --- Initialization -------------------------------------------------------------------------- */
@@ -121,6 +130,8 @@ void Init_h3()
     rb_define_singleton_method(h3_ruby, "h3_distance", h3_h3Distance, 2);
     rb_define_singleton_method(h3_ruby, "h3_to_parent", h3_h3ToParent, 2);
     rb_define_singleton_method(h3_ruby, "max_h3_to_children_size", h3_maxH3ToChildrenSize, 2);
+    rb_define_singleton_method(h3_ruby, "h3_indexes_neighbors?", h3_h3IndexesAreNeighbors, 2);
+    rb_define_singleton_method(h3_ruby, "h3_unidirectional_edge", h3_getH3UnidirectionalEdge, 2);    
 }
 
 // Private functions
