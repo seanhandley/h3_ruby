@@ -319,4 +319,31 @@ RSpec.describe H3Ruby do
 
     it { is_expected.to eq(result) }
   end
+
+  describe ".string_to_h3" do
+    let(:h3_index) { "8928308280fffff"}
+    let(:result) { h3_index.to_i(16) }
+
+    subject(:string_to_h3) { H3Ruby.string_to_h3(h3_index) }
+
+    it { is_expected.to eq(result) }
+  end
+
+  describe ".string_to_h3" do
+    let(:h3_index) { "8928308280fffff" }
+    let(:result) { h3_index.to_i(16) }
+
+    subject(:string_to_h3) { H3Ruby.string_to_h3(h3_index) }
+
+    it { is_expected.to eq(result) }
+  end
+
+  describe ".h3_to_string" do
+    let(:h3_index) { "8928308280fffff".to_i(16) }
+    let(:result) { h3_index.to_s(16) }
+
+    subject(:h3_to_string) { H3Ruby.h3_to_string(h3_index) }
+
+    it { is_expected.to eq(result) }
+  end
 end

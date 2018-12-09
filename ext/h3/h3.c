@@ -1,5 +1,6 @@
 #include <ruby.h>
 #include <h3/h3api.h>
+#include <stdio.h>
 
 static GeoCoord to_geocoord(VALUE coords);
 
@@ -101,6 +102,19 @@ static VALUE h3_getH3UnidirectionalEdge(VALUE mod, VALUE origin, VALUE destinati
   return LONG2NUM(getH3UnidirectionalEdge(NUM2LONG(origin), NUM2LONG(destination)));
 }
 
+static VALUE h3_stringToH3(VALUE mod, VALUE str) {
+  return LONG2NUM(stringToH3(StringValuePtr(str)));
+}
+
+static VALUE h3_h3ToString(VALUE mod, VALUE h) {
+  size_t sz = 32;
+  char *str = malloc(sz);
+  h3ToString(NUM2LONG(h), str, sz);
+  return rb_str_new_cstr(str);
+}
+
+// void h3ToString(uint64_t h, char *str, size_t sz);
+
 void H3_EXPORT(h3ToGeo)(H3Index h3, GeoCoord *g);
 
 /* --- Initialization -------------------------------------------------------------------------- */
@@ -108,52 +122,54 @@ void H3_EXPORT(h3ToGeo)(H3Index h3, GeoCoord *g);
 /* This function has a special name and it is invoked by Ruby to initialize the extension. */
 void Init_h3()
 {
-    VALUE h3_ruby = rb_define_module("H3Ruby");
-    rb_define_singleton_method(h3_ruby, "max_kring_size", h3_maxKringSize, 1);
-    rb_define_singleton_method(h3_ruby, "geo_to_h3", h3_geoToH3, 2);
-    rb_define_singleton_method(h3_ruby, "h3_to_geo", h3_h3ToGeo, 1);
-    rb_define_singleton_method(h3_ruby, "h3_valid?", h3_h3IsValid, 1);
-    rb_define_singleton_method(h3_ruby, "num_hexagons", h3_numHexagons, 1);
-    rb_define_singleton_method(h3_ruby, "degs_to_rads", h3_degsToRads, 1);
-    rb_define_singleton_method(h3_ruby, "rads_to_degs", h3_radsToDegs, 1);
-    rb_define_singleton_method(h3_ruby, "hex_area_km2", h3_hexAreaKm2, 1);
-    rb_define_singleton_method(h3_ruby, "hex_area_m2", h3_hexAreaM2, 1);
-    rb_define_singleton_method(h3_ruby, "edge_length_km", h3_edgeLengthKm, 1);
-    rb_define_singleton_method(h3_ruby, "edge_length_m", h3_edgeLengthM, 1);
-    rb_define_singleton_method(h3_ruby, "h3_res_class_3?", h3_h3IsResClassIII, 1);
-    rb_define_singleton_method(h3_ruby, "h3_pentagon?", h3_h3IsPentagon, 1);
-    rb_define_singleton_method(h3_ruby, "h3_unidirectional_edge_valid?", h3_h3UnidirectionalEdgeIsValid, 1);
-    rb_define_singleton_method(h3_ruby, "h3_resolution", h3_h3GetResolution, 1);
-    rb_define_singleton_method(h3_ruby, "h3_base_cell", h3_h3GetBaseCell, 1);
-    rb_define_singleton_method(h3_ruby, "origin_from_unidirectional_edge", h3_getOriginuint64_tFromUnidirectionalEdge, 1);
-    rb_define_singleton_method(h3_ruby, "destination_from_unidirectional_edge", h3_getDestinationuint64_tFromUnidirectionalEdge, 1);
-    rb_define_singleton_method(h3_ruby, "h3_distance", h3_h3Distance, 2);
-    rb_define_singleton_method(h3_ruby, "h3_to_parent", h3_h3ToParent, 2);
-    rb_define_singleton_method(h3_ruby, "max_h3_to_children_size", h3_maxH3ToChildrenSize, 2);
-    rb_define_singleton_method(h3_ruby, "h3_indexes_neighbors?", h3_h3IndexesAreNeighbors, 2);
-    rb_define_singleton_method(h3_ruby, "h3_unidirectional_edge", h3_getH3UnidirectionalEdge, 2);    
+  VALUE h3_ruby = rb_define_module("H3Ruby");
+  rb_define_singleton_method(h3_ruby, "max_kring_size", h3_maxKringSize, 1);
+  rb_define_singleton_method(h3_ruby, "geo_to_h3", h3_geoToH3, 2);
+  rb_define_singleton_method(h3_ruby, "h3_to_geo", h3_h3ToGeo, 1);
+  rb_define_singleton_method(h3_ruby, "h3_valid?", h3_h3IsValid, 1);
+  rb_define_singleton_method(h3_ruby, "num_hexagons", h3_numHexagons, 1);
+  rb_define_singleton_method(h3_ruby, "degs_to_rads", h3_degsToRads, 1);
+  rb_define_singleton_method(h3_ruby, "rads_to_degs", h3_radsToDegs, 1);
+  rb_define_singleton_method(h3_ruby, "hex_area_km2", h3_hexAreaKm2, 1);
+  rb_define_singleton_method(h3_ruby, "hex_area_m2", h3_hexAreaM2, 1);
+  rb_define_singleton_method(h3_ruby, "edge_length_km", h3_edgeLengthKm, 1);
+  rb_define_singleton_method(h3_ruby, "edge_length_m", h3_edgeLengthM, 1);
+  rb_define_singleton_method(h3_ruby, "h3_res_class_3?", h3_h3IsResClassIII, 1);
+  rb_define_singleton_method(h3_ruby, "h3_pentagon?", h3_h3IsPentagon, 1);
+  rb_define_singleton_method(h3_ruby, "h3_unidirectional_edge_valid?", h3_h3UnidirectionalEdgeIsValid, 1);
+  rb_define_singleton_method(h3_ruby, "h3_resolution", h3_h3GetResolution, 1);
+  rb_define_singleton_method(h3_ruby, "h3_base_cell", h3_h3GetBaseCell, 1);
+  rb_define_singleton_method(h3_ruby, "origin_from_unidirectional_edge", h3_getOriginuint64_tFromUnidirectionalEdge, 1);
+  rb_define_singleton_method(h3_ruby, "destination_from_unidirectional_edge", h3_getDestinationuint64_tFromUnidirectionalEdge, 1);
+  rb_define_singleton_method(h3_ruby, "h3_distance", h3_h3Distance, 2);
+  rb_define_singleton_method(h3_ruby, "h3_to_parent", h3_h3ToParent, 2);
+  rb_define_singleton_method(h3_ruby, "max_h3_to_children_size", h3_maxH3ToChildrenSize, 2);
+  rb_define_singleton_method(h3_ruby, "h3_indexes_neighbors?", h3_h3IndexesAreNeighbors, 2);
+  rb_define_singleton_method(h3_ruby, "h3_unidirectional_edge", h3_getH3UnidirectionalEdge, 2);
+  rb_define_singleton_method(h3_ruby, "string_to_h3", h3_stringToH3, 1);
+  rb_define_singleton_method(h3_ruby, "h3_to_string", h3_h3ToString, 1);
 }
 
 // Private functions
 
 static GeoCoord to_geocoord(VALUE coords)
 {
-    if (TYPE(coords) != T_ARRAY) {
-        ID method = rb_intern("to_coordinates");
-        if (rb_respond_to(coords, method)) {
-            coords = rb_funcall(coords, method, 0);
-            Check_Type(coords, T_ARRAY);
-        } else {
-            rb_raise(rb_eTypeError, "%+"PRIsVALUE" are not valid coordinates", coords);
-        }
+  if (TYPE(coords) != T_ARRAY) {
+    ID method = rb_intern("to_coordinates");
+    if (rb_respond_to(coords, method)) {
+      coords = rb_funcall(coords, method, 0);
+      Check_Type(coords, T_ARRAY);
+    } else {
+      rb_raise(rb_eTypeError, "%+"PRIsVALUE" are not valid coordinates", coords);
     }
+  }
 
-    if (RARRAY_LEN(coords) != 2) {
-        rb_raise(rb_eArgError, "%+"PRIsVALUE" should have exactly two coordinates", coords);
-    }
+  if (RARRAY_LEN(coords) != 2) {
+    rb_raise(rb_eArgError, "%+"PRIsVALUE" should have exactly two coordinates", coords);
+  }
 
-    return (GeoCoord) {
-        degsToRads(NUM2DBL(rb_ary_entry(coords, 0))),
-        degsToRads(NUM2DBL(rb_ary_entry(coords, 1)))
-    };
+  return (GeoCoord) {
+    degsToRads(NUM2DBL(rb_ary_entry(coords, 0))),
+    degsToRads(NUM2DBL(rb_ary_entry(coords, 1)))
+  };
 }
