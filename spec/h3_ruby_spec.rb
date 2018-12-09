@@ -1,6 +1,9 @@
 require "bigdecimal"
 
 RSpec.describe H3Ruby do
+  let(:valid_h3_index) { "8819429a9dfffff".to_i(16) }
+  let(:too_long_number) { 10_000_000_000_000_000_000_000 }
+
   describe ".max_kring_size" do
     subject(:max_kring_size) { H3Ruby.max_kring_size(k) }
 
@@ -18,6 +21,14 @@ RSpec.describe H3Ruby do
         expect { max_kring_size }.to raise_error(TypeError)
       end
     end
+
+    context "when given a k too large" do
+      let(:k) { too_long_number }
+
+      it "raises an error" do
+        expect { max_kring_size }.to raise_error(RangeError)
+      end
+    end  
   end
 
   describe ".geo_to_h3" do
@@ -25,7 +36,7 @@ RSpec.describe H3Ruby do
     let(:coords) { [53.959130, -1.079230]}
     subject(:geo_to_h3) { H3Ruby.geo_to_h3(coords, resolution) }
 
-    let(:result) { "8819429a9dfffff".to_i(16) }
+    let(:result) { valid_h3_index }
 
     it "returns the expected result" do
       expect(geo_to_h3).to eq(result)
@@ -46,10 +57,18 @@ RSpec.describe H3Ruby do
         expect { geo_to_h3 }.to raise_error(TypeError)
       end
     end
+
+    context "when given a resolution too large" do
+      let(:resolution) { too_long_number }
+
+      it "raises an error" do
+        expect { geo_to_h3 }.to raise_error(RangeError)
+      end
+    end    
   end
 
   describe ".h3_to_geo" do
-    let(:h3_index) { "8819429a9dfffff".to_i(16) }
+    let(:h3_index) { valid_h3_index }
     subject(:h3_to_geo) { H3Ruby.h3_to_geo(h3_index) }
 
     let(:result) { [53.95860421941974, -1.081195647095136] }
@@ -65,10 +84,18 @@ RSpec.describe H3Ruby do
         expect { h3_to_geo }.to raise_error(TypeError)
       end
     end
+
+    context "when given an index that's too large" do
+      let(:h3_index) { too_long_number }
+
+      it "raises an error" do
+        expect { h3_to_geo }.to raise_error(RangeError)
+      end
+    end
   end
 
   describe ".h3_valid?" do
-    let(:h3_index) { "8819429a9dfffff".to_i(16) }
+    let(:h3_index) { valid_h3_index }
     subject(:h3_valid?) { H3Ruby.h3_valid?(h3_index) }
 
     let(:result) { true }
@@ -96,6 +123,16 @@ RSpec.describe H3Ruby do
 
     it "returns the expected result" do
       expect(num_hexagons).to eq(result)
+    end
+
+    context "when given an invalid resolution" do
+      let(:resolution) { too_long_number }
+
+      let(:result) { false }
+
+      it "returns the expected result" do
+        expect { num_hexagons }.to raise_error(RangeError)
+      end
     end
   end
 end

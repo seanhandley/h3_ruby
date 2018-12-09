@@ -19,11 +19,13 @@ static VALUE h3_h3ToGeo(VALUE mod, VALUE h3index) {
 }
 
 static VALUE h3_h3IsValid(VALUE mod, VALUE h3index) {
-  return h3IsValid(NUM2LONG(h3index)) != 0 ? Qtrue : Qfalse;
+  uint64_t index = NUM2LONG(h3index);
+  return h3IsValid(index) != 0 ? Qtrue : Qfalse;
 }
 
 static VALUE h3_numHexagons(VALUE mod, VALUE res) {
-  return LONG2NUM(numHexagons(NUM2INT(res)));
+  int resolution = NUM2INT(res);
+  return LONG2NUM(numHexagons(resolution));
 }
 
 void H3_EXPORT(h3ToGeo)(H3Index h3, GeoCoord *g);
@@ -40,6 +42,8 @@ void Init_h3()
     rb_define_singleton_method(h3_ruby, "h3_valid?", h3_h3IsValid, 1);
     rb_define_singleton_method(h3_ruby, "num_hexagons", h3_numHexagons, 1);
 }
+
+// Private functions
 
 static GeoCoord to_geocoord(VALUE coords)
 {
