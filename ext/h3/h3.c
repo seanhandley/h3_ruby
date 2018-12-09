@@ -18,6 +18,10 @@ static VALUE h3_h3ToGeo(VALUE mod, VALUE h3index) {
   return rb_ary_new_from_args(2, DBL2NUM(radsToDegs(h3_coords.lat)), DBL2NUM(radsToDegs(h3_coords.lon)));
 }
 
+static VALUE h3_h3IsValid(VALUE mod, VALUE h3index) {
+  return h3IsValid(NUM2LONG(h3index)) != 0 ? Qtrue : Qfalse;
+}
+
 void H3_EXPORT(h3ToGeo)(H3Index h3, GeoCoord *g);
 
 /* --- Initialization -------------------------------------------------------------------------- */
@@ -29,6 +33,7 @@ void Init_h3()
     rb_define_singleton_method(h3_ruby, "max_kring_size", h3_maxKringSize, 1);
     rb_define_singleton_method(h3_ruby, "geo_to_h3", h3_geoToH3, 2);
     rb_define_singleton_method(h3_ruby, "h3_to_geo", h3_h3ToGeo, 1);
+    rb_define_singleton_method(h3_ruby, "h3_valid?", h3_h3IsValid, 1);
 }
 
 static GeoCoord to_geocoord(VALUE coords)

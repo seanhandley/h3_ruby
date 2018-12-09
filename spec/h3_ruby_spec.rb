@@ -66,4 +66,25 @@ RSpec.describe H3Ruby do
       end
     end
   end
+
+  describe ".h3_valid?" do
+    let(:h3_index) { "8819429a9dfffff".to_i(16) }
+    subject(:h3_valid?) { H3Ruby.h3_valid?(h3_index) }
+
+    let(:result) { true }
+
+    it "returns the expected result" do
+      expect(h3_valid?).to eq(result)
+    end
+
+    context "when given an invalid h3_index" do
+      let(:h3_index) { 1 }
+
+      let(:result) { false }
+
+      it "returns the expected result" do
+        expect(h3_valid?).to eq(result)
+      end
+    end
+  end
 end
