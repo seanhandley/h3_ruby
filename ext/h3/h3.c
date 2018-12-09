@@ -80,6 +80,10 @@ static VALUE h3_getDestinationuint64_tFromUnidirectionalEdge(VALUE mod, VALUE ed
   return LONG2NUM(getDestinationH3IndexFromUnidirectionalEdge(NUM2LONG(edge)));
 }
 
+static VALUE h3_h3Distance(VALUE mod, VALUE origin, VALUE destination) {
+  return INT2NUM(h3Distance(NUM2LONG(origin), NUM2LONG(destination)));
+}
+
 void H3_EXPORT(h3ToGeo)(H3Index h3, GeoCoord *g);
 
 /* --- Initialization -------------------------------------------------------------------------- */
@@ -106,6 +110,7 @@ void Init_h3()
     rb_define_singleton_method(h3_ruby, "h3_base_cell", h3_h3GetBaseCell, 1);
     rb_define_singleton_method(h3_ruby, "origin_from_unidirectional_edge", h3_getOriginuint64_tFromUnidirectionalEdge, 1);
     rb_define_singleton_method(h3_ruby, "destination_from_unidirectional_edge", h3_getDestinationuint64_tFromUnidirectionalEdge, 1);
+    rb_define_singleton_method(h3_ruby, "h3_distance", h3_h3Distance, 2);
 }
 
 // Private functions

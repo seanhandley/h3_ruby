@@ -308,4 +308,16 @@ RSpec.describe H3Ruby do
       expect(destination_from_unidirectional_edge).to eq(result)
     end
   end
+
+  describe ".h3_distance" do
+    let(:origin) { "89283082993ffff".to_i(16) }
+    let(:destination) { "89283082827ffff".to_i(16) }
+    let(:result) { 5 }
+
+    subject(:h3_distance) { H3Ruby.h3_distance(origin, destination) }
+
+    it "returns the expected result" do
+      expect(h3_distance).to eq(result)
+    end
+  end
 end
