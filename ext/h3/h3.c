@@ -1,8 +1,6 @@
 #include <ruby.h>
 #include <h3/h3api.h>
 
-#define TO_RADIANS(degrees) (degrees)*M_PI/180.0
-
 static GeoCoord to_geocoord(VALUE coords);
 
 static VALUE h3_maxKringSize(VALUE mod, VALUE k) {
@@ -14,6 +12,14 @@ static VALUE h3_geoToH3(VALUE mod, VALUE coords, VALUE res) {
   return LONG2NUM(geoToH3(&h3_coords, NUM2INT(res)));
 }
 
+static VALUE h3_h3ToGeo(VALUE mod, VALUE h3index) {
+  GeoCoord h3_coords = { .lat = 0, .lon = 0 };
+  h3ToGeo(NUM2LONG(h3index), &h3_coords);
+  return rb_ary_new_from_args(2, DBL2NUM(radsToDegs(h3_coords.lat)), DBL2NUM(radsToDegs(h3_coords.lon)));
+}
+
+void H3_EXPORT(h3ToGeo)(H3Index h3, GeoCoord *g);
+
 /* --- Initialization -------------------------------------------------------------------------- */
 
 /* This function has a special name and it is invoked by Ruby to initialize the extension. */
@@ -22,6 +28,7 @@ void Init_h3()
     VALUE h3_ruby = rb_define_module("H3Ruby");
     rb_define_singleton_method(h3_ruby, "max_kring_size", h3_maxKringSize, 1);
     rb_define_singleton_method(h3_ruby, "geo_to_h3", h3_geoToH3, 2);
+    rb_define_singleton_method(h3_ruby, "h3_to_geo", h3_h3ToGeo, 1);
 }
 
 static GeoCoord to_geocoord(VALUE coords)
@@ -41,7 +48,7 @@ static GeoCoord to_geocoord(VALUE coords)
     }
 
     return (GeoCoord) {
-        TO_RADIANS(NUM2DBL(rb_ary_entry(coords, 0))),
-        TO_RADIANS(NUM2DBL(rb_ary_entry(coords, 1)))
+        degsToRads(NUM2DBL(rb_ary_entry(coords, 0))),
+        degsToRads(NUM2DBL(rb_ary_entry(coords, 1)))
     };
 }

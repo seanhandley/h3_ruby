@@ -47,4 +47,23 @@ RSpec.describe H3Ruby do
       end
     end
   end
+
+  describe ".h3_to_geo" do
+    let(:h3_index) { "8819429a9dfffff".to_i(16) }
+    subject(:h3_to_geo) { H3Ruby.h3_to_geo(h3_index) }
+
+    let(:result) { [53.95860421941974, -1.081195647095136] }
+
+    it "returns the expected result" do
+      expect(h3_to_geo).to eq(result)
+    end
+
+    context "when given an invalid h3_index" do
+      let(:h3_index) { "boom" }
+
+      it "raises an error" do
+        expect { h3_to_geo }.to raise_error(TypeError)
+      end
+    end
+  end
 end
