@@ -201,4 +201,89 @@ RSpec.describe H3Ruby do
       expect(edge_length_m).to eq(result)
     end
   end
+
+  describe ".h3_res_class_3?" do
+    let(:h3_index) { "8928308280fffff".to_i(16) }
+    subject(:h3_res_class_3) { H3Ruby.h3_res_class_3?(h3_index) }
+
+    let(:result) { true }
+
+    it "returns the expected result" do
+      expect(h3_res_class_3).to eq(result)
+    end
+
+    context "when the h3 index is not class III" do
+      let(:h3_index) { "8828308280fffff".to_i(16) }
+
+      let(:result) { false }
+
+      it "returns the expected result" do
+        expect(h3_res_class_3).to eq(result)
+      end   
+    end
+  end
+
+  describe ".h3_pentagon?" do
+    let(:h3_index) { "821c07fffffffff".to_i(16) }
+    subject(:h3_pentagon?) { H3Ruby.h3_pentagon?(h3_index) }
+
+    let(:result) { true }
+
+    it "returns the expected result" do
+      expect(h3_pentagon?).to eq(result)
+    end
+
+    context "when the h3 index is not a pentagon" do
+      let(:h3_index) { "8928308280fffff".to_i(16) }
+
+      let(:result) { false }
+
+      it "returns the expected result" do
+        expect(h3_pentagon?).to eq(result)
+      end   
+    end
+  end
+
+  describe ".h3_unidirectional_edge_valid?" do
+    let(:edge) { "11928308280fffff".to_i(16) }
+    subject(:h3_unidirectional_edge_valid?) { H3Ruby.h3_unidirectional_edge_valid?(edge) }
+
+    let(:result) { true }
+
+    it "returns the expected result" do
+      expect(h3_unidirectional_edge_valid?).to eq(result)
+    end
+
+    context "when the h3 index is not a valid unidirectional edge" do
+      let(:edge) { "8928308280fffff".to_i(16) }
+
+      let(:result) { false }
+
+      it "returns the expected result" do
+        expect(h3_unidirectional_edge_valid?).to eq(result)
+      end   
+    end
+  end
+
+  describe ".h3_resolution" do
+    let(:h3_index) { valid_h3_index }
+    subject(:h3_resolution) { H3Ruby.h3_resolution(h3_index) }
+
+    let(:result) { 8 }
+
+    it "returns the expected result" do
+      expect(h3_resolution).to eq(result)
+    end
+  end
+
+  describe ".h3_base_cell" do
+    let(:h3_index) { valid_h3_index }
+    subject(:h3_base_cell) { H3Ruby.h3_base_cell(h3_index) }
+
+    let(:result) { 12 }
+
+    it "returns the expected result" do
+      expect(h3_base_cell).to eq(result)
+    end
+  end
 end

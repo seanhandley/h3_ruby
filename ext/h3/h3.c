@@ -52,6 +52,26 @@ static VALUE h3_edgeLengthM(VALUE mod, VALUE res) {
   return DBL2NUM(edgeLengthM(NUM2INT(res)));
 }
 
+static VALUE h3_h3IsResClassIII(VALUE mod, VALUE h) {
+  return h3IsResClassIII(NUM2LONG(h)) != 0 ? Qtrue : Qfalse;
+}
+
+static VALUE h3_h3IsPentagon(VALUE mod, VALUE h) {
+  return h3IsPentagon(NUM2LONG(h)) != 0 ? Qtrue : Qfalse;
+}
+
+static VALUE h3_h3UnidirectionalEdgeIsValid(VALUE mod, VALUE edge) {
+  return h3UnidirectionalEdgeIsValid(NUM2LONG(edge)) != 0 ? Qtrue : Qfalse;
+}
+
+static VALUE h3_h3GetResolution(VALUE mod, VALUE h) {
+  return INT2NUM(h3GetResolution(NUM2LONG(h)));
+}
+
+static VALUE h3_h3GetBaseCell(VALUE mod, VALUE h) {
+  return INT2NUM(h3GetBaseCell(NUM2LONG(h)));
+}
+
 void H3_EXPORT(h3ToGeo)(H3Index h3, GeoCoord *g);
 
 /* --- Initialization -------------------------------------------------------------------------- */
@@ -71,6 +91,11 @@ void Init_h3()
     rb_define_singleton_method(h3_ruby, "hex_area_m2", h3_hexAreaM2, 1);
     rb_define_singleton_method(h3_ruby, "edge_length_km", h3_edgeLengthKm, 1);
     rb_define_singleton_method(h3_ruby, "edge_length_m", h3_edgeLengthM, 1);
+    rb_define_singleton_method(h3_ruby, "h3_res_class_3?", h3_h3IsResClassIII, 1);
+    rb_define_singleton_method(h3_ruby, "h3_pentagon?", h3_h3IsPentagon, 1);
+    rb_define_singleton_method(h3_ruby, "h3_unidirectional_edge_valid?", h3_h3UnidirectionalEdgeIsValid, 1);
+    rb_define_singleton_method(h3_ruby, "h3_resolution", h3_h3GetResolution, 1);
+    rb_define_singleton_method(h3_ruby, "h3_base_cell", h3_h3GetBaseCell, 1);
 }
 
 // Private functions
