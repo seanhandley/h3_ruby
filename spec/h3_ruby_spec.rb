@@ -135,4 +135,70 @@ RSpec.describe H3Ruby do
       end
     end
   end
+
+  describe ".degs_to_rads" do
+    let(:degs) { 100 }
+    subject(:degs_to_rads) { H3Ruby.degs_to_rads(degs) }
+
+    let(:result) { 1.7453292519943295 }
+
+    it "returns the expected result" do
+      expect(degs_to_rads).to eq(result)
+    end
+  end
+
+  describe ".rads_to_degs" do
+    let(:rads) { 1.7453292519943295 }
+    subject(:rads_to_degs) { H3Ruby.rads_to_degs(rads) }
+
+    let(:result) { 100 }
+
+    it "returns the expected result" do
+      expect(rads_to_degs).to eq(result)
+    end
+  end
+
+  describe ".hex_area_km2" do
+    let(:resolution) { 2 }
+    subject(:hex_area_km2) { H3Ruby.hex_area_km2(resolution) }
+
+    let(:result) { 86745.85403 }
+
+    it "returns the expected result" do
+      expect(hex_area_km2).to eq(result)
+    end
+  end
+
+  describe ".hex_area_m2" do
+    let(:resolution) { 2 }
+    subject(:hex_area_m2) { H3Ruby.hex_area_m2(resolution) }
+
+    let(:result) { 86745854035.0 }
+
+    it "returns the expected result" do
+      expect(hex_area_m2).to eq(result)
+    end
+  end
+
+  describe ".edge_length_km" do
+    let(:resolution) { 2 }
+    subject(:edge_length_km) { H3Ruby.edge_length_km(resolution) }
+
+    let(:result) { 158.2446558 }
+
+    it "returns the expected result" do
+      expect(edge_length_km).to eq(result)
+    end
+  end
+      
+  describe ".edge_length_m" do
+    let(:resolution) { 2 }
+    subject(:edge_length_m) { H3Ruby.edge_length_m(resolution) }
+
+    let(:result) { 158244.6558 }
+
+    it "returns the expected result" do
+      expect(edge_length_m).to eq(result)
+    end
+  end
 end

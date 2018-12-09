@@ -28,6 +28,30 @@ static VALUE h3_numHexagons(VALUE mod, VALUE res) {
   return LONG2NUM(numHexagons(resolution));
 }
 
+static VALUE h3_degsToRads(VALUE mod, VALUE degrees) {
+  return DBL2NUM(degsToRads(NUM2DBL(degrees)));
+}
+
+static VALUE h3_radsToDegs(VALUE mod, VALUE rads) {
+  return DBL2NUM(radsToDegs(NUM2DBL(rads)));
+}
+
+static VALUE h3_hexAreaKm2(VALUE mod, VALUE res) {
+  return DBL2NUM(hexAreaKm2(NUM2INT(res)));
+}
+
+static VALUE h3_hexAreaM2(VALUE mod, VALUE res) {
+  return DBL2NUM(hexAreaM2(NUM2INT(res)));
+}
+
+static VALUE h3_edgeLengthKm(VALUE mod, VALUE res) {
+  return DBL2NUM(edgeLengthKm(NUM2INT(res)));
+}
+
+static VALUE h3_edgeLengthM(VALUE mod, VALUE res) {
+  return DBL2NUM(edgeLengthM(NUM2INT(res)));
+}
+
 void H3_EXPORT(h3ToGeo)(H3Index h3, GeoCoord *g);
 
 /* --- Initialization -------------------------------------------------------------------------- */
@@ -41,6 +65,12 @@ void Init_h3()
     rb_define_singleton_method(h3_ruby, "h3_to_geo", h3_h3ToGeo, 1);
     rb_define_singleton_method(h3_ruby, "h3_valid?", h3_h3IsValid, 1);
     rb_define_singleton_method(h3_ruby, "num_hexagons", h3_numHexagons, 1);
+    rb_define_singleton_method(h3_ruby, "degs_to_rads", h3_degsToRads, 1);
+    rb_define_singleton_method(h3_ruby, "rads_to_degs", h3_radsToDegs, 1);
+    rb_define_singleton_method(h3_ruby, "hex_area_km2", h3_hexAreaKm2, 1);
+    rb_define_singleton_method(h3_ruby, "hex_area_m2", h3_hexAreaM2, 1);
+    rb_define_singleton_method(h3_ruby, "edge_length_km", h3_edgeLengthKm, 1);
+    rb_define_singleton_method(h3_ruby, "edge_length_m", h3_edgeLengthM, 1);
 }
 
 // Private functions
