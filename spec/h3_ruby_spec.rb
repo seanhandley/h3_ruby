@@ -87,4 +87,15 @@ RSpec.describe H3Ruby do
       end
     end
   end
+
+  describe ".num_hexagons" do
+    let(:resolution) { 2 }
+    subject(:num_hexagons) { H3Ruby.num_hexagons(resolution) }
+
+    let(:result) { 5882 }
+
+    it "returns the expected result" do
+      expect(num_hexagons).to eq(result)
+    end
+  end
 end
