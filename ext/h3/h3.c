@@ -84,6 +84,14 @@ static VALUE h3_h3Distance(VALUE mod, VALUE origin, VALUE destination) {
   return INT2NUM(h3Distance(NUM2LONG(origin), NUM2LONG(destination)));
 }
 
+static VALUE h3_h3ToParent(VALUE mod, VALUE h, VALUE parentRes) {
+  return INT2NUM(h3ToParent(NUM2LONG(h), NUM2INT(parentRes)));
+}
+
+static VALUE h3_maxH3ToChildrenSize(VALUE mod, VALUE h, VALUE childRes) {
+  return INT2NUM(maxH3ToChildrenSize(NUM2LONG(h), NUM2INT(childRes)));
+}
+
 void H3_EXPORT(h3ToGeo)(H3Index h3, GeoCoord *g);
 
 /* --- Initialization -------------------------------------------------------------------------- */
@@ -111,6 +119,8 @@ void Init_h3()
     rb_define_singleton_method(h3_ruby, "origin_from_unidirectional_edge", h3_getOriginuint64_tFromUnidirectionalEdge, 1);
     rb_define_singleton_method(h3_ruby, "destination_from_unidirectional_edge", h3_getDestinationuint64_tFromUnidirectionalEdge, 1);
     rb_define_singleton_method(h3_ruby, "h3_distance", h3_h3Distance, 2);
+    rb_define_singleton_method(h3_ruby, "h3_to_parent", h3_h3ToParent, 2);
+    rb_define_singleton_method(h3_ruby, "max_h3_to_children_size", h3_maxH3ToChildrenSize, 2);
 }
 
 // Private functions

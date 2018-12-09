@@ -272,4 +272,24 @@ RSpec.describe H3Ruby do
 
     it { is_expected.to eq(result) }
   end
+
+  describe ".h3_to_parent" do
+    let(:h3_index) { "89283082993ffff".to_i(16) }
+    let(:parent_resolution) { 8 }
+    let(:result) { 698351615 }
+
+    subject(:h3_to_parent) { H3Ruby.h3_to_parent(h3_index, parent_resolution) }
+
+    it { is_expected.to eq(result) }
+  end
+
+  describe ".max_h3_to_children_size" do
+    let(:h3_index) { "89283082993ffff".to_i(16) }
+    let(:child_resolution) { 10 }
+    let(:result) { 7 }
+
+    subject(:max_h3_to_children_size) { H3Ruby.max_h3_to_children_size(h3_index, child_resolution) }
+
+    it { is_expected.to eq(result) }
+  end
 end
