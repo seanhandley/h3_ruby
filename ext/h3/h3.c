@@ -110,7 +110,9 @@ static VALUE h3_h3ToString(VALUE mod, VALUE h) {
   size_t sz = 32;
   char *str = malloc(sz);
   h3ToString(NUM2LONG(h), str, sz);
-  return rb_str_new_cstr(str);
+  VALUE rb_str = rb_str_new_cstr(str);
+  free(str);
+  return rb_str;
 }
 
 void H3_EXPORT(h3ToGeo)(H3Index h3, GeoCoord *g);
