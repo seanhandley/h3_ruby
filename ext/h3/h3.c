@@ -2,6 +2,8 @@
 #include <h3/h3api.h>
 #include <stdio.h>
 
+#define H3_TO_STR_BUF_SIZE 32
+
 static GeoCoord to_geocoord(VALUE coords);
 
 static VALUE h3_maxKringSize(VALUE mod, VALUE k) {
@@ -107,8 +109,8 @@ static VALUE h3_stringToH3(VALUE mod, VALUE str) {
 }
 
 static VALUE h3_h3ToString(VALUE mod, VALUE h) {
-  size_t sz = 32;
-  char str[32];
+  size_t sz = H3_TO_STR_BUF_SIZE;
+  char str[H3_TO_STR_BUF_SIZE];
   h3ToString(NUM2LONG(h), str, sz);
   return rb_str_new_cstr(str);
 }
