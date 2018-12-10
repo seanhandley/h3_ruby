@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.licenses = ["Nonstandard"] # Avoids a warning when building the gem.
   spec.summary  = "C Bindings for Uber's H3 library"
   spec.homepage = "https://github.com/StuartApp/h3_ruby"
-  spec.author   = "Lachlan Laycock"
+  spec.authors  = ["Lachlan Laycock", "Sean Handley"]
   spec.email    = "l.laycock@stuart.com"
 
   spec.extensions = %w(ext/h3/extconf.rb)
