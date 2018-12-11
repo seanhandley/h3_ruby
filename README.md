@@ -6,8 +6,17 @@ TODO: Add more wrapper functions.
 
 ## Getting Started
 
-* Follow the h3 instructions for installing the C lib at https://github.com/uber/h3. You will need to build from source.
-* Run `rake compile`.
+You need to install the C lib at https://github.com/uber/h3.
+
+Install the build dependencies as instructed here: https://github.com/uber/h3#install-build-time-dependencies
+
+Do *not* follow the Compilation Steps. Instead, use the following:
+
+    git clone git@github.com:uber/h3.git
+    cd h3
+    cmake . -DBUILD_SHARED_LIBS=true
+    make h3
+    sudo make install
 
 ## Installing
 
