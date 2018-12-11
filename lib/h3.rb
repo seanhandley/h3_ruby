@@ -19,6 +19,8 @@ module H3
   attach_function :edge_length_km, :edgeLengthKm, [ :int ], :double
   attach_function :edge_length_m, :edgeLengthM, [ :int ], :double
   attach_function :geoToH3, [ Structs::GeoCoord.by_ref, :int ], H3_INDEX
+  attach_function :getH3IndexesFromUnidirectionalEdge, [ H3_INDEX, :pointer ], :void
+  attach_function :getH3UnidirectionalEdgesFromHexagon, [ H3_INDEX, :pointer ], :void
   attach_function :h3_base_cell, :h3GetBaseCell, [ H3_INDEX ], :int
   attach_function :h3_distance, :h3Distance, [ H3_INDEX, H3_INDEX], :int
   attach_function :h3_indexes_neighbors, :h3IndexesAreNeighbors, [ H3_INDEX, H3_INDEX ], :bool
@@ -107,5 +109,19 @@ module H3
     hexagons = FFI::MemoryPointer.new(:ulong_long, max_hexagons)
     hexRing(h3_index, k, hexagons)
     hexagons.read_array_of_ulong_long(max_hexagons).reject { |i| i == 0 }
+  end
+
+  def self.origin_h3_indexes_from_unidirectional_edge(edge)
+    max_hexagons = 2
+    origin_destination = FFI::MemoryPointer.new(:ulong_long, max_hexagons)
+    getH3IndexesFromUnidirectionalEdge(edge, origin_destination)
+    origin_destination.read_array_of_ulong_long(max_hexagons).reject { |i| i == 0 }
+  end
+
+  def self.h3_unidirectional_edges_from_hexagon(origin)
+    max_edges = 6
+    edges = FFI::MemoryPointer.new(:ulong_long, max_edges)
+    getH3UnidirectionalEdgesFromHexagon(origin, edges)
+    edges.read_array_of_ulong_long(max_edges).reject { |i| i == 0 }
   end
 end
