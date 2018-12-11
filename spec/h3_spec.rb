@@ -468,4 +468,86 @@ RSpec.describe H3 do
       end
     end
   end
+
+  describe ".k_ring" do
+    let(:h3_index) { "8928308280fffff".to_i(16) }
+
+    subject(:k_ring) { H3.k_ring(h3_index, k) }
+
+    context "when k range is 1" do
+      let(:k) { 1 }
+      let(:count) { 7 }
+      let(:expected) do
+        %w(8928308280fffff 8928308280bffff 89283082873ffff 89283082877ffff
+           8928308283bffff 89283082807ffff 89283082803ffff).map { |i| i.to_i(16) }
+      end
+
+      it "has 7 hexagons" do
+        expect(k_ring.count).to eq count
+      end
+
+      it "has the expected hexagons" do
+        expect(k_ring).to eq expected
+      end
+    end
+
+    context "when k range is 2" do
+      let(:k) { 2 }
+      let(:count) { 19 }
+
+      it "has 19 hexagons" do
+        expect(k_ring.count).to eq count
+      end
+    end
+
+    context "when k range is 10" do
+      let(:k) { 10 }
+      let(:count) { 331 }
+
+      it "has 331 hexagons" do
+        expect(k_ring.count).to eq count
+      end
+    end
+  end
+
+  describe ".hex_ring" do
+    let(:h3_index) { "8928308280fffff".to_i(16) }
+
+    subject(:hex_ring) { H3.hex_ring(h3_index, k) }
+
+    context "when k range is 1" do
+      let(:k) { 1 }
+      let(:count) { 6 }
+      let(:expected) do
+        %w(89283082803ffff 8928308280bffff 89283082873ffff 89283082877ffff
+           8928308283bffff 89283082807ffff).map { |i| i.to_i(16) }
+      end
+
+      it "has 6 hexagons" do
+        expect(hex_ring.count).to eq count
+      end
+
+      it "has the expected hexagons" do
+        expect(hex_ring).to eq expected
+      end
+    end
+
+    context "when k range is 2" do
+      let(:k) { 2 }
+      let(:count) { 12 }
+
+      it "has 12 hexagons" do
+        expect(hex_ring.count).to eq count
+      end
+    end
+
+    context "when k range is 10" do
+      let(:k) { 10 }
+      let(:count) { 60 }
+
+      it "has 60 hexagons" do
+        expect(hex_ring.count).to eq count
+      end
+    end
+  end
 end

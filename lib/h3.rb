@@ -39,8 +39,10 @@ module H3
                   [ H3_INDEX ],
                   :bool
   attach_function :hexRange, [ H3_INDEX, :int, :pointer ], :int
+  attach_function :hexRing, [H3_INDEX, :int, :pointer], :void
   attach_function :hex_area_km2, :hexAreaKm2, [ :int ], :double
   attach_function :hex_area_m2, :hexAreaM2, [ :int ], :double
+  attach_function :kRing, [H3_INDEX, :int, :pointer], :void
   attach_function :max_h3_to_children_size, :maxH3ToChildrenSize, [ H3_INDEX, :int ], :int
   attach_function :max_kring_size, :maxKringSize, [ :int ], :int
   attach_function :num_hexagons, :numHexagons, [ :int ], H3_INDEX
@@ -90,6 +92,20 @@ module H3
     max_hexagons = max_kring_size(k)
     hexagons = FFI::MemoryPointer.new(:ulong_long, max_hexagons)
     hexRange(h3_index, k, hexagons)
+    hexagons.read_array_of_ulong_long(max_hexagons).reject { |i| i == 0 }
+  end
+
+  def self.k_ring(h3_index, k)
+    max_hexagons = max_kring_size(k)
+    hexagons = FFI::MemoryPointer.new(:ulong_long, max_hexagons)
+    kRing(h3_index, k, hexagons)
+    hexagons.read_array_of_ulong_long(max_hexagons).reject { |i| i == 0 }
+  end
+
+  def self.hex_ring(h3_index, k)
+    max_hexagons = max_kring_size(k)
+    hexagons = FFI::MemoryPointer.new(:ulong_long, max_hexagons)
+    hexRing(h3_index, k, hexagons)
     hexagons.read_array_of_ulong_long(max_hexagons).reject { |i| i == 0 }
   end
 end
