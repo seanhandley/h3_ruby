@@ -1,6 +1,3 @@
 #!/bin/bash
 
-if bin/compile;
-then
-    bundle exec rspec "$@"
-fi
+bundle exec rspec "$@"

@@ -1,11 +1,14 @@
-require "h3/h3"
-require "h3/version"
+require "h3/structs"
+
 require 'ffi'
 
 module H3
   extend FFI::Library
   ffi_lib ["libh3", "libh3.1"]
   H3_INDEX = :ulong_long
+  H3_TO_STR_BUF_SIZE = 32
+  H3_STR = FFI::MemoryPointer.new(:char, H3_TO_STR_BUF_SIZE)
+
   PREDICATES = %i(h3_indexes_neighbors h3_pentagon h3_res_class_3
                   h3_unidirectional_edge_valid h3_valid).freeze
 
@@ -16,13 +19,16 @@ module H3
                   H3_INDEX
   attach_function :edge_length_km, :edgeLengthKm, [ :int ], :double
   attach_function :edge_length_m, :edgeLengthM, [ :int ], :double
+  attach_function :geoToH3, [ Structs::GeoCoord.by_ref, :int ], H3_INDEX
   attach_function :h3_base_cell, :h3GetBaseCell, [ H3_INDEX ], :int
   attach_function :h3_distance, :h3Distance, [ H3_INDEX, H3_INDEX], :int
   attach_function :h3_indexes_neighbors, :h3IndexesAreNeighbors, [ H3_INDEX, H3_INDEX ], :bool
   attach_function :h3_pentagon, :h3IsPentagon, [ H3_INDEX ], :bool
   attach_function :h3_res_class_3, :h3IsResClassIII, [ H3_INDEX ], :bool
   attach_function :h3_resolution, :h3GetResolution, [ H3_INDEX ], :int
+  attach_function :h3ToGeo, [ H3_INDEX, :pointer ], :void
   attach_function :h3_to_parent, :h3ToParent, [ H3_INDEX, :int ], :int
+  attach_function :h3ToString, [ H3_INDEX, :pointer, :int], :void
   attach_function :h3_unidirectional_edge,
                   :getH3UnidirectionalEdge,
                   [ H3_INDEX, H3_INDEX ],
@@ -46,5 +52,28 @@ module H3
 
   PREDICATES.each do |predicate|
     singleton_class.send(:alias_method, "#{predicate}?".to_sym, predicate)
+  end
+
+  def self.geo_to_h3(coords, resolution)
+    raise TypeError unless coords.is_a?(Array)
+    raise ArgumentError unless coords.count == 2
+    raise RangeError if coords.any? { |d| d > 1000000 }
+
+    lat, lon = coords
+    coords = Structs::GeoCoord.new
+    coords[:lat] = degs_to_rads(lat)
+    coords[:lon] = degs_to_rads(lon)
+    geoToH3(coords, resolution)
+  end
+
+  def self.h3_to_geo(h3_index)
+    coords = Structs::GeoCoord.new
+    h3ToGeo(h3_index, coords.pointer)
+    [rads_to_degs(coords[:lat]), rads_to_degs(coords[:lon])]
+  end
+
+  def self.h3_to_string(h3_index)
+    h3ToString(h3_index, H3_STR, H3_TO_STR_BUF_SIZE)
+    H3_STR.read_string 
   end
 end

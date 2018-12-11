@@ -3,9 +3,6 @@ GEM
   specs:
     diff-lcs (1.3)
     ffi (1.9.25)
-    rake (12.3.2)
-    rake-compiler (1.0.5)
-      rake
     rspec (3.8.0)
       rspec-core (~> 3.8.0)
       rspec-expectations (~> 3.8.0)
@@ -25,7 +22,6 @@ PLATFORMS
 
 DEPENDENCIES
   ffi (~> 1.9.6)
-  rake-compiler (~> 1.0.5)
   rspec (~> 3.8.0)
 
 RUBY VERSION

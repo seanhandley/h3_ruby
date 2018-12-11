@@ -1,5 +1,0 @@
-#!/bin/bash
-
-# With --silent, compilation is silent when there is nothing to do, otherwise
-# you'll see stuff happening, and of course errors if there are any.
-bundle exec rake compile --silent
