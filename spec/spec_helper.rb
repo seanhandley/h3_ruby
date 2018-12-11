@@ -1,4 +1,4 @@
-require "h3_ruby"
+require "h3"
 
 require_relative "support/models"
 require_relative "support/matchers"

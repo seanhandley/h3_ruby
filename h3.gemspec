@@ -2,7 +2,7 @@ $: << File.expand_path("lib", __dir__)
 require "h3_ruby/version"
 
 Gem::Specification.new do |spec|
-  spec.name     = "h3-ruby"
+  spec.name     = "h3"
   spec.version  = H3Ruby::VERSION
   spec.licenses = ["Nonstandard"] # Avoids a warning when building the gem.
   spec.summary  = "C Bindings for Uber's H3 library"

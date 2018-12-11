@@ -122,7 +122,7 @@ void H3_EXPORT(h3ToGeo)(H3Index h3, GeoCoord *g);
 /* This function has a special name and it is invoked by Ruby to initialize the extension. */
 void Init_h3()
 {
-  VALUE h3_ruby = rb_define_module("H3Ruby");
+  VALUE h3_ruby = rb_define_module("H3");
   rb_define_singleton_method(h3_ruby, "max_kring_size", h3_maxKringSize, 1);
   rb_define_singleton_method(h3_ruby, "geo_to_h3", h3_geoToH3, 2);
   rb_define_singleton_method(h3_ruby, "h3_to_geo", h3_h3ToGeo, 1);
