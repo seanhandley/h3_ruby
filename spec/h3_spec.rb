@@ -346,4 +346,126 @@ RSpec.describe H3 do
 
     it { is_expected.to eq(result) }
   end
+
+  describe ".max_h3_to_children_size" do
+    let(:h3_index) { "8928308280fffff".to_i(16) }
+
+    subject(:h3_to_children) { H3.max_h3_to_children_size(h3_index, child_resolution) }
+
+    context "when resolution is 3" do
+      let(:child_resolution) { 3 }
+      let(:count) { 0 }
+
+      it { is_expected.to eq(count) }
+    end
+
+    context "when resolution is 9" do
+      let(:child_resolution) { 9 }
+      let(:count) { 1 }
+
+      it { is_expected.to eq(count) }
+    end
+
+    context "when resolution is 10" do
+      let(:child_resolution) { 10 }
+      let(:count) { 7 }
+
+      it { is_expected.to eq(count) }
+    end
+
+    context "when resolution is 15" do
+      let(:child_resolution) { 15 }
+      let(:count) { 117649 }
+
+      it { is_expected.to eq(count) }
+    end
+  end
+
+  describe ".h3_to_children" do
+    let(:h3_index) { "8928308280fffff".to_i(16) }
+
+    subject(:h3_to_children) { H3.h3_to_children(h3_index, child_resolution) }
+
+    context "when resolution is 3" do
+      let(:child_resolution) { 3 }
+      let(:count) { 0 }
+
+      it "has 0 children" do
+        expect(h3_to_children.count).to eq count
+      end
+    end
+
+    context "when resolution is 9" do
+      let(:child_resolution) { 9 }
+      let(:count) { 1 }
+      let(:expected) { "8928308280fffff".to_i(16) }
+
+      it "has 1 child" do
+        expect(h3_to_children.count).to eq count
+      end
+
+      it "is the expected value" do
+        expect(h3_to_children.first).to eq expected
+      end
+    end
+
+    context "when resolution is 10" do
+      let(:child_resolution) { 10 }
+      let(:count) { 7 }
+
+      it "has 7 children" do
+        expect(h3_to_children.count).to eq count
+      end
+    end
+
+    context "when resolution is 15" do
+      let(:child_resolution) { 15 }
+      let(:count) { 117649 }
+
+      it "has 117649 children" do
+        expect(h3_to_children.count).to eq count
+      end
+    end
+  end
+
+  describe ".hex_range" do
+    let(:h3_index) { "8928308280fffff".to_i(16) }
+
+    subject(:hex_range) { H3.hex_range(h3_index, k) }
+
+    context "when k range is 1" do
+      let(:k) { 1 }
+      let(:count) { 7 }
+      let(:expected) do
+        %w(8928308280fffff 8928308280bffff 89283082873ffff 89283082877ffff
+           8928308283bffff 89283082807ffff 89283082803ffff).map { |i| i.to_i(16) }
+      end
+
+      it "has 7 hexagons" do
+        expect(hex_range.count).to eq count
+      end
+
+      it "has the expected hexagons" do
+        expect(hex_range).to eq expected
+      end
+    end
+
+    context "when k range is 2" do
+      let(:k) { 2 }
+      let(:count) { 19 }
+
+      it "has 19 hexagons" do
+        expect(hex_range.count).to eq count
+      end
+    end
+
+    context "when k range is 10" do
+      let(:k) { 10 }
+      let(:count) { 331 }
+
+      it "has 331 hexagons" do
+        expect(hex_range.count).to eq count
+      end
+    end
+  end
 end
