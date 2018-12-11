@@ -1,6 +1,6 @@
 require "bigdecimal"
 
-RSpec.describe H3Ruby do
+RSpec.describe H3 do
   let(:valid_h3_index) { "8819429a9dfffff".to_i(16) }
   let(:too_long_number) { 10_000_000_000_000_000_000_000 }
 
@@ -8,7 +8,7 @@ RSpec.describe H3Ruby do
     let(:k) { 2 }
     let(:result) { 19 }
 
-    subject(:max_kring_size) { H3Ruby.max_kring_size(k) }
+    subject(:max_kring_size) { H3.max_kring_size(k) }
 
     it { is_expected.to eq(result) }
 
@@ -34,7 +34,7 @@ RSpec.describe H3Ruby do
     let(:coords) { [53.959130, -1.079230]}
     let(:result) { valid_h3_index }
 
-    subject(:geo_to_h3) { H3Ruby.geo_to_h3(coords, resolution) }
+    subject(:geo_to_h3) { H3.geo_to_h3(coords, resolution) }
 
     it { is_expected.to eq(result) }
 
@@ -67,7 +67,7 @@ RSpec.describe H3Ruby do
     let(:h3_index) { valid_h3_index }
     let(:result) { [53.95860421941974, -1.081195647095136] }
 
-    subject(:h3_to_geo) { H3Ruby.h3_to_geo(h3_index) }
+    subject(:h3_to_geo) { H3.h3_to_geo(h3_index) }
 
     it { is_expected.to eq(result) }
 
@@ -92,7 +92,7 @@ RSpec.describe H3Ruby do
     let(:h3_index) { valid_h3_index }
     let(:result) { true }
 
-    subject(:h3_valid?) { H3Ruby.h3_valid?(h3_index) }
+    subject(:h3_valid?) { H3.h3_valid?(h3_index) }
 
     it { is_expected.to eq(result) }
 
@@ -111,7 +111,7 @@ RSpec.describe H3Ruby do
     let(:resolution) { 2 }
     let(:result) { 5882 }
 
-    subject(:num_hexagons) { H3Ruby.num_hexagons(resolution) }
+    subject(:num_hexagons) { H3.num_hexagons(resolution) }
 
     it { is_expected.to eq(result) }
 
@@ -129,7 +129,7 @@ RSpec.describe H3Ruby do
     let(:degs) { 100 }
     let(:result) { 1.7453292519943295 }
 
-    subject(:degs_to_rads) { H3Ruby.degs_to_rads(degs) }
+    subject(:degs_to_rads) { H3.degs_to_rads(degs) }
 
     it { is_expected.to eq(result) }
   end
@@ -138,7 +138,7 @@ RSpec.describe H3Ruby do
     let(:rads) { 1.7453292519943295 }
     let(:result) { 100 }
 
-    subject(:rads_to_degs) { H3Ruby.rads_to_degs(rads) }
+    subject(:rads_to_degs) { H3.rads_to_degs(rads) }
 
     it { is_expected.to eq(result) }
   end
@@ -147,7 +147,7 @@ RSpec.describe H3Ruby do
     let(:resolution) { 2 }
     let(:result) { 86745.85403 }
 
-    subject(:hex_area_km2) { H3Ruby.hex_area_km2(resolution) }
+    subject(:hex_area_km2) { H3.hex_area_km2(resolution) }
 
     it { is_expected.to eq(result) }
   end
@@ -156,7 +156,7 @@ RSpec.describe H3Ruby do
     let(:resolution) { 2 }
     let(:result) { 86745854035.0 }
 
-    subject(:hex_area_m2) { H3Ruby.hex_area_m2(resolution) }
+    subject(:hex_area_m2) { H3.hex_area_m2(resolution) }
 
     it { is_expected.to eq(result) }
   end
@@ -165,7 +165,7 @@ RSpec.describe H3Ruby do
     let(:resolution) { 2 }
     let(:result) { 158.2446558 }
 
-    subject(:edge_length_km) { H3Ruby.edge_length_km(resolution) }
+    subject(:edge_length_km) { H3.edge_length_km(resolution) }
 
     it { is_expected.to eq(result) }
   end
@@ -174,7 +174,7 @@ RSpec.describe H3Ruby do
     let(:resolution) { 2 }
     let(:result) { 158244.6558 }
 
-    subject(:edge_length_m) { H3Ruby.edge_length_m(resolution) }
+    subject(:edge_length_m) { H3.edge_length_m(resolution) }
 
     it { is_expected.to eq(result) }
   end
@@ -183,7 +183,7 @@ RSpec.describe H3Ruby do
     let(:h3_index) { "8928308280fffff".to_i(16) }
     let(:result) { true }
 
-    subject(:h3_res_class_3) { H3Ruby.h3_res_class_3?(h3_index) }
+    subject(:h3_res_class_3) { H3.h3_res_class_3?(h3_index) }
 
     it { is_expected.to eq(result) }
 
@@ -199,7 +199,7 @@ RSpec.describe H3Ruby do
     let(:h3_index) { "821c07fffffffff".to_i(16) }
     let(:result) { true }
 
-    subject(:h3_pentagon?) { H3Ruby.h3_pentagon?(h3_index) }
+    subject(:h3_pentagon?) { H3.h3_pentagon?(h3_index) }
 
     it { is_expected.to eq(result) }
 
@@ -215,7 +215,7 @@ RSpec.describe H3Ruby do
     let(:edge) { "11928308280fffff".to_i(16) }
     let(:result) { true }
 
-    subject(:h3_unidirectional_edge_valid?) { H3Ruby.h3_unidirectional_edge_valid?(edge) }
+    subject(:h3_unidirectional_edge_valid?) { H3.h3_unidirectional_edge_valid?(edge) }
 
     it { is_expected.to eq(result) }
 
@@ -231,7 +231,7 @@ RSpec.describe H3Ruby do
     let(:h3_index) { valid_h3_index }
     let(:result) { 8 }
 
-    subject(:h3_resolution) { H3Ruby.h3_resolution(h3_index) }
+    subject(:h3_resolution) { H3.h3_resolution(h3_index) }
 
     it { is_expected.to eq(result) }
   end
@@ -240,7 +240,7 @@ RSpec.describe H3Ruby do
     let(:h3_index) { valid_h3_index }
     let(:result) { 12 }
 
-    subject(:h3_base_cell) { H3Ruby.h3_base_cell(h3_index) }
+    subject(:h3_base_cell) { H3.h3_base_cell(h3_index) }
 
     it { is_expected.to eq(result) }
   end
@@ -249,7 +249,7 @@ RSpec.describe H3Ruby do
     let(:edge) { "11928308280fffff".to_i(16) }
     let(:result) { "8928308280fffff".to_i(16) }
 
-    subject(:origin_from_unidirectional_edge) { H3Ruby.origin_from_unidirectional_edge(edge) }
+    subject(:origin_from_unidirectional_edge) { H3.origin_from_unidirectional_edge(edge) }
 
     it { is_expected.to eq(result) }
   end
@@ -258,7 +258,7 @@ RSpec.describe H3Ruby do
     let(:edge) { "11928308280fffff".to_i(16) }
     let(:result) { "8928308283bffff".to_i(16) }
 
-    subject(:destination_from_unidirectional_edge) { H3Ruby.destination_from_unidirectional_edge(edge) }
+    subject(:destination_from_unidirectional_edge) { H3.destination_from_unidirectional_edge(edge) }
 
     it { is_expected.to eq(result) }
   end
@@ -268,7 +268,7 @@ RSpec.describe H3Ruby do
     let(:destination) { "89283082827ffff".to_i(16) }
     let(:result) { 5 }
 
-    subject(:h3_distance) { H3Ruby.h3_distance(origin, destination) }
+    subject(:h3_distance) { H3.h3_distance(origin, destination) }
 
     it { is_expected.to eq(result) }
   end
@@ -278,7 +278,7 @@ RSpec.describe H3Ruby do
     let(:parent_resolution) { 8 }
     let(:result) { 698351615 }
 
-    subject(:h3_to_parent) { H3Ruby.h3_to_parent(h3_index, parent_resolution) }
+    subject(:h3_to_parent) { H3.h3_to_parent(h3_index, parent_resolution) }
 
     it { is_expected.to eq(result) }
   end
@@ -288,7 +288,7 @@ RSpec.describe H3Ruby do
     let(:child_resolution) { 10 }
     let(:result) { 7 }
 
-    subject(:max_h3_to_children_size) { H3Ruby.max_h3_to_children_size(h3_index, child_resolution) }
+    subject(:max_h3_to_children_size) { H3.max_h3_to_children_size(h3_index, child_resolution) }
 
     it { is_expected.to eq(result) }
   end
@@ -298,7 +298,7 @@ RSpec.describe H3Ruby do
     let(:destination) { "8928308280bffff".to_i(16) }
     let(:result) { true }
 
-    subject(:h3_indexes_neighbors?) { H3Ruby.h3_indexes_neighbors?(origin, destination) }
+    subject(:h3_indexes_neighbors?) { H3.h3_indexes_neighbors?(origin, destination) }
 
     it { is_expected.to eq(result) }
 
@@ -315,7 +315,7 @@ RSpec.describe H3Ruby do
     let(:destination) { "8928308280bffff".to_i(16) }
     let(:result) { "16928308280fffff".to_i(16) }
 
-    subject(:h3_unidirectional_edge) { H3Ruby.h3_unidirectional_edge(origin, destination) }
+    subject(:h3_unidirectional_edge) { H3.h3_unidirectional_edge(origin, destination) }
 
     it { is_expected.to eq(result) }
   end
@@ -324,7 +324,7 @@ RSpec.describe H3Ruby do
     let(:h3_index) { "8928308280fffff"}
     let(:result) { h3_index.to_i(16) }
 
-    subject(:string_to_h3) { H3Ruby.string_to_h3(h3_index) }
+    subject(:string_to_h3) { H3.string_to_h3(h3_index) }
 
     it { is_expected.to eq(result) }
   end
@@ -333,7 +333,7 @@ RSpec.describe H3Ruby do
     let(:h3_index) { "8928308280fffff" }
     let(:result) { h3_index.to_i(16) }
 
-    subject(:string_to_h3) { H3Ruby.string_to_h3(h3_index) }
+    subject(:string_to_h3) { H3.string_to_h3(h3_index) }
 
     it { is_expected.to eq(result) }
   end
@@ -342,7 +342,7 @@ RSpec.describe H3Ruby do
     let(:h3_index) { "8928308280fffff".to_i(16) }
     let(:result) { h3_index.to_s(16) }
 
-    subject(:h3_to_string) { H3Ruby.h3_to_string(h3_index) }
+    subject(:h3_to_string) { H3.h3_to_string(h3_index) }
 
     it { is_expected.to eq(result) }
   end
