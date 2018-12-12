@@ -111,7 +111,7 @@ module H3
     hexagons.read_array_of_ulong_long(max_hexagons).reject { |i| i == 0 }
   end
 
-  def self.origin_h3_indexes_from_unidirectional_edge(edge)
+  def self.origin_and_destination_from_unidirectional_edge(edge)
     max_hexagons = 2
     origin_destination = FFI::MemoryPointer.new(:ulong_long, max_hexagons)
     getH3IndexesFromUnidirectionalEdge(edge, origin_destination)

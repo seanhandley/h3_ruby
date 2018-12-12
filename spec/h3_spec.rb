@@ -551,34 +551,42 @@ RSpec.describe H3 do
     end
   end
 
-  describe ".origin_h3_indexes_from_unidirectional_edge" do
+  describe ".origin_and_destination_from_unidirectional_edge" do
     let(:h3_index) { "11928308280fffff".to_i(16) }
     let(:expected_indexes) do
       %w(8928308280fffff 8928308283bffff).map { |i| i.to_i(16) }
     end
 
-    subject(:origin_h3_indexes_from_unidirectional_edge) do
-      H3.origin_h3_indexes_from_unidirectional_edge(h3_index)
+    subject(:origin_and_destination_from_unidirectional_edge) do
+      H3.origin_and_destination_from_unidirectional_edge(h3_index)
     end
 
     it "has two expected h3 indexes" do
-      expect(origin_h3_indexes_from_unidirectional_edge).to eq(expected_indexes)
+      expect(origin_and_destination_from_unidirectional_edge).to eq(expected_indexes)
     end
   end
 
   describe ".h3_unidirectional_edges_from_hexagon" do
-    let(:h3_index) { "11928308280fffff".to_i(16) }
-    let(:expected_edges) do
-      %w(11928308280fffff 12928308280fffff 13928308280fffff 14928308280fffffn
-         15928308280fffff 16928308280fffff).map { |i| i.to_i(16) }
-    end
-
     subject(:h3_unidirectional_edges_from_hexagon) do
       H3.h3_unidirectional_edges_from_hexagon(h3_index)
     end
 
-    it "has two expected h3 indexes" do
-      expect(h3_unidirectional_edges_from_hexagon).to eq(expected_edges)
+    context "when index is a hexagon" do
+      let(:h3_index) { "8928308280fffff".to_i(16) }
+      let(:count) { 6 }
+
+      it "has six expected edges" do
+        expect(h3_unidirectional_edges_from_hexagon.count).to eq(count)
+      end
+    end
+
+    context "when index is a pentagon" do
+      let(:h3_index) { "821c07fffffffff".to_i(16) }
+      let(:count) { 5 }
+
+      it "has five expected edges" do
+        expect(h3_unidirectional_edges_from_hexagon.count).to eq(count)
+      end
     end
   end
 
