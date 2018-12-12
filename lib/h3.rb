@@ -7,7 +7,6 @@ module H3
   ffi_lib ["libh3", "libh3.1"]
   H3_INDEX = :ulong_long
   H3_TO_STR_BUF_SIZE = 32
-  H3_STR = FFI::MemoryPointer.new(:char, H3_TO_STR_BUF_SIZE)
 
   PREDICATES = %i(h3_indexes_neighbors h3_pentagon h3_res_class_3
                   h3_unidirectional_edge_valid h3_valid).freeze
@@ -73,7 +72,8 @@ module H3
   end
 
   def self.h3_to_string(h3_index)
-    h3ToString(h3_index, H3_STR, H3_TO_STR_BUF_SIZE)
-    H3_STR.read_string 
+    h3_str = FFI::MemoryPointer.new(:char, H3_TO_STR_BUF_SIZE)
+    h3ToString(h3_index, h3_str, H3_TO_STR_BUF_SIZE)
+    h3_str.read_string 
   end
 end
