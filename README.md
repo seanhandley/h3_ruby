@@ -1,6 +1,6 @@
 # H3 Ruby
 
-[![Build Status](https://travis-ci.org/seanhandley/h3_ruby.svg?branch=master)](https://travis-ci.org/seanhandley/h3_ruby)
+[![Build Status](https://travis-ci.org/StuartApp/h3_ruby.svg?branch=master)](https://travis-ci.org/seanhandley/h3_ruby)
 
 Ruby bindings for Uber's [H3 library](https://uber.github.io/h3/).
 
