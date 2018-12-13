@@ -65,11 +65,18 @@ RSpec.describe H3 do
 
   describe ".h3_to_geo" do
     let(:h3_index) { valid_h3_index }
-    let(:result) { [53.95860421941974, -1.081195647095136] }
+    let(:expected_lat) { 53.95860421941 }
+    let(:expected_lon) { -1.08119564709 }
 
     subject(:h3_to_geo) { H3.h3_to_geo(h3_index) }
 
-    it { is_expected.to eq(result) }
+    it "should return the expected latitude" do
+      expect(h3_to_geo[0]).to be_within(0.000001).of(expected_lat)
+    end
+
+    it "should return the expected longitude" do
+      expect(h3_to_geo[1]).to be_within(0.000001).of(expected_lon)
+    end
 
     context "when given an invalid h3_index" do
       let(:h3_index) { "boom" }

@@ -1,0 +1,19 @@
+install:
+  - git clone https://github.com/uber/h3.git h3_build
+  - pushd h3_build
+  - cmake . -DBUILD_SHARED_LIBS=true
+  - make
+  - sudo make install
+  - popd
+  - bundle install
+language: ruby
+cache: bundler
+rvm:
+  - 2.4
+addons:
+  apt:
+    packages:
+    - cmake
+    - make
+    - gcc
+    - libtool
