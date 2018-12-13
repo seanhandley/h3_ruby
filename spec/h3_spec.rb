@@ -597,4 +597,21 @@ RSpec.describe H3 do
     end
   end
 
+  describe ".h3_to_geo_boundary" do
+    let(:h3_index) { "85283473fffffff".to_i(16) }
+    let(:expected) do
+      [
+        [37.2713558667319, -121.91508032705622],
+        [37.353926450852256, -121.8622232890249],
+        [37.42834118609435, -121.92354999630156],
+        [37.42012867767779, -122.03773496427027],
+        [37.33755608435299, -122.090428929044],
+        [37.26319797461824, -122.02910130918998]
+      ]
+    end
+
+    subject(:h3_to_geo_boundary) { H3.h3_to_geo_boundary(h3_index) }
+
+    it { is_expected.to eq expected }
+  end
 end

@@ -32,6 +32,7 @@ module H3
   attach_function :h3ToGeo, [ H3_INDEX, Structs::GeoCoord.by_ref ], :void
   attach_function :h3_to_parent, :h3ToParent, [ H3_INDEX, :int ], :int
   attach_function :h3ToString, [ H3_INDEX, :pointer, :int], :void
+  attach_function :h3ToGeoBoundary, [H3_INDEX, Structs::GeoBoundary.by_ref ], :void
   attach_function :h3_unidirectional_edge,
                   :getH3UnidirectionalEdge,
                   [ H3_INDEX, H3_INDEX ],
@@ -123,5 +124,11 @@ module H3
     edges = FFI::MemoryPointer.new(:ulong_long, max_edges)
     getH3UnidirectionalEdgesFromHexagon(origin, edges)
     edges.read_array_of_ulong_long(max_edges).reject { |i| i == 0 }
+  end
+
+  def self.h3_to_geo_boundary(h3_index)
+    geo_boundary = Structs::GeoBoundary.new
+    h3ToGeoBoundary(h3_index, geo_boundary)
+    geo_boundary[:verts].take(geo_boundary[:num_verts] * 2).map { |d| rads_to_degs(d)}.each_slice(2).to_a
   end
 end

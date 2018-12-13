@@ -8,5 +8,10 @@ module H3
       layout :lat, :double,
              :lon, :double
     end
+
+    class GeoBoundary < FFI::Struct
+      layout :num_verts, :int,
+             :verts, [:double, 20]
+    end
   end
 end
