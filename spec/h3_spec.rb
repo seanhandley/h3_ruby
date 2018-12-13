@@ -346,4 +346,248 @@ RSpec.describe H3 do
 
     it { is_expected.to eq(result) }
   end
+
+  describe ".max_h3_to_children_size" do
+    let(:h3_index) { "8928308280fffff".to_i(16) }
+
+    subject(:h3_to_children) { H3.max_h3_to_children_size(h3_index, child_resolution) }
+
+    context "when resolution is 3" do
+      let(:child_resolution) { 3 }
+      let(:count) { 0 }
+
+      it { is_expected.to eq(count) }
+    end
+
+    context "when resolution is 9" do
+      let(:child_resolution) { 9 }
+      let(:count) { 1 }
+
+      it { is_expected.to eq(count) }
+    end
+
+    context "when resolution is 10" do
+      let(:child_resolution) { 10 }
+      let(:count) { 7 }
+
+      it { is_expected.to eq(count) }
+    end
+
+    context "when resolution is 15" do
+      let(:child_resolution) { 15 }
+      let(:count) { 117649 }
+
+      it { is_expected.to eq(count) }
+    end
+  end
+
+  describe ".h3_to_children" do
+    let(:h3_index) { "8928308280fffff".to_i(16) }
+
+    subject(:h3_to_children) { H3.h3_to_children(h3_index, child_resolution) }
+
+    context "when resolution is 3" do
+      let(:child_resolution) { 3 }
+      let(:count) { 0 }
+
+      it "has 0 children" do
+        expect(h3_to_children.count).to eq count
+      end
+    end
+
+    context "when resolution is 9" do
+      let(:child_resolution) { 9 }
+      let(:count) { 1 }
+      let(:expected) { "8928308280fffff".to_i(16) }
+
+      it "has 1 child" do
+        expect(h3_to_children.count).to eq count
+      end
+
+      it "is the expected value" do
+        expect(h3_to_children.first).to eq expected
+      end
+    end
+
+    context "when resolution is 10" do
+      let(:child_resolution) { 10 }
+      let(:count) { 7 }
+
+      it "has 7 children" do
+        expect(h3_to_children.count).to eq count
+      end
+    end
+
+    context "when resolution is 15" do
+      let(:child_resolution) { 15 }
+      let(:count) { 117649 }
+
+      it "has 117649 children" do
+        expect(h3_to_children.count).to eq count
+      end
+    end
+  end
+
+  describe ".hex_range" do
+    let(:h3_index) { "8928308280fffff".to_i(16) }
+
+    subject(:hex_range) { H3.hex_range(h3_index, k) }
+
+    context "when k range is 1" do
+      let(:k) { 1 }
+      let(:count) { 7 }
+      let(:expected) do
+        %w(8928308280fffff 8928308280bffff 89283082873ffff 89283082877ffff
+           8928308283bffff 89283082807ffff 89283082803ffff).map { |i| i.to_i(16) }
+      end
+
+      it "has 7 hexagons" do
+        expect(hex_range.count).to eq count
+      end
+
+      it "has the expected hexagons" do
+        expect(hex_range).to eq expected
+      end
+    end
+
+    context "when k range is 2" do
+      let(:k) { 2 }
+      let(:count) { 19 }
+
+      it "has 19 hexagons" do
+        expect(hex_range.count).to eq count
+      end
+    end
+
+    context "when k range is 10" do
+      let(:k) { 10 }
+      let(:count) { 331 }
+
+      it "has 331 hexagons" do
+        expect(hex_range.count).to eq count
+      end
+    end
+  end
+
+  describe ".k_ring" do
+    let(:h3_index) { "8928308280fffff".to_i(16) }
+
+    subject(:k_ring) { H3.k_ring(h3_index, k) }
+
+    context "when k range is 1" do
+      let(:k) { 1 }
+      let(:count) { 7 }
+      let(:expected) do
+        %w(8928308280fffff 8928308280bffff 89283082873ffff 89283082877ffff
+           8928308283bffff 89283082807ffff 89283082803ffff).map { |i| i.to_i(16) }
+      end
+
+      it "has 7 hexagons" do
+        expect(k_ring.count).to eq count
+      end
+
+      it "has the expected hexagons" do
+        expect(k_ring).to eq expected
+      end
+    end
+
+    context "when k range is 2" do
+      let(:k) { 2 }
+      let(:count) { 19 }
+
+      it "has 19 hexagons" do
+        expect(k_ring.count).to eq count
+      end
+    end
+
+    context "when k range is 10" do
+      let(:k) { 10 }
+      let(:count) { 331 }
+
+      it "has 331 hexagons" do
+        expect(k_ring.count).to eq count
+      end
+    end
+  end
+
+  describe ".hex_ring" do
+    let(:h3_index) { "8928308280fffff".to_i(16) }
+
+    subject(:hex_ring) { H3.hex_ring(h3_index, k) }
+
+    context "when k range is 1" do
+      let(:k) { 1 }
+      let(:count) { 6 }
+      let(:expected) do
+        %w(89283082803ffff 8928308280bffff 89283082873ffff 89283082877ffff
+           8928308283bffff 89283082807ffff).map { |i| i.to_i(16) }
+      end
+
+      it "has 6 hexagons" do
+        expect(hex_ring.count).to eq count
+      end
+
+      it "has the expected hexagons" do
+        expect(hex_ring).to eq expected
+      end
+    end
+
+    context "when k range is 2" do
+      let(:k) { 2 }
+      let(:count) { 12 }
+
+      it "has 12 hexagons" do
+        expect(hex_ring.count).to eq count
+      end
+    end
+
+    context "when k range is 10" do
+      let(:k) { 10 }
+      let(:count) { 60 }
+
+      it "has 60 hexagons" do
+        expect(hex_ring.count).to eq count
+      end
+    end
+  end
+
+  describe ".origin_and_destination_from_unidirectional_edge" do
+    let(:h3_index) { "11928308280fffff".to_i(16) }
+    let(:expected_indexes) do
+      %w(8928308280fffff 8928308283bffff).map { |i| i.to_i(16) }
+    end
+
+    subject(:origin_and_destination_from_unidirectional_edge) do
+      H3.origin_and_destination_from_unidirectional_edge(h3_index)
+    end
+
+    it "has two expected h3 indexes" do
+      expect(origin_and_destination_from_unidirectional_edge).to eq(expected_indexes)
+    end
+  end
+
+  describe ".h3_unidirectional_edges_from_hexagon" do
+    subject(:h3_unidirectional_edges_from_hexagon) do
+      H3.h3_unidirectional_edges_from_hexagon(h3_index)
+    end
+
+    context "when index is a hexagon" do
+      let(:h3_index) { "8928308280fffff".to_i(16) }
+      let(:count) { 6 }
+
+      it "has six expected edges" do
+        expect(h3_unidirectional_edges_from_hexagon.count).to eq(count)
+      end
+    end
+
+    context "when index is a pentagon" do
+      let(:h3_index) { "821c07fffffffff".to_i(16) }
+      let(:count) { 5 }
+
+      it "has five expected edges" do
+        expect(h3_unidirectional_edges_from_hexagon.count).to eq(count)
+      end
+    end
+  end
+
 end
