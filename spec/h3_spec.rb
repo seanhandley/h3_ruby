@@ -694,4 +694,43 @@ RSpec.describe H3 do
       end
     end
   end
+
+  describe ".hex_range_distances" do
+    let(:h3_index) { "85283473fffffff".to_i(16) }
+    let(:k) { 1 }
+    let(:outer_ring) do
+      [
+        "85283447fffffff", "8528347bfffffff", "85283463fffffff",
+        "85283477fffffff", "8528340ffffffff", "8528340bfffffff"
+      ].map { |i| i.to_i(16) }
+    end
+
+    subject(:hex_range_distances) { H3.hex_range_distances(h3_index, k) }
+
+    it "has two ring sets" do
+      expect(hex_range_distances.count).to eq 2
+    end
+
+    it "has an inner ring containing hexagons of distance 0" do
+      expect(hex_range_distances[0]).to eq [h3_index]
+    end
+
+    it "has an outer ring containing hexagons of distance 1" do
+      expect(hex_range_distances[1].count).to eq 6
+    end
+
+    it "has an outer ring containing all expected indexes" do
+      hex_range_distances[1].each do |index|
+        expect(outer_ring).to include(index)
+      end
+    end
+
+    context "when there is pentagonal distortion" do
+      let(:h3_index) { "821c07fffffffff".to_i(16) }
+
+      it "raises an error" do
+        expect { hex_range_distances }.to raise_error(ArgumentError)
+      end
+    end
+  end
 end

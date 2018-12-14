@@ -41,6 +41,7 @@ module H3
                   [ H3_INDEX ],
                   :bool
   attach_function :hexRange, [ H3_INDEX, :int, :pointer ], :bool
+  attach_function :hexRangeDistances, [H3_INDEX, :int, :pointer, :pointer], :bool
   attach_function :hexRanges, [ :pointer, :int, :int, :pointer ], :bool
   attach_function :hexRing, [H3_INDEX, :int, :pointer], :void
   attach_function :hex_area_km2, :hexAreaKm2, [ :int ], :double
@@ -158,5 +159,22 @@ module H3
       out[h3_index] = out[h3_index].sort_by(&:count)
     end
     out
+  end
+
+  def self.hex_range_distances(h3_index, k)
+    max_out_size = max_kring_size(k)
+    out = FFI::MemoryPointer.new(H3_INDEX, max_out_size)
+    distances = FFI::MemoryPointer.new(:int, max_out_size)
+    pentagonal_distortion = hexRangeDistances(h3_index, k, out, distances)
+    raise(ArgumentError, "Specified hexagon range contains a pentagon") if pentagonal_distortion
+
+    hexagons = out.read_array_of_ulong_long(max_out_size)
+    distances = distances.read_array_of_int(max_out_size)
+
+    Hash[
+      distances.zip(hexagons).group_by { |distance, _hexagon| distance }.map do |k, v|
+        [k, v.map { |_distance, hexagon| hexagon }]
+      end
+    ]
   end
 end
