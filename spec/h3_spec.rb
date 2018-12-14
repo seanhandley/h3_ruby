@@ -774,4 +774,20 @@ RSpec.describe H3 do
 
     it { is_expected.to eq result }
   end
+
+  describe ".h3_unidirectional_edge_boundary" do
+    let(:edge) { "11928308280fffff".to_i(16) }
+    let(:expected) do
+      [[37.77820687262237, -122.41971895414808], [37.77652420699321, -122.42079024541876]]
+    end
+
+    subject(:h3_unidirectional_edge_boundary) { H3.h3_unidirectional_edge_boundary(edge) }
+
+    it "matches expected coordinates" do
+      h3_unidirectional_edge_boundary.zip(expected) do |(lat, lon), (exp_lat, exp_lon)|
+        expect(lat).to be_within(0.000001).of(exp_lat)
+        expect(lon).to be_within(0.000001).of(exp_lon)
+      end
+    end
+  end
 end

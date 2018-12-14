@@ -40,6 +40,7 @@ module H3
                   :h3UnidirectionalEdgeIsValid,
                   [ H3_INDEX ],
                   :bool
+  attach_function :getH3UnidirectionalEdgeBoundary, [H3_INDEX, :pointer], :void  
   attach_function :hexRange, [ H3_INDEX, :int, :pointer ], :bool
   attach_function :hexRangeDistances, [H3_INDEX, :int, :pointer, :pointer], :bool
   attach_function :hexRanges, [ :pointer, :int, :int, :pointer ], :bool
@@ -201,5 +202,13 @@ module H3
       hexagons_ptr.write_array_of_ulong_long(hexagons)
       return maxUncompactSize(hexagons_ptr, hexagons.size, resolution)
     end
+  end
+
+  def self.h3_unidirectional_edge_boundary(edge)
+    geo_boundary = Structs::GeoBoundary.new
+    getH3UnidirectionalEdgeBoundary(edge, geo_boundary)
+    geo_boundary[:verts].take(geo_boundary[:num_verts] * 2).map do |d|
+      rads_to_degs(d)
+    end.each_slice(2).to_a
   end
 end
