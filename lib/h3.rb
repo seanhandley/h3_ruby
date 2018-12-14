@@ -1,6 +1,5 @@
 require "h3/structs"
-
-require 'ffi'
+require "ffi"
 
 module H3
   extend FFI::Library
@@ -42,6 +41,7 @@ module H3
                   [ H3_INDEX ],
                   :bool
   attach_function :hexRange, [ H3_INDEX, :int, :pointer ], :int
+  attach_function :hexRanges, [ :pointer, :int, :int, :pointer ], :bool
   attach_function :hexRing, [H3_INDEX, :int, :pointer], :void
   attach_function :hex_area_km2, :hexAreaKm2, [ :int ], :double
   attach_function :hex_area_m2, :hexAreaM2, [ :int ], :double
@@ -129,6 +129,33 @@ module H3
   def self.h3_to_geo_boundary(h3_index)
     geo_boundary = Structs::GeoBoundary.new
     h3ToGeoBoundary(h3_index, geo_boundary)
-    geo_boundary[:verts].take(geo_boundary[:num_verts] * 2).map { |d| rads_to_degs(d)}.each_slice(2).to_a
+    geo_boundary[:verts].take(geo_boundary[:num_verts] * 2).map do |d|
+      rads_to_degs(d)
+    end.each_slice(2).to_a
+  end
+
+  def self.hex_ranges(h3_set, k)
+    h3_set.uniq!
+    max_out_size = h3_set.size * max_kring_size(k)
+    out = FFI::MemoryPointer.new(H3_INDEX, max_out_size)
+    pentagonal_distortion = false
+    FFI::MemoryPointer.new(H3_INDEX, h3_set.size) do |h3_set_ptr|
+      h3_set_ptr.write_array_of_ulong_long(h3_set)
+      pentagonal_distortion = hexRanges(h3_set_ptr, h3_set.size, k, out)
+    end
+    raise(ArgumentError, "One of the specified hexagon ranges contains a pentagon") if pentagonal_distortion
+
+    h3_range_indexes = out.read_array_of_ulong_long(max_out_size)
+    out = h3_set.inject({}) { |acc, i| acc[i] = []; acc }
+    h3_set.each_with_index do |h3_index, i|
+      (k+1).times { out[h3_index] << [] }
+      0.upto(h3_set.count * max_kring_size(k) / h3_set.count).map do |j|
+        ring_index = ((1 + Math.sqrt(1 + 8 * (j / 6.0).ceil)) / 2).floor - 1
+        out[h3_index][ring_index] << h3_range_indexes[(i * h3_set.count + j)]
+        out[h3_index][ring_index].compact!
+      end
+      out[h3_index] = out[h3_index].sort_by(&:count)
+    end
+    out
   end
 end

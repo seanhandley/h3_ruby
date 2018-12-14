@@ -1,5 +1,3 @@
-require "bigdecimal"
-
 RSpec.describe H3 do
   let(:valid_h3_index) { "8819429a9dfffff".to_i(16) }
   let(:too_long_number) { 10_000_000_000_000_000_000_000 }
@@ -593,6 +591,94 @@ RSpec.describe H3 do
 
       it "has five expected edges" do
         expect(h3_unidirectional_edges_from_hexagon.count).to eq(count)
+      end
+    end
+  end
+
+  # def test_hex_ranges(self):
+  #     hex_ranges = h3.hex_ranges(['8928308280fffff'], 1)
+
+  #     self.assertEqual(1, len(list(hex_ranges.keys())))
+
+  #     hexagons = hex_ranges['8928308280fffff']
+
+  #     self.assertEqual(2, len(hexagons))
+  #     self.assertEqual(1, len(hexagons[0]))
+  #     self.assertEqual(6, len(hexagons[1]))
+
+  #     self.assertTrue('8928308280fffff' in hexagons[0])
+  #     self.assertTrue('8928308280bffff' in hexagons[1])
+  #     self.assertTrue('89283082807ffff' in hexagons[1])
+  #     self.assertTrue('89283082877ffff' in hexagons[1])
+  #     self.assertTrue('89283082803ffff' in hexagons[1])
+  #     self.assertTrue('89283082873ffff' in hexagons[1])
+  #     self.assertTrue('8928308283bffff' in hexagons[1])
+
+
+ describe ".hex_ranges" do
+    let(:h3_index) { "8928308280fffff".to_i(16) }
+    let(:h3_set) { [h3_index] }
+    let(:k) { 1 }
+    let(:outer_ring) do
+      [
+        "8928308280bffff", "89283082807ffff", "89283082877ffff",
+        "89283082803ffff", "89283082873ffff", "8928308283bffff"
+      ].map { |i| i.to_i(16) }
+    end
+
+    subject(:hex_ranges) { H3.hex_ranges(h3_set, k) }
+
+    it "contains a single k/v pair" do
+      expect(hex_ranges.count).to eq 1
+    end
+
+    it "has one key, the h3_index" do
+      expect(hex_ranges.keys.first).to eq h3_index
+    end
+
+    it "has two ring sets" do
+      expect(hex_ranges[h3_index].count).to eq 2
+    end
+
+    it "has an inner ring containing only the original index" do
+      expect(hex_ranges[h3_index].first).to eq [h3_index]
+    end
+
+    it "has an outer ring containing six indexes" do
+      expect(hex_ranges[h3_index].last.count).to eq 6
+    end
+
+    it "has an outer ring containing all expected indexes" do
+      hex_ranges[h3_index].last.each do |index|
+        expect(outer_ring).to include(index)
+      end
+    end
+
+    context "when there is pentagonal distortion" do
+      let(:h3_index) { "821c07fffffffff".to_i(16) }
+
+      it "raises an error" do
+        expect { hex_ranges }.to raise_error(ArgumentError)
+      end
+    end
+
+    context "when k is 2" do
+      let(:k) { 2 }
+
+      it "contains 3 rings" do
+        expect(hex_ranges[h3_index].count).to eq 3
+      end
+
+      it "has an inner ring of size 1" do
+        expect(hex_ranges[h3_index][0].count).to eq 1
+      end
+
+      it "has a middle ring of size 6" do
+        expect(hex_ranges[h3_index][1].count).to eq 6
+      end
+
+      it "has an outer ring of size 12" do
+        expect(hex_ranges[h3_index][2].count).to eq 12
       end
     end
   end
