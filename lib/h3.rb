@@ -50,6 +50,7 @@ module H3
   attach_function :kRingDistances, [H3_INDEX, :int, :pointer, :pointer], :bool
   attach_function :max_h3_to_children_size, :maxH3ToChildrenSize, [ H3_INDEX, :int ], :int
   attach_function :max_kring_size, :maxKringSize, [ :int ], :int
+  attach_function :maxUncompactSize, [:pointer, :int, :int], :int
   attach_function :num_hexagons, :numHexagons, [ :int ], H3_INDEX
   attach_function :origin_from_unidirectional_edge,
                   :getOriginH3IndexFromUnidirectionalEdge,
@@ -193,5 +194,12 @@ module H3
         [k, v.map { |_distance, hexagon| hexagon }]
       end
     ]
+  end
+
+  def self.max_uncompact_size(hexagons, resolution)
+    FFI::MemoryPointer.new(H3_INDEX, hexagons.size) do |hexagons_ptr|
+      hexagons_ptr.write_array_of_ulong_long(hexagons)
+      return maxUncompactSize(hexagons_ptr, hexagons.size, resolution)
+    end
   end
 end

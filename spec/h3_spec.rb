@@ -764,4 +764,14 @@ RSpec.describe H3 do
       end
     end
   end
+
+  describe ".max_uncompact_size" do
+    let(:h3_index) { "8928308280fffff".to_i(16) }
+    let(:resolution) { 9 }
+    let(:result) { 2 }
+
+    subject(:max_uncompact_size) { H3.max_uncompact_size([h3_index, h3_index], resolution) }
+
+    it { is_expected.to eq result }
+  end
 end
