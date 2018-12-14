@@ -40,7 +40,7 @@ module H3
                   :h3UnidirectionalEdgeIsValid,
                   [ H3_INDEX ],
                   :bool
-  attach_function :hexRange, [ H3_INDEX, :int, :pointer ], :int
+  attach_function :hexRange, [ H3_INDEX, :int, :pointer ], :bool
   attach_function :hexRanges, [ :pointer, :int, :int, :pointer ], :bool
   attach_function :hexRing, [H3_INDEX, :int, :pointer], :void
   attach_function :hex_area_km2, :hexAreaKm2, [ :int ], :double
@@ -94,7 +94,8 @@ module H3
   def self.hex_range(h3_index, k)
     max_hexagons = max_kring_size(k)
     hexagons = FFI::MemoryPointer.new(:ulong_long, max_hexagons)
-    hexRange(h3_index, k, hexagons)
+    pentagonal_distortion = hexRange(h3_index, k, hexagons)
+    raise(ArgumentError, "Specified hexagon range contains a pentagon") if pentagonal_distortion
     hexagons.read_array_of_ulong_long(max_hexagons).reject { |i| i == 0 }
   end
 
@@ -148,7 +149,7 @@ module H3
     h3_range_indexes = out.read_array_of_ulong_long(max_out_size)
     out = h3_set.inject({}) { |acc, i| acc[i] = []; acc }
     h3_set.each_with_index do |h3_index, i|
-      (k+1).times { out[h3_index] << [] }
+      (k + 1).times { out[h3_index] << [] }
       0.upto(h3_set.count * max_kring_size(k) / h3_set.count).map do |j|
         ring_index = ((1 + Math.sqrt(1 + 8 * (j / 6.0).ceil)) / 2).floor - 1
         out[h3_index][ring_index] << h3_range_indexes[(i * h3_set.count + j)]

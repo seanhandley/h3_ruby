@@ -472,6 +472,15 @@ RSpec.describe H3 do
         expect(hex_range.count).to eq count
       end
     end
+
+    context "when range contains a pentagon" do
+      let(:h3_index) { "821c07fffffffff".to_i(16) }
+      let(:k) { 1 }
+
+      it "raises an error" do
+        expect { hex_range }.to raise_error(ArgumentError)
+      end
+    end
   end
 
   describe ".k_ring" do
@@ -595,27 +604,7 @@ RSpec.describe H3 do
     end
   end
 
-  # def test_hex_ranges(self):
-  #     hex_ranges = h3.hex_ranges(['8928308280fffff'], 1)
-
-  #     self.assertEqual(1, len(list(hex_ranges.keys())))
-
-  #     hexagons = hex_ranges['8928308280fffff']
-
-  #     self.assertEqual(2, len(hexagons))
-  #     self.assertEqual(1, len(hexagons[0]))
-  #     self.assertEqual(6, len(hexagons[1]))
-
-  #     self.assertTrue('8928308280fffff' in hexagons[0])
-  #     self.assertTrue('8928308280bffff' in hexagons[1])
-  #     self.assertTrue('89283082807ffff' in hexagons[1])
-  #     self.assertTrue('89283082877ffff' in hexagons[1])
-  #     self.assertTrue('89283082803ffff' in hexagons[1])
-  #     self.assertTrue('89283082873ffff' in hexagons[1])
-  #     self.assertTrue('8928308283bffff' in hexagons[1])
-
-
- describe ".hex_ranges" do
+  describe ".hex_ranges" do
     let(:h3_index) { "8928308280fffff".to_i(16) }
     let(:h3_set) { [h3_index] }
     let(:k) { 1 }
@@ -698,6 +687,11 @@ RSpec.describe H3 do
 
     subject(:h3_to_geo_boundary) { H3.h3_to_geo_boundary(h3_index) }
 
-    it { is_expected.to eq expected }
+    it "matches expected boundary coordinates" do
+      h3_to_geo_boundary.zip(expected) do |(lat, lon), (exp_lat, exp_lon)|
+        expect(lat).to be_within(0.000001).of(exp_lat)
+        expect(lon).to be_within(0.000001).of(exp_lon)
+      end
+    end
   end
 end
