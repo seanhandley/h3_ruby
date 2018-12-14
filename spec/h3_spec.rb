@@ -707,19 +707,19 @@ RSpec.describe H3 do
 
     subject(:hex_range_distances) { H3.hex_range_distances(h3_index, k) }
 
-    it "has two ring sets" do
+    it "has two range sets" do
       expect(hex_range_distances.count).to eq 2
     end
 
-    it "has an inner ring containing hexagons of distance 0" do
+    it "has an inner range containing hexagons of distance 0" do
       expect(hex_range_distances[0]).to eq [h3_index]
     end
 
-    it "has an outer ring containing hexagons of distance 1" do
+    it "has an outer range containing hexagons of distance 1" do
       expect(hex_range_distances[1].count).to eq 6
     end
 
-    it "has an outer ring containing all expected indexes" do
+    it "has an outer range containing all expected indexes" do
       hex_range_distances[1].each do |index|
         expect(outer_ring).to include(index)
       end
@@ -730,6 +730,37 @@ RSpec.describe H3 do
 
       it "raises an error" do
         expect { hex_range_distances }.to raise_error(ArgumentError)
+      end
+    end
+  end
+
+  describe ".k_ring_distances" do
+    let(:h3_index) { "8928308280fffff".to_i(16) }
+    let(:k) { 1 }
+    let(:outer_ring) do
+      [
+        "8928308280bffff", "89283082873ffff", "89283082877ffff",
+        "8928308283bffff", "89283082807ffff", "89283082803ffff"
+      ].map { |i| i.to_i(16) }
+    end
+
+    subject(:k_ring_distances) { H3.k_ring_distances(h3_index, k) }
+
+    it "has two ring sets" do
+      expect(k_ring_distances.count).to eq 2
+    end
+
+    it "has an inner ring containing hexagons of distance 0" do
+      expect(k_ring_distances[0]).to eq [h3_index]
+    end
+
+    it "has an outer ring containing hexagons of distance 1" do
+      expect(k_ring_distances[1].count).to eq 6
+    end
+
+    it "has an outer ring containing all expected indexes" do
+      k_ring_distances[1].each do |index|
+        expect(outer_ring).to include(index)
       end
     end
   end
