@@ -140,7 +140,6 @@ module H3
   end
 
   def self.hex_ranges(h3_set, k)
-    h3_set.uniq!
     max_out_size = h3_set.size * max_kring_size(k)
     out = FFI::MemoryPointer.new(H3_INDEX, max_out_size)
     pentagonal_distortion = false
@@ -151,12 +150,12 @@ module H3
     raise(ArgumentError, "One of the specified hexagon ranges contains a pentagon") if pentagonal_distortion
 
     h3_range_indexes = out.read_array_of_ulong_long(max_out_size)
-    out = h3_set.inject({}) { |acc, i| acc[i] = []; acc }
+    out = Hash.new { |h, k| h[k] = [] }
     h3_set.each_with_index do |h3_index, i|
       (k + 1).times { out[h3_index] << [] }
       0.upto(h3_set.count * max_kring_size(k) / h3_set.count).map do |j|
         ring_index = ((1 + Math.sqrt(1 + 8 * (j / 6.0).ceil)) / 2).floor - 1
-        out[h3_index][ring_index] << h3_range_indexes[(i * h3_set.count + j)]
+        out[h3_index][ring_index] << h3_range_indexes[i * h3_set.count + j]
         out[h3_index][ring_index].compact!
       end
       out[h3_index] = out[h3_index].sort_by(&:count)
@@ -175,9 +174,7 @@ module H3
     distances = distances.read_array_of_int(max_out_size)
 
     Hash[
-      distances.zip(hexagons).group_by { |distance, _hexagon| distance }.map do |k, v|
-        [k, v.map { |_distance, hexagon| hexagon }]
-      end
+      distances.zip(hexagons).group_by(&:first).map { |d, hs| [d, hs.map(&:last)] }
     ]
   end
 
@@ -191,9 +188,7 @@ module H3
     distances = distances.read_array_of_int(max_out_size)
 
     Hash[
-      distances.zip(hexagons).group_by { |distance, _hexagon| distance }.map do |k, v|
-        [k, v.map { |_distance, hexagon| hexagon }]
-      end
+      distances.zip(hexagons).group_by(&:first).map { |d, hs| [d, hs.map(&:last)] }
     ]
   end
 
