@@ -16,7 +16,7 @@ module H3
 
     class GeoFence < FFI::Struct
       layout :num_verts, :int,
-             :verts, :pointer
+             :verts, :pointer # array of GeoCoord structs
     end
 
     class GeoPolygon < FFI::Struct

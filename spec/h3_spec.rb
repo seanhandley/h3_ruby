@@ -773,6 +773,14 @@ RSpec.describe H3 do
     subject(:max_uncompact_size) { H3.max_uncompact_size([h3_index, h3_index], resolution) }
 
     it { is_expected.to eq result }
+
+    context "when resolution is incorrect for index" do
+      let(:resolution) { 8 }
+
+      it "raises an error" do
+        expect { max_uncompact_size }.to raise_error(RuntimeError)
+      end
+    end
   end
 
   describe ".h3_unidirectional_edge_boundary" do
@@ -790,4 +798,52 @@ RSpec.describe H3 do
       end
     end
   end
+
+  describe ".compact" do
+    let(:h3_index) { "89283470c27ffff".to_i(16) }
+    let(:k) { 9 }
+    let(:uncompacted) do
+      H3.k_ring(h3_index, k)
+    end
+
+    subject(:compact) { H3.compact(uncompacted) }
+
+    it "has an uncompacted size of 271" do
+      expect(uncompacted.size).to eq 271
+    end
+
+    it "has a compacted size of 73" do
+      expect(compact.size).to eq 73
+    end
+  end
+
+  describe ".uncompact" do
+    let(:h3_index) { "89283470c27ffff".to_i(16) }
+    let(:resolution) { 9 }
+    let(:uncompacted) do
+      H3.k_ring(h3_index, resolution)
+    end
+    let(:compacted) do
+      H3.compact(uncompacted)
+    end
+
+    subject(:uncompact) { H3.uncompact(compacted, resolution) }
+
+    it "has an uncompacted size of 271" do
+      expect(uncompact.size).to eq 271
+    end
+
+    it "has a compacted size of 73" do
+      expect(compacted.size).to eq 73
+    end
+
+    context "when resolution is incorrect for index" do
+      let(:resolution) { 8 }
+
+      it "raises error" do
+        expect { uncompact }.to raise_error(RuntimeError)
+      end
+    end
+  end
+
 end

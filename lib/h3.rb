@@ -10,6 +10,7 @@ module H3
   PREDICATES = %i(h3_indexes_neighbors h3_pentagon h3_res_class_3
                   h3_unidirectional_edge_valid h3_valid).freeze
 
+  attach_function :_compact, :compact, [:pointer, :pointer, :int], :bool
   attach_function :degs_to_rads, :degsToRads, [ :double ], :double
   attach_function :destination_from_unidirectional_edge,
                   :getDestinationH3IndexFromUnidirectionalEdge,
@@ -59,6 +60,7 @@ module H3
                   H3_INDEX
   attach_function :rads_to_degs, :radsToDegs, [ :double ], :double
   attach_function :string_to_h3, :stringToH3, [ :string ], H3_INDEX
+  attach_function :_uncompact, :uncompact, [:pointer, :int, :pointer, :int, :int], :bool
 
   PREDICATES.each do |predicate|
     singleton_class.send(:alias_method, "#{predicate}?".to_sym, predicate)
@@ -195,7 +197,9 @@ module H3
   def self.max_uncompact_size(hexagons, resolution)
     FFI::MemoryPointer.new(H3_INDEX, hexagons.size) do |hexagons_ptr|
       hexagons_ptr.write_array_of_ulong_long(hexagons)
-      return maxUncompactSize(hexagons_ptr, hexagons.size, resolution)
+      size = maxUncompactSize(hexagons_ptr, hexagons.size, resolution)
+      raise "Couldn't estimate size. Invalid resolution?" if size < 0
+      return size
     end
   end
 
@@ -205,5 +209,31 @@ module H3
     geo_boundary[:verts].take(geo_boundary[:num_verts] * 2).map do |d|
       rads_to_degs(d)
     end.each_slice(2).to_a
+  end
+
+  def self.compact(hexagons)
+    failure = false
+    out = FFI::MemoryPointer.new(H3_INDEX, hexagons.size)
+    FFI::MemoryPointer.new(H3_INDEX, hexagons.size) do |hexagons_ptr|
+      hexagons_ptr.write_array_of_ulong_long(hexagons)
+      failure = _compact(hexagons_ptr, out, hexagons.size)
+    end
+    
+    raise "Couldn't compact given indexes" if failure
+    out.read_array_of_ulong_long(hexagons.size).reject(&:zero?)
+  end
+
+  def self.uncompact(compacted, resolution)
+    max_size = max_uncompact_size(compacted, resolution)
+
+    failure = false
+    out = FFI::MemoryPointer.new(H3_INDEX, max_size)
+    FFI::MemoryPointer.new(H3_INDEX, compacted.size) do |hexagons_ptr|
+      hexagons_ptr.write_array_of_ulong_long(compacted)
+      failure = _uncompact(hexagons_ptr, compacted.size, out, max_size, resolution)
+    end
+    
+    raise "Couldn't uncompact given indexes" if failure
+    out.read_array_of_ulong_long(max_size).reject(&:zero?)
   end
 end
