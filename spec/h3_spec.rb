@@ -1,5 +1,3 @@
-require "bigdecimal"
-
 RSpec.describe H3 do
   let(:valid_h3_index) { "8819429a9dfffff".to_i(16) }
   let(:too_long_number) { 10_000_000_000_000_000_000_000 }
@@ -474,6 +472,15 @@ RSpec.describe H3 do
         expect(hex_range.count).to eq count
       end
     end
+
+    context "when range contains a pentagon" do
+      let(:h3_index) { "821c07fffffffff".to_i(16) }
+      let(:k) { 1 }
+
+      it "raises an error" do
+        expect { hex_range }.to raise_error(ArgumentError)
+      end
+    end
   end
 
   describe ".k_ring" do
@@ -597,4 +604,190 @@ RSpec.describe H3 do
     end
   end
 
+  describe ".hex_ranges" do
+    let(:h3_index) { "8928308280fffff".to_i(16) }
+    let(:h3_set) { [h3_index] }
+    let(:k) { 1 }
+    let(:outer_ring) do
+      [
+        "8928308280bffff", "89283082807ffff", "89283082877ffff",
+        "89283082803ffff", "89283082873ffff", "8928308283bffff"
+      ].map { |i| i.to_i(16) }
+    end
+
+    subject(:hex_ranges) { H3.hex_ranges(h3_set, k) }
+
+    it "contains a single k/v pair" do
+      expect(hex_ranges.count).to eq 1
+    end
+
+    it "has one key, the h3_index" do
+      expect(hex_ranges.keys.first).to eq h3_index
+    end
+
+    it "has two ring sets" do
+      expect(hex_ranges[h3_index].count).to eq 2
+    end
+
+    it "has an inner ring containing only the original index" do
+      expect(hex_ranges[h3_index].first).to eq [h3_index]
+    end
+
+    it "has an outer ring containing six indexes" do
+      expect(hex_ranges[h3_index].last.count).to eq 6
+    end
+
+    it "has an outer ring containing all expected indexes" do
+      hex_ranges[h3_index].last.each do |index|
+        expect(outer_ring).to include(index)
+      end
+    end
+
+    context "when there is pentagonal distortion" do
+      let(:h3_index) { "821c07fffffffff".to_i(16) }
+
+      it "raises an error" do
+        expect { hex_ranges }.to raise_error(ArgumentError)
+      end
+    end
+
+    context "when k is 2" do
+      let(:k) { 2 }
+
+      it "contains 3 rings" do
+        expect(hex_ranges[h3_index].count).to eq 3
+      end
+
+      it "has an inner ring of size 1" do
+        expect(hex_ranges[h3_index][0].count).to eq 1
+      end
+
+      it "has a middle ring of size 6" do
+        expect(hex_ranges[h3_index][1].count).to eq 6
+      end
+
+      it "has an outer ring of size 12" do
+        expect(hex_ranges[h3_index][2].count).to eq 12
+      end
+    end
+  end
+
+  describe ".h3_to_geo_boundary" do
+    let(:h3_index) { "85283473fffffff".to_i(16) }
+    let(:expected) do
+      [
+        [37.2713558667319, -121.91508032705622],
+        [37.353926450852256, -121.8622232890249],
+        [37.42834118609435, -121.92354999630156],
+        [37.42012867767779, -122.03773496427027],
+        [37.33755608435299, -122.090428929044],
+        [37.26319797461824, -122.02910130918998]
+      ]
+    end
+
+    subject(:h3_to_geo_boundary) { H3.h3_to_geo_boundary(h3_index) }
+
+    it "matches expected boundary coordinates" do
+      h3_to_geo_boundary.zip(expected) do |(lat, lon), (exp_lat, exp_lon)|
+        expect(lat).to be_within(0.000001).of(exp_lat)
+        expect(lon).to be_within(0.000001).of(exp_lon)
+      end
+    end
+  end
+
+  describe ".hex_range_distances" do
+    let(:h3_index) { "85283473fffffff".to_i(16) }
+    let(:k) { 1 }
+    let(:outer_ring) do
+      [
+        "85283447fffffff", "8528347bfffffff", "85283463fffffff",
+        "85283477fffffff", "8528340ffffffff", "8528340bfffffff"
+      ].map { |i| i.to_i(16) }
+    end
+
+    subject(:hex_range_distances) { H3.hex_range_distances(h3_index, k) }
+
+    it "has two range sets" do
+      expect(hex_range_distances.count).to eq 2
+    end
+
+    it "has an inner range containing hexagons of distance 0" do
+      expect(hex_range_distances[0]).to eq [h3_index]
+    end
+
+    it "has an outer range containing hexagons of distance 1" do
+      expect(hex_range_distances[1].count).to eq 6
+    end
+
+    it "has an outer range containing all expected indexes" do
+      hex_range_distances[1].each do |index|
+        expect(outer_ring).to include(index)
+      end
+    end
+
+    context "when there is pentagonal distortion" do
+      let(:h3_index) { "821c07fffffffff".to_i(16) }
+
+      it "raises an error" do
+        expect { hex_range_distances }.to raise_error(ArgumentError)
+      end
+    end
+  end
+
+  describe ".k_ring_distances" do
+    let(:h3_index) { "8928308280fffff".to_i(16) }
+    let(:k) { 1 }
+    let(:outer_ring) do
+      [
+        "8928308280bffff", "89283082873ffff", "89283082877ffff",
+        "8928308283bffff", "89283082807ffff", "89283082803ffff"
+      ].map { |i| i.to_i(16) }
+    end
+
+    subject(:k_ring_distances) { H3.k_ring_distances(h3_index, k) }
+
+    it "has two ring sets" do
+      expect(k_ring_distances.count).to eq 2
+    end
+
+    it "has an inner ring containing hexagons of distance 0" do
+      expect(k_ring_distances[0]).to eq [h3_index]
+    end
+
+    it "has an outer ring containing hexagons of distance 1" do
+      expect(k_ring_distances[1].count).to eq 6
+    end
+
+    it "has an outer ring containing all expected indexes" do
+      k_ring_distances[1].each do |index|
+        expect(outer_ring).to include(index)
+      end
+    end
+  end
+
+  describe ".max_uncompact_size" do
+    let(:h3_index) { "8928308280fffff".to_i(16) }
+    let(:resolution) { 9 }
+    let(:result) { 2 }
+
+    subject(:max_uncompact_size) { H3.max_uncompact_size([h3_index, h3_index], resolution) }
+
+    it { is_expected.to eq result }
+  end
+
+  describe ".h3_unidirectional_edge_boundary" do
+    let(:edge) { "11928308280fffff".to_i(16) }
+    let(:expected) do
+      [[37.77820687262237, -122.41971895414808], [37.77652420699321, -122.42079024541876]]
+    end
+
+    subject(:h3_unidirectional_edge_boundary) { H3.h3_unidirectional_edge_boundary(edge) }
+
+    it "matches expected coordinates" do
+      h3_unidirectional_edge_boundary.zip(expected) do |(lat, lon), (exp_lat, exp_lon)|
+        expect(lat).to be_within(0.000001).of(exp_lat)
+        expect(lon).to be_within(0.000001).of(exp_lon)
+      end
+    end
+  end
 end

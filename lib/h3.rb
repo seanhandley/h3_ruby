@@ -1,6 +1,5 @@
 require "h3/structs"
-
-require 'ffi'
+require "ffi"
 
 module H3
   extend FFI::Library
@@ -32,6 +31,7 @@ module H3
   attach_function :h3ToGeo, [ H3_INDEX, Structs::GeoCoord.by_ref ], :void
   attach_function :h3_to_parent, :h3ToParent, [ H3_INDEX, :int ], :int
   attach_function :h3ToString, [ H3_INDEX, :pointer, :int], :void
+  attach_function :h3ToGeoBoundary, [H3_INDEX, Structs::GeoBoundary.by_ref ], :void
   attach_function :h3_unidirectional_edge,
                   :getH3UnidirectionalEdge,
                   [ H3_INDEX, H3_INDEX ],
@@ -40,13 +40,18 @@ module H3
                   :h3UnidirectionalEdgeIsValid,
                   [ H3_INDEX ],
                   :bool
-  attach_function :hexRange, [ H3_INDEX, :int, :pointer ], :int
+  attach_function :getH3UnidirectionalEdgeBoundary, [H3_INDEX, :pointer], :void  
+  attach_function :hexRange, [ H3_INDEX, :int, :pointer ], :bool
+  attach_function :hexRangeDistances, [H3_INDEX, :int, :pointer, :pointer], :bool
+  attach_function :hexRanges, [ :pointer, :int, :int, :pointer ], :bool
   attach_function :hexRing, [H3_INDEX, :int, :pointer], :void
   attach_function :hex_area_km2, :hexAreaKm2, [ :int ], :double
   attach_function :hex_area_m2, :hexAreaM2, [ :int ], :double
   attach_function :kRing, [H3_INDEX, :int, :pointer], :void
+  attach_function :kRingDistances, [H3_INDEX, :int, :pointer, :pointer], :bool
   attach_function :max_h3_to_children_size, :maxH3ToChildrenSize, [ H3_INDEX, :int ], :int
   attach_function :max_kring_size, :maxKringSize, [ :int ], :int
+  attach_function :maxUncompactSize, [:pointer, :int, :int], :int
   attach_function :num_hexagons, :numHexagons, [ :int ], H3_INDEX
   attach_function :origin_from_unidirectional_edge,
                   :getOriginH3IndexFromUnidirectionalEdge,
@@ -93,7 +98,8 @@ module H3
   def self.hex_range(h3_index, k)
     max_hexagons = max_kring_size(k)
     hexagons = FFI::MemoryPointer.new(:ulong_long, max_hexagons)
-    hexRange(h3_index, k, hexagons)
+    pentagonal_distortion = hexRange(h3_index, k, hexagons)
+    raise(ArgumentError, "Specified hexagon range contains a pentagon") if pentagonal_distortion
     hexagons.read_array_of_ulong_long(max_hexagons).reject { |i| i == 0 }
   end
 
@@ -123,5 +129,81 @@ module H3
     edges = FFI::MemoryPointer.new(:ulong_long, max_edges)
     getH3UnidirectionalEdgesFromHexagon(origin, edges)
     edges.read_array_of_ulong_long(max_edges).reject { |i| i == 0 }
+  end
+
+  def self.h3_to_geo_boundary(h3_index)
+    geo_boundary = Structs::GeoBoundary.new
+    h3ToGeoBoundary(h3_index, geo_boundary)
+    geo_boundary[:verts].take(geo_boundary[:num_verts] * 2).map do |d|
+      rads_to_degs(d)
+    end.each_slice(2).to_a
+  end
+
+  def self.hex_ranges(h3_set, k)
+    max_out_size = h3_set.size * max_kring_size(k)
+    out = FFI::MemoryPointer.new(H3_INDEX, max_out_size)
+    pentagonal_distortion = false
+    FFI::MemoryPointer.new(H3_INDEX, h3_set.size) do |h3_set_ptr|
+      h3_set_ptr.write_array_of_ulong_long(h3_set)
+      pentagonal_distortion = hexRanges(h3_set_ptr, h3_set.size, k, out)
+    end
+    raise(ArgumentError, "One of the specified hexagon ranges contains a pentagon") if pentagonal_distortion
+
+    h3_range_indexes = out.read_array_of_ulong_long(max_out_size)
+    out = Hash.new { |h, k| h[k] = [] }
+    h3_set.each_with_index do |h3_index, i|
+      (k + 1).times { out[h3_index] << [] }
+      0.upto(h3_set.count * max_kring_size(k) / h3_set.count).map do |j|
+        ring_index = ((1 + Math.sqrt(1 + 8 * (j / 6.0).ceil)) / 2).floor - 1
+        out[h3_index][ring_index] << h3_range_indexes[i * h3_set.count + j]
+        out[h3_index][ring_index].compact!
+      end
+      out[h3_index] = out[h3_index].sort_by(&:count)
+    end
+    out
+  end
+
+  def self.hex_range_distances(h3_index, k)
+    max_out_size = max_kring_size(k)
+    out = FFI::MemoryPointer.new(H3_INDEX, max_out_size)
+    distances = FFI::MemoryPointer.new(:int, max_out_size)
+    pentagonal_distortion = hexRangeDistances(h3_index, k, out, distances)
+    raise(ArgumentError, "Specified hexagon range contains a pentagon") if pentagonal_distortion
+
+    hexagons = out.read_array_of_ulong_long(max_out_size)
+    distances = distances.read_array_of_int(max_out_size)
+
+    Hash[
+      distances.zip(hexagons).group_by(&:first).map { |d, hs| [d, hs.map(&:last)] }
+    ]
+  end
+
+  def self.k_ring_distances(h3_index, k)
+    max_out_size = max_kring_size(k)
+    out = FFI::MemoryPointer.new(H3_INDEX, max_out_size)
+    distances = FFI::MemoryPointer.new(:int, max_out_size)
+    kRingDistances(h3_index, k, out, distances)
+
+    hexagons = out.read_array_of_ulong_long(max_out_size)
+    distances = distances.read_array_of_int(max_out_size)
+
+    Hash[
+      distances.zip(hexagons).group_by(&:first).map { |d, hs| [d, hs.map(&:last)] }
+    ]
+  end
+
+  def self.max_uncompact_size(hexagons, resolution)
+    FFI::MemoryPointer.new(H3_INDEX, hexagons.size) do |hexagons_ptr|
+      hexagons_ptr.write_array_of_ulong_long(hexagons)
+      return maxUncompactSize(hexagons_ptr, hexagons.size, resolution)
+    end
+  end
+
+  def self.h3_unidirectional_edge_boundary(edge)
+    geo_boundary = Structs::GeoBoundary.new
+    getH3UnidirectionalEdgeBoundary(edge, geo_boundary)
+    geo_boundary[:verts].take(geo_boundary[:num_verts] * 2).map do |d|
+      rads_to_degs(d)
+    end.each_slice(2).to_a
   end
 end
