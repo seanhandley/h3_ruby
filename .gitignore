@@ -1,4 +1,2 @@
 spec/examples.txt
 tmp
-lib/h3_ruby/*.bundle
-lib/h3_ruby/*.so
