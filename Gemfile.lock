@@ -4,6 +4,9 @@ GEM
     diff-lcs (1.3)
     ffi (1.9.25)
     rake (12.3.2)
+    rgeo (1.0.0)
+    rgeo-geojson (2.1.1)
+      rgeo (>= 1.0.0)
     rspec (3.8.0)
       rspec-core (~> 3.8.0)
       rspec-expectations (~> 3.8.0)
@@ -24,6 +27,7 @@ PLATFORMS
 DEPENDENCIES
   ffi (~> 1.9.6)
   rake
+  rgeo-geojson (~> 2.1.1)
   rspec (~> 3.8.0)
 
 RUBY VERSION
