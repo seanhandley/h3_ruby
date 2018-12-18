@@ -142,6 +142,21 @@ module H3
   end
 
   def self.hex_ranges(h3_set, k)
+    h3_range_indexes = hex_ranges_ungrouped(h3_set, k)
+    out = Hash.new { |h, k| h[k] = [] }
+    h3_range_indexes.each_slice(max_kring_size(k)).each do |indexes|
+      h3_index = indexes.first
+
+      out[h3_index] = 0.upto(k).map do |j|
+        size = [max_kring_size(j) - max_kring_size(j-1), 1].max
+        pos = j == 0 ? 0 : max_kring_size(j-1)
+        indexes.slice(pos, size)
+      end
+    end
+    out
+  end
+
+  def self.hex_ranges_ungrouped(h3_set, k)
     max_out_size = h3_set.size * max_kring_size(k)
     out = FFI::MemoryPointer.new(H3_INDEX, max_out_size)
     pentagonal_distortion = false
@@ -151,18 +166,7 @@ module H3
     end
     raise(ArgumentError, "One of the specified hexagon ranges contains a pentagon") if pentagonal_distortion
 
-    h3_range_indexes = out.read_array_of_ulong_long(max_out_size)
-    out = Hash.new { |h, k| h[k] = [] }
-    h3_set.each_with_index do |h3_index, i|
-      (k + 1).times { out[h3_index] << [] }
-      0.upto(h3_set.count * max_kring_size(k) / h3_set.count).map do |j|
-        ring_index = ((1 + Math.sqrt(1 + 8 * (j / 6.0).ceil)) / 2).floor - 1
-        out[h3_index][ring_index] << h3_range_indexes[i * h3_set.count + j]
-        out[h3_index][ring_index].compact!
-      end
-      out[h3_index] = out[h3_index].sort_by(&:count)
-    end
-    out
+    out.read_array_of_ulong_long(max_out_size)
   end
 
   def self.hex_range_distances(h3_index, k)
