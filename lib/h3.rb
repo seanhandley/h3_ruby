@@ -269,7 +269,7 @@ module H3
 
     geo_polygons = [linked_geo_polygon]
 
-    until(linked_geo_polygon[:next].null?) do
+    until linked_geo_polygon[:next].null? do
       geo_polygons << linked_geo_polygon[:next]
       linked_geo_polygon = linked_geo_polygon[:next]
     end
@@ -286,7 +286,7 @@ module H3
 
     geo_loops = [linked_geo_loop]
 
-    until(linked_geo_loop[:next].null?) do
+    until linked_geo_loop[:next].null? do
       geo_loops << linked_geo_loop[:next]
       linked_geo_loop = linked_geo_loop[:next]
     end
@@ -303,7 +303,7 @@ module H3
 
     geo_coords = [linked_geo_coord]
 
-    until(linked_geo_coord[:next].null?) do
+    until linked_geo_coord[:next].null? do
       geo_coords << linked_geo_coord[:next]
       linked_geo_coord = linked_geo_coord[:next]
     end
