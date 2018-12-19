@@ -141,16 +141,20 @@ module H3
     end.each_slice(2).to_a
   end
 
+  def self.max_hex_ring_size(k)
+    k.zero? ? 1 : 6*k
+  end
+
   def self.hex_ranges(h3_set, k)
     h3_range_indexes = hex_ranges_ungrouped(h3_set, k)
-    out = Hash.new { |h, k| h[k] = [] }
+    out = {}
     h3_range_indexes.each_slice(max_kring_size(k)).each do |indexes|
       h3_index = indexes.first
 
       out[h3_index] = 0.upto(k).map do |j|
-        size = [max_kring_size(j) - max_kring_size(j-1), 1].max
-        pos = j == 0 ? 0 : max_kring_size(j-1)
-        indexes.slice(pos, size)
+        start  = j == 0 ? 0 : max_kring_size(j-1)
+        length = max_hex_ring_size(j)
+        indexes.slice(start, length)
       end
     end
     out
