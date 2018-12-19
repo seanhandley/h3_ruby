@@ -1,5 +1,6 @@
 require "h3/structs"
 require "ffi"
+require "rgeo/geo_json"
 
 module H3
   extend FFI::Library
@@ -28,6 +29,7 @@ module H3
   attach_function :h3_res_class_3, :h3IsResClassIII, [ H3_INDEX ], :bool
   attach_function :h3_resolution, :h3GetResolution, [ H3_INDEX ], :int
   attach_function :h3_valid, :h3IsValid, [ H3_INDEX ], :bool
+  attach_function :h3SetToLinkedGeo, [ :pointer, :int, Structs::LinkedGeoPolygon.by_ref ], :void
   attach_function :h3ToChildren, [ H3_INDEX, :int, :pointer ], :void
   attach_function :h3ToGeo, [ H3_INDEX, Structs::GeoCoord.by_ref ], :void
   attach_function :h3_to_parent, :h3ToParent, [ H3_INDEX, :int ], :int
@@ -52,12 +54,14 @@ module H3
   attach_function :kRingDistances, [H3_INDEX, :int, :pointer, :pointer], :bool
   attach_function :max_h3_to_children_size, :maxH3ToChildrenSize, [ H3_INDEX, :int ], :int
   attach_function :max_kring_size, :maxKringSize, [ :int ], :int
+  attach_function :maxPolyfillSize, [Structs::GeoPolygon.by_ref, :int], :int
   attach_function :maxUncompactSize, [:pointer, :int, :int], :int
   attach_function :num_hexagons, :numHexagons, [ :int ], H3_INDEX
   attach_function :origin_from_unidirectional_edge,
                   :getOriginH3IndexFromUnidirectionalEdge,
                   [ H3_INDEX ],
                   H3_INDEX
+  attach_function :_polyfill, :polyfill, [ :pointer, :int, :pointer ], :void
   attach_function :rads_to_degs, :radsToDegs, [ :double ], :double
   attach_function :string_to_h3, :stringToH3, [ :string ], H3_INDEX
   attach_function :_uncompact, :uncompact, [:pointer, :int, :pointer, :int, :int], :bool
@@ -243,5 +247,148 @@ module H3
     
     raise "Couldn't uncompact given indexes" if failure
     out.read_array_of_ulong_long(max_size).reject(&:zero?)
+  end
+
+  def self.max_polyfill_size(geo_polygon, resolution)
+    geo_polygon = geo_json_to_coordinates(geo_polygon) if geo_polygon.is_a?(String)
+    maxPolyfillSize(build_polygon(geo_polygon), resolution)
+  end
+
+  def self.polyfill(geo_polygon, resolution)
+    geo_polygon = geo_json_to_coordinates(geo_polygon) if geo_polygon.is_a?(String)
+    max_size = max_polyfill_size(geo_polygon, resolution)
+    out = FFI::MemoryPointer.new(H3_INDEX, max_size)
+    _polyfill(build_polygon(geo_polygon), resolution, out)
+    out.read_array_of_ulong_long(max_size).reject(&:zero?)
+  end
+
+  def self.h3_set_to_linked_geo(h3_indexes)
+    linked_geo_polygon = Structs::LinkedGeoPolygon.new
+    FFI::MemoryPointer.new(H3_INDEX, h3_indexes.size) do |hexagons_ptr|
+      hexagons_ptr.write_array_of_ulong_long(h3_indexes)
+      h3SetToLinkedGeo(hexagons_ptr, h3_indexes.size, linked_geo_polygon)
+    end
+
+    extract_linked_geo_polygon(linked_geo_polygon).first
+  end
+
+  def self.extract_linked_geo_polygon(linked_geo_polygon)
+    return if linked_geo_polygon.null?
+
+    geo_polygons = [linked_geo_polygon]
+
+    until linked_geo_polygon[:next].null? do
+      geo_polygons << linked_geo_polygon[:next]
+      linked_geo_polygon = linked_geo_polygon[:next]
+    end
+
+    geo_polygons.map(&method(:extract_geo_polygon))
+  end
+
+  def self.extract_geo_polygon(geo_polygon)
+    extract_linked_geo_loop(geo_polygon[:first]) unless geo_polygon[:first].null?
+  end
+
+  def self.extract_linked_geo_loop(linked_geo_loop)
+    return if linked_geo_loop.null?
+
+    geo_loops = [linked_geo_loop]
+
+    until linked_geo_loop[:next].null? do
+      geo_loops << linked_geo_loop[:next]
+      linked_geo_loop = linked_geo_loop[:next]
+    end
+
+    geo_loops.map(&method(:extract_geo_loop))
+  end
+
+  def self.extract_geo_loop(geo_loop)
+    extract_linked_geo_coord(geo_loop[:first]) unless geo_loop[:first].null?
+  end
+
+  def self.extract_linked_geo_coord(linked_geo_coord)
+    return if linked_geo_coord.null?
+
+    geo_coords = [linked_geo_coord]
+
+    until linked_geo_coord[:next].null? do
+      geo_coords << linked_geo_coord[:next]
+      linked_geo_coord = linked_geo_coord[:next]
+    end
+
+    geo_coords.map(&method(:extract_geo_coord))
+  end
+
+  def self.extract_geo_coord(geo_coord)
+    [
+      rads_to_degs(geo_coord[:vertex][:lat]),
+      rads_to_degs(geo_coord[:vertex][:lon])
+    ]
+  end
+
+  def self.geo_json_to_coordinates(input)
+    geom = RGeo::GeoJSON.decode(input)
+    coordinates = if geom.respond_to?(:first) # feature collection
+                    geom.first.geometry.coordinates
+                  elsif geom.respond_to?(:geometry) # feature
+                    geom.geometry.coordinates
+                  elsif geom.respond_to?(:coordinates) # polygon
+                    geom.coordinates
+                  else
+                    raise "Could not parse given input. Please use a GeoJSON polygon."
+                  end
+    swap_lat_lon(coordinates)
+  end
+
+  # geo-json coordinates use [lon, lat], h3 uses [lat, lon]
+  def self.swap_lat_lon(coordinates)
+    coordinates.map { |polygon| polygon.map { |x, y| [y, x] } }
+  end
+
+  def self.coordinates_to_geo_json(coordinates)
+    coordinates = swap_lat_lon(coordinates)
+    outer_coords, *inner_coords = coordinates
+    factory = RGeo::Cartesian.simple_factory
+    exterior = factory.linear_ring(outer_coords.map! { |lon, lat| factory.point(lon, lat) })
+    interior_rings = inner_coords.map do |polygon|
+      factory.linear_ring(polygon.map { |lon, lat| factory.point(lon, lat) })
+    end
+    polygon = factory.polygon(exterior, interior_rings)
+    RGeo::GeoJSON.encode(polygon).to_json
+  end
+
+  def self.build_polygon(input)
+    outline, *holes = input
+    geo_polygon = Structs::GeoPolygon.new
+    geo_polygon[:geofence] = build_geofence(outline)
+    len = holes.count
+    geo_polygon[:num_holes] = len
+    geofences = holes.map(&method(:build_geofence))
+    ptr = FFI::MemoryPointer.new(Structs::GeoFence, len)
+    fence_structs = geofences.count.times.map do |i|
+      Structs::GeoFence.new(ptr + i * Structs::GeoFence.size())
+    end
+    geofences.each_with_index do |geofence, i|
+      fence_structs[i][:num_verts] = geofence[:num_verts]
+      fence_structs[i][:verts] = geofence[:verts]
+    end
+    geo_polygon[:holes] = ptr
+    geo_polygon
+  end
+
+  def self.build_geofence(input)
+    geo_fence = Structs::GeoFence.new
+    len = input.count
+    geo_fence[:num_verts] = len
+    ptr = FFI::MemoryPointer.new(Structs::GeoCoord, len)
+    coords = 0.upto(len).map do |i|
+      Structs::GeoCoord.new(ptr + i * Structs::GeoCoord.size)
+    end
+    input.each_with_index do |(lat, lon), i|
+      coords[i][:lat] = degs_to_rads(lat)
+      coords[i][:lon] = degs_to_rads(lon)
+    end
+    geo_fence[:verts] = ptr
+    geo_fence
   end
 end
