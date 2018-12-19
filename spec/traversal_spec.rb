@@ -254,11 +254,25 @@ RSpec.describe H3 do
       end
     end
 
+    context "when run without grouping" do
+      let(:hex_array) do
+        [
+          617700169958293503, 617700169958031359, 617700169964847103,
+          617700169965109247, 617700169961177087, 617700169957769215,
+          617700169957507071
+        ]
+      end
+
+      subject(:hex_ranges) { H3.hex_ranges(h3_set, k, grouped: false) }
+
+      it { is_expected.to eq hex_array }
+    end
+
     context "when compared with the ungrouped version" do
       let(:h3_index2) { "8f19425b6ccd582".to_i(16) }
       let(:h3_index3) { "89283082873ffff".to_i(16) }
       let(:h3_set) { [h3_index, h3_index2, h3_index3]}
-      let(:ungrouped) { H3.hex_ranges_ungrouped(h3_set, k) }
+      let(:ungrouped) { H3.hex_ranges(h3_set, k, grouped: false) }
       let(:k) { 3 }
 
       it "has the same elements when we remove grouping" do
