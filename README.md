@@ -14,8 +14,8 @@ Install the build dependencies as instructed here: https://github.com/uber/h3#in
 
 Do *not* follow the Compilation Steps. Instead, use the following:
 
-    git clone git@github.com:uber/h3.git
-    cd h3
+    git clone git@github.com:uber/h3.git h3_build
+    cd h3_build
     cmake . -DBUILD_SHARED_LIBS=true
     make
     sudo make install
@@ -27,11 +27,11 @@ Do *not* follow the Compilation Steps. Instead, use the following:
 or
 
     # Gemfile
-    gem "h3", "~> 0.0.1pre"
+    gem "h3", "~> 3.2"
 
 ## Running Specs
 
-    bin/rspec spec
+    rake
 
 ## Usage
 

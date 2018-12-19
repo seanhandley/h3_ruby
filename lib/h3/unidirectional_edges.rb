@@ -25,14 +25,14 @@ module H3
       max_hexagons = 2
       origin_destination = FFI::MemoryPointer.new(:ulong_long, max_hexagons)
       Bindings::Private.h3_indexes_from_unidirectional_edge(edge, origin_destination)
-      origin_destination.read_array_of_ulong_long(max_hexagons).reject { |i| i == 0 }
+      origin_destination.read_array_of_ulong_long(max_hexagons).reject(&:zero?)
     end
 
     def h3_unidirectional_edges_from_hexagon(origin)
       max_edges = 6
       edges = FFI::MemoryPointer.new(:ulong_long, max_edges)
       Bindings::Private.h3_unidirectional_edges_from_hexagon(origin, edges)
-      edges.read_array_of_ulong_long(max_edges).reject { |i| i == 0 }
+      edges.read_array_of_ulong_long(max_edges).reject(&:zero?)
     end
 
     def h3_unidirectional_edge_boundary(edge)

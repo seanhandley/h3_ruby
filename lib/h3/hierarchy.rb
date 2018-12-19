@@ -8,7 +8,7 @@ module H3
       max_children = max_h3_to_children_size(h3_index, child_resolution)
       h3_children = FFI::MemoryPointer.new(H3_INDEX, max_children)
       Bindings::Private.h3_to_children(h3_index, child_resolution, h3_children)
-      h3_children.read_array_of_ulong_long(max_children).reject { |i| i == 0 }
+      h3_children.read_array_of_ulong_long(max_children).reject(&:zero?)
     end
 
     def max_uncompact_size(hexagons, resolution)

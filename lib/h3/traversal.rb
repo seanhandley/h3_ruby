@@ -10,21 +10,21 @@ module H3
       hexagons = FFI::MemoryPointer.new(:ulong_long, max_hexagons)
       pentagonal_distortion = Bindings::Private.hex_range(h3_index, k, hexagons)
       raise(ArgumentError, "Specified hexagon range contains a pentagon") if pentagonal_distortion
-      hexagons.read_array_of_ulong_long(max_hexagons).reject { |i| i == 0 }
+      hexagons.read_array_of_ulong_long(max_hexagons).reject(&:zero?)
     end
 
     def k_ring(h3_index, k)
       max_hexagons = max_kring_size(k)
       hexagons = FFI::MemoryPointer.new(:ulong_long, max_hexagons)
       Bindings::Private.k_ring(h3_index, k, hexagons)
-      hexagons.read_array_of_ulong_long(max_hexagons).reject { |i| i == 0 }
+      hexagons.read_array_of_ulong_long(max_hexagons).reject(&:zero?)
     end
 
     def hex_ring(h3_index, k)
       max_hexagons = max_kring_size(k)
       hexagons = FFI::MemoryPointer.new(:ulong_long, max_hexagons)
       Bindings::Private.hex_ring(h3_index, k, hexagons)
-      hexagons.read_array_of_ulong_long(max_hexagons).reject { |i| i == 0 }
+      hexagons.read_array_of_ulong_long(max_hexagons).reject(&:zero?)
     end
 
     def hex_ranges(h3_set, k)
