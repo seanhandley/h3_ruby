@@ -1,4 +1,4 @@
-require "h3/version"
+require_relative "lib/h3/version"
 
 Gem::Specification.new do |spec|
   spec.name     = "h3"
@@ -10,7 +10,6 @@ Gem::Specification.new do |spec|
   spec.email    = "l.laycock@stuart.com"
 
   spec.required_ruby_version = "> 2.3"
-  spec.require_paths = %w(lib)
   spec.files = `git ls-files`.split("\n")
 
   spec.add_runtime_dependency "ffi", "~> 1.9"
