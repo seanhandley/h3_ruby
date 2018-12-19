@@ -43,6 +43,7 @@ module H3
     end
 
     def hex_ranges_ungrouped(h3_set, k)
+      h3_set.uniq!
       max_out_size = h3_set.size * max_kring_size(k)
       out = FFI::MemoryPointer.new(H3_INDEX, max_out_size)
       pentagonal_distortion = false
