@@ -4,8 +4,6 @@
 
 Ruby bindings for Uber's [H3 library](https://uber.github.io/h3/).
 
-TODO: Add more wrapper functions.
-
 ## Getting Started
 
 You need to install the C lib at https://github.com/uber/h3.
@@ -19,6 +17,8 @@ Do *not* follow the Compilation Steps. Instead, use the following:
     cmake . -DBUILD_SHARED_LIBS=true
     make
     sudo make install
+
+The key difference is the `BUILD_SHARED_LIBS` option.
 
 ## Installing
 
