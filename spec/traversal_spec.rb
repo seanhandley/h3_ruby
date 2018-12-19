@@ -258,7 +258,7 @@ RSpec.describe H3 do
       let(:h3_index2) { "8f19425b6ccd582".to_i(16) }
       let(:h3_index3) { "89283082873ffff".to_i(16) }
       let(:h3_set) { [h3_index, h3_index2, h3_index3]}
-      let(:ungrouped) { H3.hex_ranges_ungrouped(h3_set, k) }
+      let(:ungrouped) { H3.hex_ranges(h3_set, k, grouped: false) }
       let(:k) { 3 }
 
       it "has the same elements when we remove grouping" do
