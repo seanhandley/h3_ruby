@@ -1,0 +1,19 @@
+engines:
+  rubocop:
+    enabled: true
+    config: '.rubocop.yml'
+    channel: rubocop-0-52
+    checks:
+      Rubocop/Style/ClassAndModuleChildren:
+        enabled: false
+  duplication:
+    enabled: true
+    config:
+      languages:
+        ruby:
+          mass_threshold: 75
+ratings:
+  paths:
+  - lib/**
+  - spec/**/*.rb
+  - "**.rb"
