@@ -87,6 +87,8 @@ module H3
                       failed_to_parse!
                     end
       swap_lat_lon(coordinates) || failed_to_parse!
+    rescue JSON::ParserError
+      failed_to_parse!
     end
 
     # Convert a nested array of coordinates to a GeoJSON document
