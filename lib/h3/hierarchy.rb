@@ -1,6 +1,6 @@
 module H3
   module Hierarchy
-    extend H3::BindingBase
+    extend H3::Bindings::Base
 
     attach_function :h3_to_parent, :h3ToParent, [ :h3_index, :int ], :int
 

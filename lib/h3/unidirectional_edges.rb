@@ -1,6 +1,6 @@
 module H3
   module UnidirectionalEdges
-    extend H3::BindingBase
+    extend H3::Bindings::Base
 
     attach_function :h3_indexes_neighbors, :h3IndexesAreNeighbors, [ :h3_index, :h3_index ], :bool
     attach_function :h3_unidirectional_edge_valid,

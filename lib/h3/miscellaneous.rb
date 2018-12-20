@@ -1,6 +1,6 @@
 module H3
   module Miscellaneous
-    extend H3::BindingBase
+    extend H3::Bindings::Base
 
     attach_function :degs_to_rads, :degsToRads, [ :double ], :double
     attach_function :edge_length_km, :edgeLengthKm, [ :int ], :double

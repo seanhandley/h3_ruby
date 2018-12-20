@@ -1,6 +1,6 @@
 module H3
   module Traversal
-    extend H3::BindingBase
+    extend H3::Bindings::Base
 
     attach_function :max_kring_size, :maxKringSize, [ :int ], :int
     attach_function :h3_distance, :h3Distance, [ :h3_index, :h3_index], :int

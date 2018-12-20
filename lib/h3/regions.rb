@@ -1,6 +1,6 @@
 module H3
   module Regions
-    extend H3::BindingBase
+    extend H3::Bindings::Base
 
     def max_polyfill_size(geo_polygon, resolution)
       geo_polygon = geo_json_to_coordinates(geo_polygon) if geo_polygon.is_a?(String)
