@@ -320,6 +320,15 @@ RSpec.describe H3 do
         expect(hex_ring.count).to eq count
       end
     end
+
+    context "when the ring contains a pentagon" do
+      let(:h3_index) { "821c07fffffffff".to_i(16) }
+      let(:k) { 1 }
+
+      it "raises an error" do
+        expect { hex_ring }.to raise_error(ArgumentError)
+      end
+    end
   end
 
   describe ".h3_distance" do

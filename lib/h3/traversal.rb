@@ -23,7 +23,8 @@ module H3
     def hex_ring(h3_index, k)
       max_hexagons = max_kring_size(k)
       hexagons = FFI::MemoryPointer.new(:ulong_long, max_hexagons)
-      Bindings::Private.hex_ring(h3_index, k, hexagons)
+      pentagonal_distortion = Bindings::Private.hex_ring(h3_index, k, hexagons)
+      raise(ArgumentError, "The hex ring contains a pentagon") if pentagonal_distortion
       hexagons.read_array_of_ulong_long(max_hexagons).reject(&:zero?)
     end
 
