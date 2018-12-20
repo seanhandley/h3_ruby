@@ -4,7 +4,7 @@ RSpec.describe H3 do
   describe ".h3_to_parent" do
     let(:h3_index) { "89283082993ffff".to_i(16) }
     let(:parent_resolution) { 8 }
-    let(:result) { 698351615 }
+    let(:result) { "8828308299fffff".to_i(16) }
 
     subject(:h3_to_parent) { H3.h3_to_parent(h3_index, parent_resolution) }
 
@@ -134,17 +134,17 @@ RSpec.describe H3 do
       let(:resolution) { 8 }
 
       it "raises error" do
-        expect { uncompact }.to raise_error(RuntimeError)
+        expect { uncompact }.to raise_error(ArgumentError)
       end
     end
   end
 
   describe ".max_uncompact_size" do
-    let(:h3_index) { "8928308280fffff".to_i(16) }
+    let(:h3_indexes) { ["8928308280fffff", "89283470893ffff"].map { |i| i.to_i(16) } }
     let(:resolution) { 9 }
     let(:result) { 2 }
 
-    subject(:max_uncompact_size) { H3.max_uncompact_size([h3_index, h3_index], resolution) }
+    subject(:max_uncompact_size) { H3.max_uncompact_size(h3_indexes, resolution) }
 
     it { is_expected.to eq result }
 
@@ -152,7 +152,7 @@ RSpec.describe H3 do
       let(:resolution) { 8 }
 
       it "raises an error" do
-        expect { max_uncompact_size }.to raise_error(RuntimeError)
+        expect { max_uncompact_size }.to raise_error(ArgumentError)
       end
     end
   end
