@@ -1,5 +1,9 @@
 module H3
   module Bindings
+    # FFI Structs.
+    #
+    # These match the structs defined in H3's header file and are required
+    # to correctly interact with the library's functions.
     module Structs
       extend FFI::Library
 

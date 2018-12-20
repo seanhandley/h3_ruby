@@ -11,6 +11,9 @@ require "h3/regions"
 require "h3/traversal"
 require "h3/unidirectional_edges"
 
+# The main H3 namespace.
+#
+# All public methods for the library are defined here.
 module H3
   class << self
     include GeoJSON
