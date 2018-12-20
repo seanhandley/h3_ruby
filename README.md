@@ -29,9 +29,9 @@ or
     # Gemfile
     gem "h3", "~> 3.2"
 
-## Running Specs
+## Documentation
 
-    rake
+https://www.rubydoc.info/github/StuartApp/h3_ruby
 
 ## Usage
 
@@ -41,6 +41,7 @@ H3.geo_to_h3([53.959130, -1.079230], 8).to_s(16)
 # => "8819429a9dfffff"
 ```
 
-## GeoJSON
+## Running Specs
 
-Note that methods returning GeoJSON contain coordinates in the form `[lon, lat]`, whereas H3 coordinates use `[lat, lon]`.
+    rake
+
