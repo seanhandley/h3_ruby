@@ -2,9 +2,37 @@ module H3
   module Traversal
     extend H3::Bindings::Base
 
+    # @!method name_of_method(args)
+    #
+    # Description
+    #
+    # @param [Type] name Description
+    #
+    # @example 
+    #
+    # @return [Type] Description
     attach_function :max_kring_size, :maxKringSize, [ :int ], :int
+
+    # @!method name_of_method(args)
+    #
+    # Description
+    #
+    # @param [Type] name Description
+    #
+    # @example 
+    #
+    # @return [Type] Description
     attach_function :h3_distance, :h3Distance, [ :h3_index, :h3_index], :int
 
+    # Name
+    #
+    # Description
+    #
+    # @param [Type] name Description
+    #
+    # @example 
+    #
+    # @return [Type] Description
     def hex_range(h3_index, k)
       max_hexagons = max_kring_size(k)
       hexagons = FFI::MemoryPointer.new(:ulong_long, max_hexagons)
@@ -13,6 +41,15 @@ module H3
       hexagons.read_array_of_ulong_long(max_hexagons).reject(&:zero?)
     end
 
+    # Name
+    #
+    # Description
+    #
+    # @param [Type] name Description
+    #
+    # @example 
+    #
+    # @return [Type] Description
     def k_ring(h3_index, k)
       max_hexagons = max_kring_size(k)
       hexagons = FFI::MemoryPointer.new(:ulong_long, max_hexagons)
@@ -20,6 +57,15 @@ module H3
       hexagons.read_array_of_ulong_long(max_hexagons).reject(&:zero?)
     end
 
+    # Name
+    #
+    # Description
+    #
+    # @param [Type] name Description
+    #
+    # @example 
+    #
+    # @return [Type] Description
     def hex_ring(h3_index, k)
       max_hexagons = max_hex_ring_size(k)
       hexagons = FFI::MemoryPointer.new(:ulong_long, max_hexagons)
@@ -28,10 +74,28 @@ module H3
       hexagons.read_array_of_ulong_long(max_hexagons).reject(&:zero?)
     end
 
+    # Name
+    #
+    # Description
+    #
+    # @param [Type] name Description
+    #
+    # @example 
+    #
+    # @return [Type] Description
     def max_hex_ring_size(k)
       k.zero? ? 1 : 6 * k
     end
 
+    # Name
+    #
+    # Description
+    #
+    # @param [Type] name Description
+    #
+    # @example 
+    #
+    # @return [Type] Description
     def hex_ranges(h3_set, k, grouped: true)
       h3_range_indexes = hex_ranges_ungrouped(h3_set, k)
       return h3_range_indexes unless grouped
@@ -48,6 +112,15 @@ module H3
       out
     end
 
+    # Name
+    #
+    # Description
+    #
+    # @param [Type] name Description
+    #
+    # @example 
+    #
+    # @return [Type] Description
     def hex_range_distances(h3_index, k)
       max_out_size = max_kring_size(k)
       out = FFI::MemoryPointer.new(H3_INDEX, max_out_size)
@@ -63,6 +136,15 @@ module H3
       ]
     end
 
+    # Name
+    #
+    # Description
+    #
+    # @param [Type] name Description
+    #
+    # @example 
+    #
+    # @return [Type] Description
     def k_ring_distances(h3_index, k)
       max_out_size = max_kring_size(k)
       out = FFI::MemoryPointer.new(H3_INDEX, max_out_size)

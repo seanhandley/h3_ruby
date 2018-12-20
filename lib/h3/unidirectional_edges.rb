@@ -2,25 +2,82 @@ module H3
   module UnidirectionalEdges
     extend H3::Bindings::Base
 
+    # @!method name_of_method(args)
+    #
+    # Description
+    #
+    # @param [Type] name Description
+    #
+    # @example 
+    #
+    # @return [Type] Description
     attach_function :h3_indexes_neighbors, :h3IndexesAreNeighbors, [ :h3_index, :h3_index ], :bool
+
+    # @!method name_of_method(args)
+    #
+    # Description
+    #
+    # @param [Type] name Description
+    #
+    # @example 
+    #
+    # @return [Type] Description
     attach_function :h3_unidirectional_edge_valid,
                 :h3UnidirectionalEdgeIsValid,
                 [ :h3_index ],
                 :bool
+
+    # @!method name_of_method(args)
+    #
+    # Description
+    #
+    # @param [Type] name Description
+    #
+    # @example 
+    #
+    # @return [Type] Description
     attach_function :h3_unidirectional_edge,
                     :getH3UnidirectionalEdge,
                     [ :h3_index, :h3_index ],
                     :h3_index
 
+    # @!method name_of_method(args)
+    #
+    # Description
+    #
+    # @param [Type] name Description
+    #
+    # @example 
+    #
+    # @return [Type] Description
     attach_function :destination_from_unidirectional_edge,
                     :getDestinationH3IndexFromUnidirectionalEdge,
                     [ :h3_index ],
                     :h3_index
+
+    # @!method name_of_method(args)
+    #
+    # Description
+    #
+    # @param [Type] name Description
+    #
+    # @example 
+    #
+    # @return [Type] Description
     attach_function :origin_from_unidirectional_edge,
                     :getOriginH3IndexFromUnidirectionalEdge,
                     [ :h3_index ],
                     :h3_index
 
+    # Name
+    #
+    # Description
+    #
+    # @param [Type] name Description
+    #
+    # @example 
+    #
+    # @return [Type] Description
     def h3_indexes_from_unidirectional_edge(edge)
       max_hexagons = 2
       origin_destination = FFI::MemoryPointer.new(:ulong_long, max_hexagons)
@@ -28,6 +85,15 @@ module H3
       origin_destination.read_array_of_ulong_long(max_hexagons).reject(&:zero?)
     end
 
+    # Name
+    #
+    # Description
+    #
+    # @param [Type] name Description
+    #
+    # @example 
+    #
+    # @return [Type] Description
     def h3_unidirectional_edges_from_hexagon(origin)
       max_edges = 6
       edges = FFI::MemoryPointer.new(:ulong_long, max_edges)
@@ -35,6 +101,15 @@ module H3
       edges.read_array_of_ulong_long(max_edges).reject(&:zero?)
     end
 
+    # Name
+    #
+    # Description
+    #
+    # @param [Type] name Description
+    #
+    # @example 
+    #
+    # @return [Type] Description
     def h3_unidirectional_edge_boundary(edge)
       geo_boundary = Bindings::Structs::GeoBoundary.new
       Bindings::Private.h3_unidirectional_edge_boundary(edge, geo_boundary)

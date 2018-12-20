@@ -14,6 +14,8 @@ require "h3/unidirectional_edges"
 # The main H3 namespace.
 #
 # All public methods for the library are defined here.
+#
+# @see https://uber.github.io/h3/#/documentation/overview/introduction
 module H3
   class << self
     include GeoJSON
