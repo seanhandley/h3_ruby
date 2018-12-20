@@ -7,7 +7,7 @@ module H3
 
     # Derive the maximum number of H3 indexes that could be returned from the input.
     #
-    # @param [Object] geo_polygon Either a GeoJSON string or a coordinates nested array.
+    # @param [String, Array<Array<Array<Float>>>] geo_polygon Either a GeoJSON string or a coordinates nested array.
     # @param [Integer] resolution Resolution.
     #
     # @example Derive maximum number of hexagons for given GeoJSON document.
@@ -54,7 +54,7 @@ module H3
 
     # Derive a list of H3 indexes that fall within a given geo polygon structure.
     #
-    # @param [Object] geo_polygon Either a GeoJSON string or a coordinates nested array.
+    # @param [String, Array<Array<Array<Float>>>] geo_polygon Either a GeoJSON string or a coordinates nested array.
     # @param [Integer] resolution Resolution.
     #
     # @example Derive hexagons for given GeoJSON document.
@@ -133,7 +133,7 @@ module H3
     #     ]
     #   ]
     #
-    # @return [Array<Array<Array<Integer>>>] Nested array of coordinates.
+    # @return [Array<Array<Array<Float>>>] Nested array of coordinates.
     def h3_set_to_linked_geo(h3_indexes)
       h3_indexes.uniq!
       linked_geo_polygon = Bindings::Structs::LinkedGeoPolygon.new

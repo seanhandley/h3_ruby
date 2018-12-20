@@ -1,83 +1,102 @@
 module H3
+  # Unidirectional edge functions
+  # 
+  # @see https://uber.github.io/h3/#/documentation/api-reference/unidirectional-edges
   module UnidirectionalEdges
     extend H3::Bindings::Base
 
-    # @!method name_of_method(args)
+    # @!method h3_indexes_neighbors?(origin, destination)
     #
-    # Description
+    # Determine whether two H3 indexes are neighbors.
     #
-    # @param [Type] name Description
+    # @param [Integer] origin Origin H3 Index
+    # @param [Integer] destination Destination H3 Index
     #
-    # @example 
+    # @example Check two H3 indexes
+    #   H3.h3_indexes_neighbors?(617700169958293503, 617700169958031359)
+    #   true
     #
-    # @return [Type] Description
+    # @return [Boolean] True if indexes are neighbors
     attach_function :h3_indexes_neighbors, :h3IndexesAreNeighbors, [ :h3_index, :h3_index ], :bool
 
-    # @!method name_of_method(args)
+    # @!method h3_unidirectional_edge_valid?(h3_index)
     #
-    # Description
+    # Determine whether the given H3 Index represents an edge.
     #
-    # @param [Type] name Description
+    # @param [Integer] h3_index H3 Index
     #
-    # @example 
+    # @example Check if H3 index is a valid unidirectional edge.
+    #   H3.h3_unidirectional_edge_valid?(1266218516299644927)
+    #   true
     #
-    # @return [Type] Description
+    # @return [Boolean] True if H3 index is a valid unidirectional edge
     attach_function :h3_unidirectional_edge_valid,
                 :h3UnidirectionalEdgeIsValid,
                 [ :h3_index ],
                 :bool
 
-    # @!method name_of_method(args)
+    # @!method h3_unidirectional_edge(origin, destination)
     #
-    # Description
+    # Derives the H3 index of the edge from the given H3 indexes.
     #
-    # @param [Type] name Description
+    # @param [Integer] origin H3 Index
+    # @param [Integer] destination H3 Index
     #
-    # @example 
+    # @example Derive the H3 edge index between two H3 indexes
+    #   H3.h3_unidirectional_edge(617700169958293503, 617700169958031359)
+    #   1626506486489284607
     #
-    # @return [Type] Description
+    # @return [Integer] H3 edge index
     attach_function :h3_unidirectional_edge,
                     :getH3UnidirectionalEdge,
                     [ :h3_index, :h3_index ],
                     :h3_index
 
-    # @!method name_of_method(args)
+    # @!method destination_from_unidirectional_edge(edge)
     #
-    # Description
+    # Derive destination H3 index from edge.
     #
-    # @param [Type] name Description
+    # @param [Integer] edge H3 edge index
     #
-    # @example 
+    # @example Get destination index from edge
+    #   H3.destination_from_unidirectional_edge(1266218516299644927)
+    #   617700169961177087
     #
-    # @return [Type] Description
+    # @return [Integer] H3 index
     attach_function :destination_from_unidirectional_edge,
                     :getDestinationH3IndexFromUnidirectionalEdge,
                     [ :h3_index ],
                     :h3_index
 
-    # @!method name_of_method(args)
+    # @!method origin_from_unidirectional_edge(edge)
     #
-    # Description
+    # Derive origin H3 index from edge.
     #
-    # @param [Type] name Description
+    # @param [Integer] edge H3 edge index
     #
-    # @example 
+    # @example Get origin index from edge
+    #   H3.origin_from_unidirectional_edge(1266218516299644927)
+    #   617700169958293503
     #
-    # @return [Type] Description
+    # @return [Integer] H3 index
     attach_function :origin_from_unidirectional_edge,
                     :getOriginH3IndexFromUnidirectionalEdge,
                     [ :h3_index ],
                     :h3_index
 
-    # Name
+    # Derive origin and destination H3 indexes from edge.
     #
-    # Description
+    # Returned in the form
     #
-    # @param [Type] name Description
+    #   [origin, destination]
     #
-    # @example 
+    # @param [Integer] edge H3 edge index
     #
-    # @return [Type] Description
+    # @example Get origin and destination indexes from edge
+    #   H3.h3_indexes_from_unidirectional_edge(1266218516299644927)
+    #   [617700169958293503, 617700169961177087]
+    #
+    # @return [Array<Integer>] H3 index array.
     def h3_indexes_from_unidirectional_edge(edge)
       max_hexagons = 2
       origin_destination = FFI::MemoryPointer.new(:ulong_long, max_hexagons)
@@ -85,15 +104,18 @@ module H3
       origin_destination.read_array_of_ulong_long(max_hexagons).reject(&:zero?)
     end
 
-    # Name
+    # Derive unidirectional edges for a H3 index.
     #
-    # Description
+    # @param [Integer] origin H3 index
     #
-    # @param [Type] name Description
+    # @example Get unidirectional indexes from hexagon
+    #   H3.h3_unidirectional_edges_from_hexagon(1266218516299644927)
+    #   [
+    #     1266218516299644927, 1338276110337572863, 1410333704375500799,
+    #     1482391298413428735, 1554448892451356671, 1626506486489284607
+    #   ]
     #
-    # @example 
-    #
-    # @return [Type] Description
+    # @return [Array<Integer>] H3 index array.
     def h3_unidirectional_edges_from_hexagon(origin)
       max_edges = 6
       edges = FFI::MemoryPointer.new(:ulong_long, max_edges)
@@ -101,15 +123,18 @@ module H3
       edges.read_array_of_ulong_long(max_edges).reject(&:zero?)
     end
 
-    # Name
+    # Derive coordinates for edge boundary.
     #
-    # Description
-    #
-    # @param [Type] name Description
+    # @param [Integer] edge H3 edge index
     #
     # @example 
+    #   H3.h3_unidirectional_edge_boundary(1266218516299644927)
+    #   [
+    #     [37.77820687262237, -122.41971895414808],
+    #     [37.77652420699321, -122.42079024541876]
+    #   ]
     #
-    # @return [Type] Description
+    # @return [Array<Array<Float>>] Edge boundary coordinates for a hexagon
     def h3_unidirectional_edge_boundary(edge)
       geo_boundary = Bindings::Structs::GeoBoundary.new
       Bindings::Private.h3_unidirectional_edge_boundary(edge, geo_boundary)
