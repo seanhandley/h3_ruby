@@ -60,7 +60,7 @@ H3.geo_to_h3([53.959130, -1.079230], 8).to_s(16)
 
 ## Documentation
 
-There is a full reference available here: https://www.rubydoc.info/github/StuartApp/h3_ruby
+There is a full reference available here: https://www.rubydoc.info/github/StuartApp/h3_ruby/H3
 
 ## Running Specs
 
