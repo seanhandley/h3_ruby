@@ -1,6 +1,6 @@
 module H3
   # Unidirectional edge functions
-  # 
+  #
   # @see https://uber.github.io/h3/#/documentation/api-reference/unidirectional-edges
   module UnidirectionalEdges
     extend H3::Bindings::Base
@@ -17,7 +17,7 @@ module H3
     #   true
     #
     # @return [Boolean] True if indexes are neighbors
-    attach_function :h3_indexes_neighbors, :h3IndexesAreNeighbors, [ :h3_index, :h3_index ], :bool
+    attach_function :h3_indexes_neighbors, :h3IndexesAreNeighbors, %i[h3_index h3_index], :bool
 
     # @!method h3_unidirectional_edge_valid?(h3_index)
     #
@@ -31,9 +31,9 @@ module H3
     #
     # @return [Boolean] True if H3 index is a valid unidirectional edge
     attach_function :h3_unidirectional_edge_valid,
-                :h3UnidirectionalEdgeIsValid,
-                [ :h3_index ],
-                :bool
+                    :h3UnidirectionalEdgeIsValid,
+                    %i[h3_index],
+                    :bool
 
     # @!method h3_unidirectional_edge(origin, destination)
     #
@@ -49,7 +49,7 @@ module H3
     # @return [Integer] H3 edge index
     attach_function :h3_unidirectional_edge,
                     :getH3UnidirectionalEdge,
-                    [ :h3_index, :h3_index ],
+                    %i[h3_index h3_index],
                     :h3_index
 
     # @!method destination_from_unidirectional_edge(edge)
@@ -65,7 +65,7 @@ module H3
     # @return [Integer] H3 index
     attach_function :destination_from_unidirectional_edge,
                     :getDestinationH3IndexFromUnidirectionalEdge,
-                    [ :h3_index ],
+                    %i[h3_index],
                     :h3_index
 
     # @!method origin_from_unidirectional_edge(edge)
@@ -81,7 +81,7 @@ module H3
     # @return [Integer] H3 index
     attach_function :origin_from_unidirectional_edge,
                     :getOriginH3IndexFromUnidirectionalEdge,
-                    [ :h3_index ],
+                    %i[h3_index],
                     :h3_index
 
     # Derive origin and destination H3 indexes from edge.
@@ -127,7 +127,7 @@ module H3
     #
     # @param [Integer] edge H3 edge index
     #
-    # @example 
+    # @example
     #   H3.h3_unidirectional_edge_boundary(1266218516299644927)
     #   [
     #     [37.77820687262237, -122.41971895414808],

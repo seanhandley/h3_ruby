@@ -2,7 +2,7 @@ module H3
   # GeoJSON helper methods.
   #
   # This module allows conversions between GeoJSON polygon data and a nested set of coordinates.
-  # 
+  #
   # It should be noted that H3 describes coordinates as number pairs in the form
   #
   #   [latitude, longitude]
@@ -25,7 +25,8 @@ module H3
   #
   # Specific examples are shown in the individual method details.
   #
-  # @see http://geojson.io geojson.io - A graphical tool to see GeoJSON data rendered on a world map.
+  # @see http://geojson.io geojson.io - A graphical tool to see GeoJSON data
+  # rendered on a world map.
   # @see https://tools.ietf.org/html/rfc7946 The GeoJSON RFC standard.
   module GeoJSON
     # Convert a GeoJSON document to a nested array of coordinates.
@@ -77,15 +78,7 @@ module H3
     # @return [Array<Array<Array>>] Nested array of coordinates.
     def geo_json_to_coordinates(input)
       geom = RGeo::GeoJSON.decode(input)
-      coordinates = if geom.respond_to?(:first) # feature collection
-                      geom.first.geometry.coordinates
-                    elsif geom.respond_to?(:geometry) # feature
-                      geom.geometry.coordinates
-                    elsif geom.respond_to?(:coordinates) # polygon
-                      geom.coordinates
-                    else
-                      failed_to_parse!
-                    end
+      coordinates = fetch_coordinates(geom)
       swap_lat_lon(coordinates) || failed_to_parse!
     rescue JSON::ParserError
       failed_to_parse!
@@ -156,6 +149,18 @@ module H3
     # geo-json coordinates use [lon, lat], h3 uses [lat, lon]
     def swap_lat_lon(coordinates)
       coordinates.map { |polygon| polygon.map { |x, y| [y, x] } }
+    end
+
+    def fetch_coordinates(geom)
+      if geom.respond_to?(:first) # feature collection
+        geom.first.geometry.coordinates
+      elsif geom.respond_to?(:geometry) # feature
+        geom.geometry.coordinates
+      elsif geom.respond_to?(:coordinates) # polygon
+        geom.coordinates
+      else
+        failed_to_parse!
+      end
     end
 
     def failed_to_parse!

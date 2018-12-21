@@ -1,17 +1,18 @@
 module H3
   # Region functions.
   #
-  # @see https://uber.github.io/h3/#/documentation/api-reference/regions 
+  # @see https://uber.github.io/h3/#/documentation/api-reference/regions
   module Regions
     extend H3::Bindings::Base
 
     # Derive the maximum number of H3 indexes that could be returned from the input.
     #
-    # @param [String, Array<Array<Array<Float>>>] geo_polygon Either a GeoJSON string or a coordinates nested array.
+    # @param [String, Array<Array<Array<Float>>>] geo_polygon Either a GeoJSON string
+    # or a coordinates nested array.
     # @param [Integer] resolution Resolution.
     #
     # @example Derive maximum number of hexagons for given GeoJSON document.
-    #   geo_json = "{\"type\":\"Polygon\",\"coordinates\":[[[-1.7358398437499998,52.24630137198303],
+    #   geo_json = "{\"type\":\"Polygon\",\"coordinates\":[[[-1.735839843749998,52.24630137198303],
     #     [-1.8923950195312498,52.05249047600099],[-1.56829833984375,51.891749018068246],
     #     [-1.27716064453125,51.91208502557545],[-1.19476318359375,52.032218104145294],
     #     [-1.24420166015625,52.19413974159753],[-1.5902709960937498,52.24125614966341],
@@ -54,11 +55,12 @@ module H3
 
     # Derive a list of H3 indexes that fall within a given geo polygon structure.
     #
-    # @param [String, Array<Array<Array<Float>>>] geo_polygon Either a GeoJSON string or a coordinates nested array.
+    # @param [String, Array<Array<Array<Float>>>] geo_polygon Either a GeoJSON string or a
+    # coordinates nested array.
     # @param [Integer] resolution Resolution.
     #
     # @example Derive hexagons for given GeoJSON document.
-    #   geo_json = "{\"type\":\"Polygon\",\"coordinates\":[[[-1.7358398437499998,52.24630137198303],
+    #   geo_json = "{\"type\":\"Polygon\",\"coordinates\":[[[-1.735839843799998,52.24630137198303],
     #     [-1.8923950195312498,52.05249047600099],[-1.56829833984375,51.891749018068246],
     #     [-1.27716064453125,51.91208502557545],[-1.19476318359375,52.032218104145294],
     #     [-1.24420166015625,52.19413974159753],[-1.5902709960937498,52.24125614966341],
@@ -152,7 +154,7 @@ module H3
 
       geo_polygons = [linked_geo_polygon]
 
-      until linked_geo_polygon[:next].null? do
+      until linked_geo_polygon[:next].null?
         geo_polygons << linked_geo_polygon[:next]
         linked_geo_polygon = linked_geo_polygon[:next]
       end
@@ -169,7 +171,7 @@ module H3
 
       geo_loops = [linked_geo_loop]
 
-      until linked_geo_loop[:next].null? do
+      until linked_geo_loop[:next].null?
         geo_loops << linked_geo_loop[:next]
         linked_geo_loop = linked_geo_loop[:next]
       end
@@ -186,7 +188,7 @@ module H3
 
       geo_coords = [linked_geo_coord]
 
-      until linked_geo_coord[:next].null? do
+      until linked_geo_coord[:next].null?
         geo_coords << linked_geo_coord[:next]
         linked_geo_coord = linked_geo_coord[:next]
       end
@@ -209,8 +211,8 @@ module H3
       geo_polygon[:num_holes] = len
       geofences = holes.map(&method(:build_geofence))
       ptr = FFI::MemoryPointer.new(Bindings::Structs::GeoFence, len)
-      fence_structs = geofences.count.times.map do |i|
-        Bindings::Structs::GeoFence.new(ptr + i * Bindings::Structs::GeoFence.size())
+      fence_structs = 0.upto(geofences.count).map do |i|
+        Bindings::Structs::GeoFence.new(ptr + i * Bindings::Structs::GeoFence.size)
       end
       geofences.each_with_index do |geofence, i|
         fence_structs[i][:num_verts] = geofence[:num_verts]

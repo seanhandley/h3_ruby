@@ -19,7 +19,7 @@ module H3
     #   9
     #
     # @return [Integer] Resolution of H3 index
-    attach_function :h3_resolution, :h3GetResolution, [ :h3_index ], :int
+    attach_function :h3_resolution, :h3GetResolution, %i[h3_index], :int
 
     # @!method h3_base_cell(h3_index)
     #
@@ -32,7 +32,7 @@ module H3
     #   20
     #
     # @return [Integer] Base cell number
-    attach_function :h3_base_cell, :h3GetBaseCell, [ :h3_index ], :int
+    attach_function :h3_base_cell, :h3GetBaseCell, %i[h3_index], :int
 
     # @!method string_to_h3(h3_string)
     #
@@ -45,7 +45,7 @@ module H3
     #   617700169958293503
     #
     # @return [Integer] H3 index
-    attach_function :string_to_h3, :stringToH3, [ :string ], :h3_index
+    attach_function :string_to_h3, :stringToH3, %i[string], :h3_index
 
     # @!method h3_pentagon?(h3_index)
     #
@@ -58,7 +58,7 @@ module H3
     #   true
     #
     # @return [Boolean] True if the H3 index is a pentagon.
-    attach_function :h3_pentagon, :h3IsPentagon, [ :h3_index ], :bool
+    attach_function :h3_pentagon, :h3IsPentagon, %i[h3_index], :bool
 
     # @!method h3_res_class_3?(h3_index)
     #
@@ -72,7 +72,7 @@ module H3
     #   true
     #
     # @return [Boolean] True if the H3 index has a class III resolution.
-    attach_function :h3_res_class_3, :h3IsResClassIII, [ :h3_index ], :bool
+    attach_function :h3_res_class_3, :h3IsResClassIII, %i[h3_index], :bool
 
     # @!method h3_valid?(h3_index)
     #
@@ -85,7 +85,7 @@ module H3
     #   true
     #
     # @return [Boolean] True if the H3 index is valid.
-    attach_function :h3_valid, :h3IsValid, [ :h3_index ], :bool
+    attach_function :h3_valid, :h3IsValid, %i[h3_index], :bool
 
     # Derives the hexadecimal string representation for a given H3 index.
     #
@@ -99,7 +99,7 @@ module H3
     def h3_to_string(h3_index)
       h3_str = FFI::MemoryPointer.new(:char, H3_TO_STR_BUF_SIZE)
       Bindings::Private.h3_to_string(h3_index, h3_str, H3_TO_STR_BUF_SIZE)
-      h3_str.read_string 
+      h3_str.read_string
     end
   end
 end

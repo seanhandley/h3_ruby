@@ -16,7 +16,7 @@ module H3
     #   91
     #
     # @return [Integer] Maximum k-ring size.
-    attach_function :max_kring_size, :maxKringSize, [ :int ], :int
+    attach_function :max_kring_size, :maxKringSize, %i[int], :int
 
     # @!method h3_distance(origin, h3_index)
     #
@@ -30,7 +30,7 @@ module H3
     #   5
     #
     # @return [Integer] Distance between indexes.
-    attach_function :h3_distance, :h3Distance, [ :h3_index, :h3_index], :int
+    attach_function :h3_distance, :h3Distance, %i[h3_index h3_index], :int
 
     # Derives H3 indexes within k distance of the origin H3 index.
     #
@@ -180,17 +180,11 @@ module H3
     def hex_ranges(h3_set, k, grouped: true)
       h3_range_indexes = hex_ranges_ungrouped(h3_set, k)
       return h3_range_indexes unless grouped
-      out = {}
-      h3_range_indexes.each_slice(max_kring_size(k)).each do |indexes|
+      h3_range_indexes.each_slice(max_kring_size(k)).each_with_object({}) do |indexes, out|
         h3_index = indexes.first
 
-        out[h3_index] = 0.upto(k).map do |j|
-          start  = j == 0 ? 0 : max_kring_size(j-1)
-          length = max_hex_ring_size(j)
-          indexes.slice(start, length)
-        end
+        out[h3_index] = k_rings_for_hex_range(indexes, k)
       end
-      out
     end
 
     # Derives the hex range for the given origin at k distance, sub-grouped by distance.
@@ -270,6 +264,14 @@ module H3
 
     private
 
+    def k_rings_for_hex_range(indexes, k)
+      0.upto(k).map do |j|
+        start  = j.zero? ? 0 : max_kring_size(j - 1)
+        length = max_hex_ring_size(j)
+        indexes.slice(start, length)
+      end
+    end
+
     def hex_ranges_ungrouped(h3_set, k)
       h3_set = h3_set.uniq
       max_out_size = h3_set.size * max_kring_size(k)
@@ -279,7 +281,9 @@ module H3
         h3_set_ptr.write_array_of_ulong_long(h3_set)
         pentagonal_distortion = Bindings::Private.hex_ranges(h3_set_ptr, h3_set.size, k, out)
       end
-      raise(ArgumentError, "One of the specified hexagon ranges contains a pentagon") if pentagonal_distortion
+      if pentagonal_distortion
+        raise(ArgumentError, "One of the specified hexagon ranges contains a pentagon")
+      end
 
       out.read_array_of_ulong_long(max_out_size)
     end

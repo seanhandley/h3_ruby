@@ -17,7 +17,7 @@ module H3
     #   604189371209351167
     #
     # @return [Integer] H3 index of parent hexagon.
-    attach_function :h3_to_parent, :h3ToParent, [ :h3_index, :int ], :h3_index
+    attach_function :h3_to_parent, :h3ToParent, %i[h3_index int], :h3_index
 
     # @!method max_h3_to_children_size(h3_index, child_resolution)
     #
@@ -31,7 +31,7 @@ module H3
     #    49
     #
     # @return [Integer] Maximum number of child hexagons possible at given resolution.
-    attach_function :max_h3_to_children_size, :maxH3ToChildrenSize, [ :h3_index, :int ], :int
+    attach_function :max_h3_to_children_size, :maxH3ToChildrenSize, %i[h3_index int], :int
 
     # Derive child hexagons contained within the hexagon at the given H3 index.
     #
@@ -76,7 +76,7 @@ module H3
       FFI::MemoryPointer.new(H3_INDEX, compacted_set.size) do |hexagons_ptr|
         hexagons_ptr.write_array_of_ulong_long(compacted_set)
         size = Bindings::Private.max_uncompact_size(hexagons_ptr, compacted_set.size, resolution)
-        raise(ArgumentError, "Couldn't estimate size. Invalid resolution?") if size < 0
+        raise(ArgumentError, "Couldn't estimate size. Invalid resolution?") if size.negative?
         return size
       end
     end
@@ -114,7 +114,7 @@ module H3
         hexagons_ptr.write_array_of_ulong_long(h3_set)
         failure = Bindings::Private.compact(hexagons_ptr, out, h3_set.size)
       end
-      
+
       raise "Couldn't compact given indexes" if failure
       out.read_array_of_ulong_long(h3_set.size).reject(&:zero?)
     end
@@ -150,9 +150,11 @@ module H3
       out = FFI::MemoryPointer.new(H3_INDEX, max_size)
       FFI::MemoryPointer.new(H3_INDEX, compacted_set.size) do |hexagons_ptr|
         hexagons_ptr.write_array_of_ulong_long(compacted_set)
-        failure = Bindings::Private.uncompact(hexagons_ptr, compacted_set.size, out, max_size, resolution)
+        failure = Bindings::Private.uncompact(
+          hexagons_ptr, compacted_set.size, out, max_size, resolution
+        )
       end
-      
+
       raise "Couldn't uncompact given indexes" if failure
       out.read_array_of_ulong_long(max_size).reject(&:zero?)
     end

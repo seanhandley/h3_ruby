@@ -7,6 +7,5 @@ module H3
   #
   # These are intended to be used by the library's public methods
   # and not to be used directly by client code.
-  module Bindings
-  end
+  module Bindings; end
 end
