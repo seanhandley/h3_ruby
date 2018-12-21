@@ -28,8 +28,8 @@ module H3
     include UnidirectionalEdges
   end
 
-  PREDICATES = %i(h3_indexes_neighbors h3_pentagon h3_res_class_3
-                  h3_unidirectional_edge_valid h3_valid).freeze
+  PREDICATES = %i[h3_indexes_neighbors h3_pentagon h3_res_class_3
+                  h3_unidirectional_edge_valid h3_valid].freeze
   PREDICATES.each do |predicate|
     singleton_class.send(:alias_method, "#{predicate}?".to_sym, predicate)
   end
