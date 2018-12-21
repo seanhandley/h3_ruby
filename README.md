@@ -4,7 +4,7 @@
 
 [![Build Status](https://travis-ci.org/StuartApp/h3_ruby.svg?branch=master)](https://travis-ci.org/seanhandley/h3_ruby) [![Maintainability](https://api.codeclimate.com/v1/badges/c55e1f67421eba8af8d0/maintainability)](https://codeclimate.com/repos/5c18b7f49bc79a02a4000d81/maintainability) [![Coverage Status](https://coveralls.io/repos/github/StuartApp/h3_ruby/badge.svg?branch=master)](https://coveralls.io/github/StuartApp/h3_ruby?branch=master)
 
-Ruby bindings for Uber's [H3 library](https://uber.github.io/h3/).
+Ruby-to-C bindings for Uber's [H3 library](https://uber.github.io/h3/).
 
 Please consult [the H3 documentation](https://uber.github.io/h3/#/documentation/overview/introduction) for a full explanation of terminology and concepts.
 
