@@ -6,6 +6,7 @@ module H3
     extend H3::Bindings::Base
 
     H3_TO_STR_BUF_SIZE = 32
+    private_constant :H3_TO_STR_BUF_SIZE
 
     # @!method h3_resolution(h3_index)
     #

@@ -52,6 +52,14 @@ RSpec.describe H3 do
 
       it { is_expected.to eq coordinates }
     end
+
+    context "when given bad input" do
+      let(:input) { "blah" }
+
+      it "raises an error" do
+        expect { geo_json_to_coordinates }.to raise_error(ArgumentError)
+      end
+    end
   end
 
   describe ".coordinates_to_geo_json" do
@@ -90,5 +98,21 @@ RSpec.describe H3 do
     subject(:coordinates_to_geo_json) { H3.coordinates_to_geo_json(input) }
 
     it { is_expected.to eq geojson }
+
+    context "when given bad input" do
+      let(:input) { "blah" }
+
+      it "raises an error" do
+        expect { coordinates_to_geo_json }.to raise_error(ArgumentError)
+      end
+    end
+
+    context "when given nested bad input" do
+      let(:input) { [[],[[[[]]]]] }
+
+      it "raises an error" do
+        expect { coordinates_to_geo_json }.to raise_error(ArgumentError)
+      end
+    end
   end
 end
