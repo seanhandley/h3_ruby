@@ -6,11 +6,17 @@
 
 Ruby bindings for Uber's [H3 library](https://uber.github.io/h3/).
 
-Please consult the H3 documentation for a full explanation of terminology and concepts.
+Please consult [the H3 documentation](https://uber.github.io/h3/#/documentation/overview/introduction) for a full explanation of terminology and concepts.
+
+## Supported H3 Versions
+
+The semantic versioning of this gem matches the versioning of the H3 C library. Currently, this is `3.2.x`.
 
 ## Getting Started
 
-You need to install the C lib at https://github.com/uber/h3.
+This gem uses FFI to link directly into the H3 library (written in C).
+
+Before using the gem, you will need to install the C lib at https://github.com/uber/h3.
 
 Install the build dependencies as instructed here: https://github.com/uber/h3#install-build-time-dependencies
 
@@ -24,32 +30,40 @@ Do *not* follow the Compilation Steps. Instead, use the following:
 
 The key difference is the `BUILD_SHARED_LIBS` option.
 
-## Supported Versions
-
-The semantic versioning of this gem matches the versioning of the H3 C library. Currently, this is `3.2.x`.
-
 ## Installing
+
+You can install the gem directly using
 
     gem install h3
 
-or
+or add it to your Gemfile
 
     # Gemfile
     gem "h3", "~> 3.2"
 
-## Documentation
-
-https://www.rubydoc.info/github/StuartApp/h3_ruby
-
 ## Usage
+
+Require the gem in your code
 
 ```ruby
 require "h3"
+```
+
+Call H3 functions via the `H3` namespace
+
+```ruby
 H3.geo_to_h3([53.959130, -1.079230], 8).to_s(16)
 # => "8819429a9dfffff"
 ```
+
+## Documentation
+
+There is a full reference available here: https://www.rubydoc.info/github/StuartApp/h3_ruby
 
 ## Running Specs
 
     rake
 
+## Contributing
+
+Pull requests and issues are welcome!
