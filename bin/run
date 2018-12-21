@@ -1,6 +1,0 @@
-#!/bin/bash
-
-if bin/compile;
-then
-    bundle exec ruby -Ilib -rh3_ruby "$@"
-fi
