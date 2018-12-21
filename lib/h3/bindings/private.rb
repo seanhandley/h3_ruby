@@ -20,7 +20,7 @@ module H3
       attach_function :hex_range, :hexRange, [ :h3_index, :int, :pointer ], :bool
       attach_function :hex_range_distances, :hexRangeDistances, [:h3_index, :int, :pointer, :pointer], :bool
       attach_function :hex_ranges, :hexRanges, [ :pointer, :int, :int, :pointer ], :bool
-      attach_function :hex_ring, :hexRing, [:h3_index, :int, :pointer], :void
+      attach_function :hex_ring, :hexRing, [:h3_index, :int, :pointer], :bool
       attach_function :k_ring, :kRing, [:h3_index, :int, :pointer], :void
       attach_function :k_ring_distances, :kRingDistances, [:h3_index, :int, :pointer, :pointer], :bool
       attach_function :max_polyfill_size, :maxPolyfillSize, [Bindings::Structs::GeoPolygon.by_ref, :int], :int
