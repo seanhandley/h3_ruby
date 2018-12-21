@@ -5,7 +5,7 @@ module H3
     # This module provides bindings that do not have to be invoked directly by clients
     # of the library. They are used only internally to provide related public interface.
     module Private
-      extend H3::BindingBase
+      extend H3::Bindings::Base
 
       attach_function :compact, [:pointer, :pointer, :int], :bool
       attach_function :geo_to_h3, :geoToH3, [ Bindings::Structs::GeoCoord.by_ref, :int ], :h3_index
@@ -20,7 +20,7 @@ module H3
       attach_function :hex_range, :hexRange, [ :h3_index, :int, :pointer ], :bool
       attach_function :hex_range_distances, :hexRangeDistances, [:h3_index, :int, :pointer, :pointer], :bool
       attach_function :hex_ranges, :hexRanges, [ :pointer, :int, :int, :pointer ], :bool
-      attach_function :hex_ring, :hexRing, [:h3_index, :int, :pointer], :void
+      attach_function :hex_ring, :hexRing, [:h3_index, :int, :pointer], :bool
       attach_function :k_ring, :kRing, [:h3_index, :int, :pointer], :void
       attach_function :k_ring_distances, :kRingDistances, [:h3_index, :int, :pointer, :pointer], :bool
       attach_function :max_polyfill_size, :maxPolyfillSize, [Bindings::Structs::GeoPolygon.by_ref, :int], :int

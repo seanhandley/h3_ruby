@@ -3,8 +3,7 @@ module H3
   #
   # @see https://uber.github.io/h3/#/documentation/api-reference/regions 
   module Regions
-    extend H3::BindingBase
-
+    extend H3::Bindings::Base
 
     # Derive the maximum number of H3 indexes that could be returned from the input.
     #
@@ -136,6 +135,7 @@ module H3
     #
     # @return [Array<Array<Array<Float>>>] Nested array of coordinates.
     def h3_set_to_linked_geo(h3_indexes)
+      h3_indexes.uniq!
       linked_geo_polygon = Bindings::Structs::LinkedGeoPolygon.new
       FFI::MemoryPointer.new(H3_INDEX, h3_indexes.size) do |hexagons_ptr|
         hexagons_ptr.write_array_of_ulong_long(h3_indexes)

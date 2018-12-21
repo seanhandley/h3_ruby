@@ -3,7 +3,7 @@ module H3
   #
   # @see https://uber.github.io/h3/#/documentation/api-reference/traversal
   module Traversal
-    extend H3::BindingBase
+    extend H3::Bindings::Base
 
     # @!method max_kring_size(k)
     #

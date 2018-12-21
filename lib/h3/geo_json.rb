@@ -84,9 +84,11 @@ module H3
                     elsif geom.respond_to?(:coordinates) # polygon
                       geom.coordinates
                     else
-                      raise "Could not parse given input. Please use a GeoJSON polygon."
+                      failed_to_parse!
                     end
-      swap_lat_lon(coordinates)
+      swap_lat_lon(coordinates) || failed_to_parse!
+    rescue JSON::ParserError
+      failed_to_parse!
     end
 
     # Convert a nested array of coordinates to a GeoJSON document
@@ -139,12 +141,14 @@ module H3
       coordinates = swap_lat_lon(coordinates)
       outer_coords, *inner_coords = coordinates
       factory = RGeo::Cartesian.simple_factory
-      exterior = factory.linear_ring(outer_coords.map! { |lon, lat| factory.point(lon, lat) })
+      exterior = factory.linear_ring(outer_coords.map { |lon, lat| factory.point(lon, lat) })
       interior_rings = inner_coords.map do |polygon|
         factory.linear_ring(polygon.map { |lon, lat| factory.point(lon, lat) })
       end
       polygon = factory.polygon(exterior, interior_rings)
       RGeo::GeoJSON.encode(polygon).to_json
+    rescue RGeo::Error::InvalidGeometry, NoMethodError
+      invalid_coordinates!
     end
 
     private
@@ -152,6 +156,14 @@ module H3
     # geo-json coordinates use [lon, lat], h3 uses [lat, lon]
     def swap_lat_lon(coordinates)
       coordinates.map { |polygon| polygon.map { |x, y| [y, x] } }
+    end
+
+    def failed_to_parse!
+      raise ArgumentError, "Could not parse given input. Please use a GeoJSON polygon."
+    end
+
+    def invalid_coordinates!
+      raise ArgumentError, "Could not parse given coordinates."
     end
   end
 end

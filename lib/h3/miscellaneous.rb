@@ -3,7 +3,7 @@ module H3
   #
   # @see https://uber.github.io/h3/#/documentation/api-reference/miscellaneous
   module Miscellaneous
-    extend H3::BindingBase
+    extend H3::Bindings::Base
 
     # @!method degs_to_rads(degs)
     #

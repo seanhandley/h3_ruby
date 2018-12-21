@@ -3,7 +3,7 @@ module H3
   #
   # @see https://uber.github.io/h3/#/documentation/api-reference/hierarchy
   module Hierarchy
-    extend H3::BindingBase
+    extend H3::Bindings::Base
 
     # @!method h3_to_parent(h3_index, parent_resolution)
     #
