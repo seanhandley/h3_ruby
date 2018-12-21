@@ -9,8 +9,8 @@ module H3
     #
     # Determine whether two H3 indexes are neighbors.
     #
-    # @param [Integer] origin Origin H3 Index
-    # @param [Integer] destination Destination H3 Index
+    # @param [Integer] origin Origin H3 index
+    # @param [Integer] destination Destination H3 index
     #
     # @example Check two H3 indexes
     #   H3.h3_indexes_neighbors?(617700169958293503, 617700169958031359)
@@ -21,9 +21,9 @@ module H3
 
     # @!method h3_unidirectional_edge_valid?(h3_index)
     #
-    # Determine whether the given H3 Index represents an edge.
+    # Determine whether the given H3 index represents an edge.
     #
-    # @param [Integer] h3_index H3 Index
+    # @param [Integer] h3_index H3 index
     #
     # @example Check if H3 index is a valid unidirectional edge.
     #   H3.h3_unidirectional_edge_valid?(1266218516299644927)
@@ -39,8 +39,8 @@ module H3
     #
     # Derives the H3 index of the edge from the given H3 indexes.
     #
-    # @param [Integer] origin H3 Index
-    # @param [Integer] destination H3 Index
+    # @param [Integer] origin H3 index
+    # @param [Integer] destination H3 index
     #
     # @example Derive the H3 edge index between two H3 indexes
     #   H3.h3_unidirectional_edge(617700169958293503, 617700169958031359)

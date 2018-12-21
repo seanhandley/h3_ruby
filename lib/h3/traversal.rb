@@ -22,8 +22,8 @@ module H3
     #
     # Derive the distance between two H3 indexes.
     #
-    # @param [Integer] origin Origin H3 Index
-    # @param [Integer] h3_index H3 Index
+    # @param [Integer] origin Origin H3 index
+    # @param [Integer] h3_index H3 index
     #
     # @example Derive the distance between two H3 indexes.
     #   H3.h3_distance(617700169983721471, 617700169959866367)
@@ -42,7 +42,7 @@ module H3
     #
     # Output is inserted into the array in order of increasing distance from the origin.
     #
-    # @param [Integer] origin Origin H3 Index
+    # @param [Integer] origin Origin H3 index
     # @param [Integer] k K distance.
     #
     # @example Derive the hex range for a given H3 index with k of 0.
@@ -73,7 +73,7 @@ module H3
     # k-ring 0 is defined as the origin index, k-ring 1 is defined as k-ring 0
     # and all neighboring indexes, and so on.
     #
-    # @param [Integer] origin Origin H3 Index
+    # @param [Integer] origin Origin H3 index
     # @param [Integer] k K distance.
     #
     # @example Derive the k-ring for a given H3 index with k of 0.
@@ -101,7 +101,7 @@ module H3
     # An error is raised when one of the indexes returned is a pentagon or is
     # in the pentagon distortion area.
     #
-    # @param [Integer] origin Origin H3 Index.
+    # @param [Integer] origin Origin H3 index.
     # @param [Integer] k K distance.
     #
     # @example Derive the hex ring for the H3 index at k = 1
@@ -139,7 +139,7 @@ module H3
 
     # Derives H3 indexes within k distance for each H3 index in the set.
     #
-    # @param [Array<Integer>] h3_set Set of H3 Indexes
+    # @param [Array<Integer>] h3_set Set of H3 indexes
     # @param [Integer] k K distance.
     # @param [Boolean] grouped Whether to group the output. Default true.
     #

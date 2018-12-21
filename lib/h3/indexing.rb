@@ -7,18 +7,18 @@ module H3
   #
   # @see https://uber.github.io/h3/#/documentation/api-reference/indexing
   module Indexing
-    # Derive H3 Index for the given set of coordinates.
+    # Derive H3 index for the given set of coordinates.
     #
     # @param [Array<Integer>] coords A coordinate pair.
-    # @param [Integer] resolution The desired resolution of the H3 Index.
+    # @param [Integer] resolution The desired resolution of the H3 index.
     #
-    # @example Derive the H3 Index for the given coordinates.
+    # @example Derive the H3 index for the given coordinates.
     #   H3.geo_to_h3([52.24630137198303, -1.7358398437499998], 9)
     #   617439284584775679
     #
     # @raise [ArgumentError] If coordinates are invalid.
     #
-    # @return [Integer] H3 Index.
+    # @return [Integer] H3 index.
     def geo_to_h3(coords, resolution)
       raise TypeError unless coords.is_a?(Array)
       raise ArgumentError unless coords.count == 2
@@ -31,13 +31,13 @@ module H3
       Bindings::Private.geo_to_h3(coords, resolution)
     end
 
-    # Derive coordinates for a given H3 Index.
+    # Derive coordinates for a given H3 index.
     #
     # The coordinates map to the centre of the hexagon at the given index.
     #
-    # @param [Integer] h3_index A valid H3 Index.
+    # @param [Integer] h3_index A valid H3 index.
     #
-    # @example Derive the central coordinates for the given H3 Index.
+    # @example Derive the central coordinates for the given H3 index.
     #   H3.h3_to_geo(617439284584775679)
     #   [52.245519061399506, -1.7363137757391423]
     #
@@ -48,16 +48,16 @@ module H3
       [rads_to_degs(coords[:lat]), rads_to_degs(coords[:lon])]
     end
 
-    # Derive the geographical boundary as coordinates for a given H3 Index.
+    # Derive the geographical boundary as coordinates for a given H3 index.
     #
     # This will be a set of 6 coordinate pairs matching the vertexes of the
-    # hexagon represented by the given H3 Index.
+    # hexagon represented by the given H3 index.
     #
-    # If the H3 Index is a pentagon, there will be only 5 coordinate pairs returned.
+    # If the H3 index is a pentagon, there will be only 5 coordinate pairs returned.
     #
-    # @param [Integer] h3_index A valid H3 Index.
+    # @param [Integer] h3_index A valid H3 index.
     #
-    # @example Derive the geographical boundary for the given H3 Index.
+    # @example Derive the geographical boundary for the given H3 index.
     #   H3.h3_to_geo_boundary(617439284584775679)
     #   [
     #     [52.247260929171055, -1.736809158397472], [52.24625850761068, -1.7389279144996015],

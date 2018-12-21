@@ -12,11 +12,11 @@ module H3
     # @param [Integer] h3_index A valid H3 index.
     # @param [Integer] parent_resoluton The desired resolution of the parent hexagon.
     #
-    # @example Find the parent hexagon for a H3 Index.
+    # @example Find the parent hexagon for a H3 index.
     #   H3.h3_to_parent(613196570357137407, 6)
     #   604189371209351167
     #
-    # @return [Integer] H3 Index of parent hexagon.
+    # @return [Integer] H3 index of parent hexagon.
     attach_function :h3_to_parent, :h3ToParent, [ :h3_index, :int ], :h3_index
 
     # @!method max_h3_to_children_size(h3_index, child_resolution)
@@ -33,12 +33,12 @@ module H3
     # @return [Integer] Maximum number of child hexagons possible at given resolution.
     attach_function :max_h3_to_children_size, :maxH3ToChildrenSize, [ :h3_index, :int ], :int
 
-    # Derive child hexagons contained within the hexagon at the given H3 Index.
+    # Derive child hexagons contained within the hexagon at the given H3 index.
     #
-    # @param [Integer] h3_index A valid H3 Index.
+    # @param [Integer] h3_index A valid H3 index.
     # @param [Integer] child_resolution The desired resolution of hexagons returned.
     #
-    # @example Find the child hexagons for a H3 Index.
+    # @example Find the child hexagons for a H3 index.
     #   H3.h3_to_children(613196570357137407, 9)
     #   [
     #     617700169982672895, 617700169982935039, 617700169983197183, 617700169983459327,
@@ -55,7 +55,7 @@ module H3
 
     # Find the maximum uncompacted size of the given set of H3 indexes.
     #
-    # @param [Array<Integer>] compacted_set An array of valid H3 Indexes.
+    # @param [Array<Integer>] compacted_set An array of valid H3 indexes.
     # @param [Integer] resolution The desired resolution to uncompact to.
     #
     # @example Find the maximum uncompacted size of the given set.
@@ -85,7 +85,7 @@ module H3
     #
     # In the case where the set cannot be compacted, the set is returned unchanged.
     #
-    # @param [Array<Integer>] h3_set An array of valid H3 Indexes.
+    # @param [Array<Integer>] h3_set An array of valid H3 indexes.
     #
     # @example Compact the given set.
     #   h3_set = [
@@ -105,7 +105,7 @@ module H3
     #
     # @raise [RuntimeError] Couldn't attempt to compact given H3 indexes.
     #
-    # @return [Array<Integer>] Compacted set of H3 Indexes.
+    # @return [Array<Integer>] Compacted set of H3 indexes.
     def compact(h3_set)
       h3_set.uniq!
       failure = false
@@ -121,7 +121,7 @@ module H3
 
     # Uncompact a set of H3 indexes to the given resolution.
     #
-    # @param [Array<Integer>] compacted_set An array of valid H3 Indexes.
+    # @param [Array<Integer>] compacted_set An array of valid H3 indexes.
     # @param [Integer] resolution The desired resolution to uncompact to.
     #
     # @example Compact the given set.
@@ -142,7 +142,7 @@ module H3
     #
     # @raise [RuntimeError] Couldn't attempt to umcompact H3 indexes.
     #
-    # @return [Array<Integer>] Uncompacted set of H3 Indexes.
+    # @return [Array<Integer>] Uncompacted set of H3 indexes.
     def uncompact(compacted_set, resolution)
       max_size = max_uncompact_size(compacted_set, resolution)
 

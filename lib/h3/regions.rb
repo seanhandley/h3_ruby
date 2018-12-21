@@ -109,7 +109,7 @@ module H3
       out.read_array_of_ulong_long(max_size).reject(&:zero?)
     end
 
-    # Derive a nested array of coordinates from a list of H3 Indexes.
+    # Derive a nested array of coordinates from a list of H3 indexes.
     #
     # @param [Array<Integer>] h3_indexes A list of H3 indexes.
     #
