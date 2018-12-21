@@ -1,5 +1,7 @@
 module H3
   module Bindings
+    # Private H3 functions which should not be called directly.
+    #
     # This module provides bindings that do not have to be invoked directly by clients
     # of the library. They are used only internally to provide related public interface.
     module Private
