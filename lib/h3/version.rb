@@ -1,3 +1,3 @@
 module H3
-  VERSION = "0.0.1pre"
+  VERSION = "3.2.0"
 end
