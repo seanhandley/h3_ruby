@@ -38,8 +38,10 @@ You can install the gem directly using
 
 or add it to your Gemfile
 
-    # Gemfile
-    gem "h3", "~> 3.2"
+```ruby
+# Gemfile
+gem "h3", "~> 3.2"
+```
 
 ## Usage
 
