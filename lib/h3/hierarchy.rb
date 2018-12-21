@@ -72,7 +72,7 @@ module H3
     #
     # @return [Integer] Maximum size of uncompacted set.
     def max_uncompact_size(compacted_set, resolution)
-      compacted_set.uniq!
+      compacted_set = compacted_set.uniq
       FFI::MemoryPointer.new(H3_INDEX, compacted_set.size) do |hexagons_ptr|
         hexagons_ptr.write_array_of_ulong_long(compacted_set)
         size = Bindings::Private.max_uncompact_size(hexagons_ptr, compacted_set.size, resolution)
@@ -107,7 +107,7 @@ module H3
     #
     # @return [Array<Integer>] Compacted set of H3 indexes.
     def compact(h3_set)
-      h3_set.uniq!
+      h3_set = h3_set.uniq
       failure = false
       out = FFI::MemoryPointer.new(H3_INDEX, h3_set.size)
       FFI::MemoryPointer.new(H3_INDEX, h3_set.size) do |hexagons_ptr|
