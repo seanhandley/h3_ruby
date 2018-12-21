@@ -1,9 +1,7 @@
 require "ffi"
 require "rgeo/geo_json"
 
-require "h3/binding_base"
-require "h3/bindings/structs"
-require "h3/bindings/private"
+require "h3/bindings"
 require "h3/geo_json"
 require "h3/hierarchy"
 require "h3/indexing"

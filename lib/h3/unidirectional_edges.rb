@@ -3,7 +3,7 @@ module H3
   # 
   # @see https://uber.github.io/h3/#/documentation/api-reference/unidirectional-edges
   module UnidirectionalEdges
-    extend H3::BindingBase
+    extend H3::Bindings::Base
 
     # @!method h3_indexes_neighbors?(origin, destination)
     #

@@ -3,7 +3,7 @@ module H3
   #
   # @see https://uber.github.io/h3/#/documentation/api-reference/inspection
   module Inspection
-    extend H3::BindingBase
+    extend H3::Bindings::Base
 
     H3_TO_STR_BUF_SIZE = 32
 

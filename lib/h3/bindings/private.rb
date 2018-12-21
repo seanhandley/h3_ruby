@@ -5,7 +5,7 @@ module H3
     # This module provides bindings that do not have to be invoked directly by clients
     # of the library. They are used only internally to provide related public interface.
     module Private
-      extend H3::BindingBase
+      extend H3::Bindings::Base
 
       attach_function :compact, [:pointer, :pointer, :int], :bool
       attach_function :geo_to_h3, :geoToH3, [ Bindings::Structs::GeoCoord.by_ref, :int ], :h3_index

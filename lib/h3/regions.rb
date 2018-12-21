@@ -3,8 +3,7 @@ module H3
   #
   # @see https://uber.github.io/h3/#/documentation/api-reference/regions 
   module Regions
-    extend H3::BindingBase
-
+    extend H3::Bindings::Base
 
     # Derive the maximum number of H3 indexes that could be returned from the input.
     #
