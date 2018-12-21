@@ -24,6 +24,10 @@ Do *not* follow the Compilation Steps. Instead, use the following:
 
 The key difference is the `BUILD_SHARED_LIBS` option.
 
+## Supported Versions
+
+The semantic versioning of this gem matches the versioning of the H3 C library. Currently, this is `3.2.x`.
+
 ## Installing
 
     gem install h3
