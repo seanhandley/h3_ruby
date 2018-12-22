@@ -25,8 +25,7 @@ module H3
   #
   # Specific examples are shown in the individual method details.
   #
-  # @see http://geojson.io geojson.io - A graphical tool to see GeoJSON data
-  # rendered on a world map.
+  # @see http://geojson.io geojson.io - A tool to see GeoJSON data rendered on a world map.
   # @see https://tools.ietf.org/html/rfc7946 The GeoJSON RFC standard.
   module GeoJSON
     # Convert a GeoJSON document to a nested array of coordinates.
