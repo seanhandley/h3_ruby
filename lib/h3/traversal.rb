@@ -16,7 +16,7 @@ module H3
     #   91
     #
     # @return [Integer] Maximum k-ring size.
-    attach_function :max_kring_size, :maxKringSize, %i[int], :int
+    attach_function :max_kring_size, :maxKringSize, %i[k_distance], :int
 
     # @!method h3_distance(origin, h3_index)
     #
@@ -30,7 +30,7 @@ module H3
     #   5
     #
     # @return [Integer] Distance between indexes.
-    attach_function :h3_distance, :h3Distance, %i[h3_index h3_index], :int
+    attach_function :h3_distance, :h3Distance, %i[h3_index h3_index], :k_distance
 
     # Derives H3 indexes within k distance of the origin H3 index.
     #

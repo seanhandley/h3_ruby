@@ -1,5 +1,6 @@
 require "h3/bindings/base"
 require "h3/bindings/structs"
+require "h3/bindings/types"
 require "h3/bindings/private"
 
 module H3

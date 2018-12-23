@@ -19,7 +19,7 @@ module H3
     #   9
     #
     # @return [Integer] Resolution of H3 index
-    attach_function :h3_resolution, :h3GetResolution, %i[h3_index], :int
+    attach_function :h3_resolution, :h3GetResolution, %i[h3_index], Resolution
 
     # @!method h3_base_cell(h3_index)
     #

@@ -6,8 +6,14 @@ module H3
     module Base
       def self.extended(base)
         base.extend FFI::Library
+        base.include Structs
+        base.include Types
         base.ffi_lib ["libh3", "libh3.1"]
         base.typedef :ulong_long, :h3_index
+        base.typedef :int, :size
+        base.typedef :int, :k_distance
+        base.typedef :pointer, :h3_set
+        base.typedef :pointer, :output_buffer
         base.const_set("H3_INDEX", :ulong_long)
       end
     end

@@ -56,6 +56,22 @@ RSpec.describe H3 do
         expect(h3_to_children.count).to eq count
       end
     end
+
+    context "when the resolution is -1" do
+      let(:child_resolution) { -1 }
+
+      it "raises an error" do
+        expect { h3_to_children }.to raise_error(ArgumentError)
+      end
+    end
+
+    context "when the resolution is 16" do
+      let(:child_resolution) { 16 }
+
+      it "raises an error" do
+        expect { h3_to_children }.to raise_error(ArgumentError)
+      end
+    end
   end
 
   describe ".max_h3_to_children_size" do
