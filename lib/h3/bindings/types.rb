@@ -5,11 +5,11 @@ module H3
         extend FFI::DataConverter
         native_type FFI::Type::INT
 
-        RES_RANGE = [0, 15].freeze
+        RES_RANGE = 0..15
 
         class << self
           def to_native(value, _context)
-            failure unless value.is_a?(Integer) && value.between?(*RES_RANGE)
+            failure unless value.is_a?(Integer) && RES_RANGE.cover?(value)
             value
           end
 
