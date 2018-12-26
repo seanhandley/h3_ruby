@@ -14,7 +14,11 @@ The semantic versioning of this gem matches the versioning of the H3 C library. 
 
 ## Naming Conventions
 
-We have changed camel-case method names to snake-case, as per the Ruby convention. In addition, some methods using the `get` verb have been renamed i.e. `getH3UnidirectionalEdgesFromHexagon` becomes `h3_unidirectional_edges_from_hexagon`. We have also suffixed predicate methods with a question mark, as per the Ruby convention i.e. `h3IsPentagon` becomes `h3_pentagon?`
+We have changed camel-case method names to snake-case, as per the Ruby convention.
+
+In addition, some methods using the `get` verb have been renamed i.e. `getH3UnidirectionalEdgesFromHexagon` becomes `h3_unidirectional_edges_from_hexagon`.
+
+We have also suffixed predicate methods with a question mark, as per the Ruby convention, and removed `is` from the name i.e. `h3IsPentagon` becomes `h3_pentagon?`
 
 ## Getting Started
 
