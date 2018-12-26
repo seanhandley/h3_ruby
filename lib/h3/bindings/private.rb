@@ -12,6 +12,7 @@ module H3
       attach_function :h3_indexes_from_unidirectional_edge,
                       :getH3IndexesFromUnidirectionalEdge,
                       %i[h3_index output_buffer], :void
+      attach_function :h3_line, :h3Line, %i[h3_index h3_index output_buffer], :int
       attach_function :h3_unidirectional_edges_from_hexagon,
                       :getH3UnidirectionalEdgesFromHexagon,
                       %i[h3_index output_buffer], :void

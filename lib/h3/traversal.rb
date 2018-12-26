@@ -32,6 +32,23 @@ module H3
     # @return [Integer] Distance between indexes.
     attach_function :h3_distance, :h3Distance, %i[h3_index h3_index], :k_distance
 
+    # @!method h3_line_size(origin, h3_index)
+    #
+    # Derive the number of hexagons present in the distance between two H3 indexes.
+    #
+    # Returns a negative number if the distance cannot be computed e.g. 
+    # a pentagon was encountered, or the hexagons are too far apart.
+    #
+    # @param [Integer] origin Origin H3 index
+    # @param [Integer] h3_index H3 index
+    #
+    # @example Derive the number of hexagons present in the distance between two H3 indexes.
+    #   H3.h3_line_size(617700169983721471, 617700169959866367)
+    #   5
+    #
+    # @return [Integer] Number of hexagons found between indexes.
+    attach_function :h3_line_size, :h3LineSize, %i[h3_index h3_index], :int
+
     # Derives H3 indexes within k distance of the origin H3 index.
     #
     # Similar to {k_ring}, except that an error is raised when one of the indexes
@@ -260,6 +277,28 @@ module H3
       Hash[
         distances.zip(hexagons).group_by(&:first).map { |d, hs| [d, hs.map(&:last)] }
       ]
+    end
+
+    # Derives the H3 indexes found in the line between an origin H3 index
+    # and a destination H3 index.
+    #
+    # @param [Integer] origin Origin H3 index.
+    # @param [Integer] destination Destination H3 index.
+    #
+    # @example Derive the intermediate H3 indexes found between two H3 indexes.
+    #   H3.h3_line(617700169983721471, 617700169959866367)
+    #   [
+    #     617700169983721471, 617700169984245759, 617700169988177919,
+    #     617700169986867199, 617700169987391487, 617700169959866367
+    #   ]
+    #
+    # @return [Array<Integer>] Hexagons found in the line.
+    def h3_line(origin, destination)
+      max_hexagons = h3_line_size(origin, destination)
+      hexagons = FFI::MemoryPointer.new(:ulong_long, max_hexagons)
+      res = Bindings::Private.h3_line(origin, destination, hexagons)
+      raise(ArgumentError, "Could not compute line") if res.negative?
+      hexagons.read_array_of_ulong_long(max_hexagons).reject(&:zero?)
     end
 
     private
