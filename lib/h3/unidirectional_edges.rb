@@ -99,9 +99,9 @@ module H3
     # @return [Array<Integer>] H3 index array.
     def h3_indexes_from_unidirectional_edge(edge)
       max_hexagons = 2
-      origin_destination = FFI::MemoryPointer.new(:ulong_long, max_hexagons)
-      Bindings::Private.h3_indexes_from_unidirectional_edge(edge, origin_destination)
-      origin_destination.read_array_of_ulong_long(max_hexagons).reject(&:zero?)
+      out = H3SetOut.new(max_hexagons)
+      Bindings::Private.h3_indexes_from_unidirectional_edge(edge, out)
+      out.read
     end
 
     # Derive unidirectional edges for a H3 index.
@@ -119,8 +119,9 @@ module H3
     def h3_unidirectional_edges_from_hexagon(origin)
       max_edges = 6
       edges = FFI::MemoryPointer.new(:ulong_long, max_edges)
-      Bindings::Private.h3_unidirectional_edges_from_hexagon(origin, edges)
-      edges.read_array_of_ulong_long(max_edges).reject(&:zero?)
+      out = H3SetOut.new(max_edges)
+      Bindings::Private.h3_unidirectional_edges_from_hexagon(origin, out)
+      out.read
     end
 
     # Derive coordinates for edge boundary.

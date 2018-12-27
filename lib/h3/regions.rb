@@ -105,9 +105,9 @@ module H3
     def polyfill(geo_polygon, resolution)
       geo_polygon = geo_json_to_coordinates(geo_polygon) if geo_polygon.is_a?(String)
       max_size = max_polyfill_size(geo_polygon, resolution)
-      out = FFI::MemoryPointer.new(H3_INDEX, max_size)
+      out = H3SetOut.new(max_size)
       Bindings::Private.polyfill(build_polygon(geo_polygon), resolution, out)
-      out.read_array_of_ulong_long(max_size).reject(&:zero?)
+      out.read
     end
 
     # Derive a nested array of coordinates from a list of H3 indexes.
