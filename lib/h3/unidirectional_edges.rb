@@ -137,7 +137,7 @@ module H3
     #
     # @return [Array<Array<Float>>] Edge boundary coordinates for a hexagon
     def h3_unidirectional_edge_boundary(edge)
-      geo_boundary = Bindings::Structs::GeoBoundary.new
+      geo_boundary = GeoBoundary.new
       Bindings::Private.h3_unidirectional_edge_boundary(edge, geo_boundary)
       geo_boundary[:verts].take(geo_boundary[:num_verts] * 2).map do |d|
         rads_to_degs(d)

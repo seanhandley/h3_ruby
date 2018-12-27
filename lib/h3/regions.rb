@@ -138,7 +138,7 @@ module H3
     # @return [Array<Array<Array<Float>>>] Nested array of coordinates.
     def h3_set_to_linked_geo(h3_indexes)
       h3_indexes = h3_indexes.uniq
-      linked_geo_polygon = Bindings::Structs::LinkedGeoPolygon.new
+      linked_geo_polygon = LinkedGeoPolygon.new
       FFI::MemoryPointer.new(H3_INDEX, h3_indexes.size) do |hexagons_ptr|
         hexagons_ptr.write_array_of_ulong_long(h3_indexes)
         Bindings::Private.h3_set_to_linked_geo(hexagons_ptr, h3_indexes.size, linked_geo_polygon)
@@ -205,14 +205,14 @@ module H3
 
     def build_polygon(input)
       outline, *holes = input
-      geo_polygon = Bindings::Structs::GeoPolygon.new
+      geo_polygon = GeoPolygon.new
       geo_polygon[:geofence] = build_geofence(outline)
       len = holes.count
       geo_polygon[:num_holes] = len
       geofences = holes.map(&method(:build_geofence))
-      ptr = FFI::MemoryPointer.new(Bindings::Structs::GeoFence, len)
+      ptr = FFI::MemoryPointer.new(GeoFence, len)
       fence_structs = 0.upto(geofences.count).map do |i|
-        Bindings::Structs::GeoFence.new(ptr + i * Bindings::Structs::GeoFence.size)
+        GeoFence.new(ptr + i * GeoFence.size)
       end
       geofences.each_with_index do |geofence, i|
         fence_structs[i][:num_verts] = geofence[:num_verts]
@@ -223,12 +223,12 @@ module H3
     end
 
     def build_geofence(input)
-      geo_fence = Bindings::Structs::GeoFence.new
+      geo_fence = GeoFence.new
       len = input.count
       geo_fence[:num_verts] = len
-      ptr = FFI::MemoryPointer.new(Bindings::Structs::GeoCoord, len)
+      ptr = FFI::MemoryPointer.new(GeoCoord, len)
       coords = 0.upto(len).map do |i|
-        Bindings::Structs::GeoCoord.new(ptr + i * Bindings::Structs::GeoCoord.size)
+        GeoCoord.new(ptr + i * GeoCoord.size)
       end
       input.each_with_index do |(lat, lon), i|
         coords[i][:lat] = degs_to_rads(lat)

@@ -7,6 +7,7 @@ module H3
   #
   # @see https://uber.github.io/h3/#/documentation/api-reference/indexing
   module Indexing
+    include Bindings::Structs
     # Derive H3 index for the given set of coordinates.
     #
     # @param [Array<Integer>] coords A coordinate pair.
@@ -28,7 +29,7 @@ module H3
         raise(ArgumentError, "Invalid coordinates")
       end
 
-      coords = Bindings::Structs::GeoCoord.new
+      coords = GeoCoord.new
       coords[:lat] = degs_to_rads(lat)
       coords[:lon] = degs_to_rads(lon)
       Bindings::Private.geo_to_h3(coords, resolution)
@@ -46,7 +47,7 @@ module H3
     #
     # @return [Array<Integer>] A coordinate pair.
     def h3_to_geo(h3_index)
-      coords = Bindings::Structs::GeoCoord.new
+      coords = GeoCoord.new
       Bindings::Private.h3_to_geo(h3_index, coords)
       [rads_to_degs(coords[:lat]), rads_to_degs(coords[:lon])]
     end
@@ -70,7 +71,7 @@ module H3
     #
     # @return [Array<Array<Integer>>] An array of six coordinate pairs.
     def h3_to_geo_boundary(h3_index)
-      geo_boundary = Bindings::Structs::GeoBoundary.new
+      geo_boundary = GeoBoundary.new
       Bindings::Private.h3_to_geo_boundary(h3_index, geo_boundary)
       geo_boundary[:verts].take(geo_boundary[:num_verts] * 2).map do |d|
         rads_to_degs(d)
