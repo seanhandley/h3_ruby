@@ -35,32 +35,23 @@ module H3
           h3_set_in.ptr
         end
 
-        attr_reader :set, :ptr
+        attr_reader :ptr, :size
 
         def initialize(set)
-          @set = set
-          @ptr = FFI::MemoryPointer.new(:ulong_long, set.size)
+          @size = set.size   
           ptr.write_array_of_ulong_long(set)
         end
 
-        def size
-          @set.size
+        def ptr
+          @ptr ||= FFI::MemoryPointer.new(:ulong_long, size)
         end
       end
 
-      class H3SetOut
-        extend FFI::DataConverter
+      class H3SetOut < H3SetIn
         native_type FFI::Type::POINTER
-
-        def self.to_native(h3_set_out, _context)
-          h3_set_out.ptr
-        end
-
-        attr_reader :size, :ptr
 
         def initialize(size)
           @size = size
-          @ptr = FFI::MemoryPointer.new(:ulong_long, size)
         end
 
         def read
