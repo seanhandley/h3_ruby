@@ -105,7 +105,7 @@ module H3
     def polyfill(geo_polygon, resolution)
       geo_polygon = geo_json_to_coordinates(geo_polygon) if geo_polygon.is_a?(String)
       max_size = max_polyfill_size(geo_polygon, resolution)
-      out = H3SetOut.new(max_size)
+      out = H3Set.of_size(max_size)
       Bindings::Private.polyfill(build_polygon(geo_polygon), resolution, out)
       out.read
     end
@@ -138,7 +138,7 @@ module H3
     # @return [Array<Array<Array<Float>>>] Nested array of coordinates.
     def h3_set_to_linked_geo(h3_indexes)
       h3_indexes = h3_indexes.uniq
-      h3_set = H3SetIn.new(h3_indexes)
+      h3_set = H3Set.with_contents(h3_indexes)
       linked_geo_polygon = LinkedGeoPolygon.new
       Bindings::Private.h3_set_to_linked_geo(h3_set, h3_indexes.size, linked_geo_polygon)
 

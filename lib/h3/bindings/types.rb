@@ -58,6 +58,18 @@ module H3
           @read ||= ptr.read_array_of_ulong_long(size).reject(&:zero?)
         end
       end
+
+      module H3Set
+        class << self
+          def of_size(size)
+            H3SetOut.new(size)
+          end
+
+          def with_contents(set)
+            H3SetIn.new(set)
+          end
+        end
+      end
     end
   end
 end

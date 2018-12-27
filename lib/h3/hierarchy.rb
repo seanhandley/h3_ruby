@@ -48,7 +48,7 @@ module H3
     # @return [Array<Integer>] H3 indexes of child hexagons.
     def h3_to_children(h3_index, child_resolution)
       max_children = max_h3_to_children_size(h3_index, child_resolution)
-      out = H3SetOut.new(max_children)
+      out = H3Set.of_size(max_children)
       Bindings::Private.h3_to_children(h3_index, child_resolution, out)
       out.read
     end
@@ -73,7 +73,7 @@ module H3
     # @return [Integer] Maximum size of uncompacted set.
     def max_uncompact_size(compacted_set, resolution)
       compacted_set = compacted_set.uniq
-      h3_set = H3SetIn.new(compacted_set)
+      h3_set = H3Set.with_contents(compacted_set)
       size = Bindings::Private.max_uncompact_size(h3_set, compacted_set.size, resolution)
       raise(ArgumentError, "Couldn't estimate size. Invalid resolution?") if size.negative?
       size
@@ -107,8 +107,8 @@ module H3
     def compact(h3_set)
       h3_set = h3_set.uniq
       out_size = h3_set.size
-      h3_set = H3SetIn.new(h3_set)
-      out = H3SetOut.new(out_size)
+      h3_set = H3Set.with_contents(h3_set)
+      out = H3Set.of_size(out_size)
       failure = Bindings::Private.compact(h3_set, out, out_size)
 
       raise "Couldn't compact given indexes" if failure
@@ -143,8 +143,8 @@ module H3
       max_size = max_uncompact_size(compacted_set, resolution)
 
       failure = false
-      out = H3SetOut.new(max_size)
-      h3_set = H3SetIn.new(compacted_set)
+      out = H3Set.of_size(max_size)
+      h3_set = H3Set.with_contents(compacted_set)
       failure = Bindings::Private.uncompact(h3_set, compacted_set.size, out, max_size, resolution)
 
       raise "Couldn't uncompact given indexes" if failure

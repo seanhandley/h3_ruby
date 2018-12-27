@@ -81,7 +81,7 @@ module H3
     # @return [Array<Integer>] Array of H3 indexes within the k-range.
     def hex_range(origin, k)
       max_hexagons = max_kring_size(k)
-      out = H3SetOut.new(max_hexagons)
+      out = H3Set.of_size(max_hexagons)
       pentagonal_distortion = Bindings::Private.hex_range(origin, k, out)
       raise(ArgumentError, "Specified hexagon range contains a pentagon") if pentagonal_distortion
       out.read
@@ -110,7 +110,7 @@ module H3
     # @return [Array<Integer>] Array of H3 indexes within the k-range.
     def k_ring(origin, k)
       max_hexagons = max_kring_size(k)
-      out = H3SetOut.new(max_hexagons)
+      out = H3Set.of_size(max_hexagons)
       Bindings::Private.k_ring(origin, k, out)
       out.read
     end
@@ -135,7 +135,7 @@ module H3
     # @return [Array<Integer>] Array of H3 indexes within the hex ring.
     def hex_ring(origin, k)
       max_hexagons = max_hex_ring_size(k)
-      out = H3SetOut.new(max_hexagons)
+      out = H3Set.of_size(max_hexagons)
       pentagonal_distortion = Bindings::Private.hex_ring(origin, k, out)
       raise(ArgumentError, "The hex ring contains a pentagon") if pentagonal_distortion
       out.read
@@ -232,7 +232,7 @@ module H3
     # @return [Hash] Hex range grouped by distance.
     def hex_range_distances(origin, k)
       max_out_size = max_kring_size(k)
-      out = H3SetOut.new(max_out_size)
+      out = H3Set.of_size(max_out_size)
       distances = FFI::MemoryPointer.new(:int, max_out_size)
       pentagonal_distortion = Bindings::Private.hex_range_distances(origin, k, out, distances)
       raise(ArgumentError, "Specified hexagon range contains a pentagon") if pentagonal_distortion
@@ -269,7 +269,7 @@ module H3
     # @return [Hash] Hash of k-ring distances grouped by distance.
     def k_ring_distances(origin, k)
       max_out_size = max_kring_size(k)
-      out = H3SetOut.new(max_out_size)
+      out = H3Set.of_size(max_out_size)
       distances = FFI::MemoryPointer.new(:int, max_out_size)
       Bindings::Private.k_ring_distances(origin, k, out, distances)
 
@@ -317,9 +317,9 @@ module H3
 
     def hex_ranges_ungrouped(h3_set, k)
       h3_set = h3_set.uniq
-      h3_set_in = H3SetIn.new(h3_set)
+      h3_set_in = H3Set.with_contents(h3_set)
       max_out_size = h3_set.size * max_kring_size(k)
-      out = H3SetOut.new(max_out_size)
+      out = H3Set.of_size(max_out_size)
       if Bindings::Private.hex_ranges(h3_set_in, h3_set.size, k, out)
         raise(ArgumentError, "One of the specified hexagon ranges contains a pentagon")
       end
