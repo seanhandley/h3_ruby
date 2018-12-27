@@ -7,7 +7,7 @@ module H3
     module Private
       extend H3::Bindings::Base
 
-      attach_function :compact, %i[h3_set output_buffer size], :bool
+      attach_function :compact, [H3SetIn, :output_buffer, :size], :bool
       attach_function :geo_to_h3, :geoToH3, [GeoCoord.by_ref, Resolution], :h3_index
       attach_function :h3_indexes_from_unidirectional_edge,
                       :getH3IndexesFromUnidirectionalEdge,
@@ -18,7 +18,7 @@ module H3
                       %i[h3_index output_buffer], :void
       attach_function :h3_set_to_linked_geo,
                       :h3SetToLinkedGeo,
-                      [:h3_set, :size, LinkedGeoPolygon.by_ref],
+                      [H3SetIn, :size, LinkedGeoPolygon.by_ref],
                       :void
       attach_function :h3_to_children, :h3ToChildren, [:h3_index, Resolution, :output_buffer], :void
       attach_function :h3_to_geo, :h3ToGeo, [:h3_index, GeoCoord.by_ref], :void
@@ -34,7 +34,7 @@ module H3
       attach_function :hex_range_distances,
                       :hexRangeDistances,
                       %i[h3_index k_distance output_buffer output_buffer], :bool
-      attach_function :hex_ranges, :hexRanges, %i[h3_set size k_distance output_buffer], :bool
+      attach_function :hex_ranges, :hexRanges, [H3SetIn, :size, :k_distance, :output_buffer], :bool
       attach_function :hex_ring, :hexRing, %i[h3_index k_distance output_buffer], :bool
       attach_function :k_ring, :kRing, %i[h3_index k_distance output_buffer], :void
       attach_function :k_ring_distances,
@@ -45,9 +45,9 @@ module H3
                       :maxPolyfillSize,
                       [GeoPolygon.by_ref, Resolution],
                       :int
-      attach_function :max_uncompact_size, :maxUncompactSize, [:h3_set, :size, Resolution], :int
+      attach_function :max_uncompact_size, :maxUncompactSize, [H3SetIn, :size, Resolution], :int
       attach_function :polyfill, [GeoPolygon.by_ref, Resolution, :output_buffer], :void
-      attach_function :uncompact, [:h3_set, :size, :output_buffer, :size, Resolution], :bool
+      attach_function :uncompact, [H3SetIn, :size, :output_buffer, :size, Resolution], :bool
     end
   end
 end

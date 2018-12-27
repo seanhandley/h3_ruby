@@ -317,14 +317,10 @@ module H3
 
     def hex_ranges_ungrouped(h3_set, k)
       h3_set = h3_set.uniq
+      h3_set_in = H3SetIn.new(h3_set)
       max_out_size = h3_set.size * max_kring_size(k)
       out = FFI::MemoryPointer.new(H3_INDEX, max_out_size)
-      pentagonal_distortion = false
-      FFI::MemoryPointer.new(H3_INDEX, h3_set.size) do |h3_set_ptr|
-        h3_set_ptr.write_array_of_ulong_long(h3_set)
-        pentagonal_distortion = Bindings::Private.hex_ranges(h3_set_ptr, h3_set.size, k, out)
-      end
-      if pentagonal_distortion
+      if Bindings::Private.hex_ranges(h3_set_in, h3_set.size, k, out)
         raise(ArgumentError, "One of the specified hexagon ranges contains a pentagon")
       end
 

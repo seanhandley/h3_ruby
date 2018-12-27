@@ -138,11 +138,9 @@ module H3
     # @return [Array<Array<Array<Float>>>] Nested array of coordinates.
     def h3_set_to_linked_geo(h3_indexes)
       h3_indexes = h3_indexes.uniq
+      h3_set = H3SetIn.new(h3_indexes)
       linked_geo_polygon = LinkedGeoPolygon.new
-      FFI::MemoryPointer.new(H3_INDEX, h3_indexes.size) do |hexagons_ptr|
-        hexagons_ptr.write_array_of_ulong_long(h3_indexes)
-        Bindings::Private.h3_set_to_linked_geo(hexagons_ptr, h3_indexes.size, linked_geo_polygon)
-      end
+      Bindings::Private.h3_set_to_linked_geo(h3_set, h3_indexes.size, linked_geo_polygon)
 
       extract_linked_geo_polygon(linked_geo_polygon).first
     end
