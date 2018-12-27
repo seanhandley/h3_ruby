@@ -73,9 +73,9 @@ module H3
     def h3_to_geo_boundary(h3_index)
       geo_boundary = GeoBoundary.new
       Bindings::Private.h3_to_geo_boundary(h3_index, geo_boundary)
-      geo_boundary[:verts].take(geo_boundary[:num_verts] * 2).map do |d|
-        rads_to_degs(d)
-      end.each_slice(2).to_a
+      geo_boundary[:verts].take(geo_boundary[:num_verts]).map do |d|
+        [rads_to_degs(d[:lat]), rads_to_degs(d[:lon])]
+      end
     end
   end
 end

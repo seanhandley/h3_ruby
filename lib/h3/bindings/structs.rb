@@ -14,7 +14,7 @@ module H3
 
       class GeoBoundary < FFI::Struct
         layout :num_verts, :int,
-               :verts, [:double, 20] # array of GeoCoord structs (must be fixed length)
+               :verts, [GeoCoord, 10] # array of GeoCoord structs (must be fixed length)
       end
 
       class GeoFence < FFI::Struct
