@@ -72,7 +72,6 @@ module H3
     #
     # @return [Integer] Maximum size of uncompacted set.
     def max_uncompact_size(compacted_set, resolution)
-      compacted_set = compacted_set.uniq
       h3_set = H3Set.with_contents(compacted_set)
       size = Bindings::Private.max_uncompact_size(h3_set, compacted_set.size, resolution)
       raise(ArgumentError, "Couldn't estimate size. Invalid resolution?") if size.negative?
@@ -105,11 +104,9 @@ module H3
     #
     # @return [Array<Integer>] Compacted set of H3 indexes.
     def compact(h3_set)
-      h3_set = h3_set.uniq
-      out_size = h3_set.size
       h3_set = H3Set.with_contents(h3_set)
-      out = H3Set.of_size(out_size)
-      failure = Bindings::Private.compact(h3_set, out, out_size)
+      out = H3Set.of_size(h3_set.size)
+      failure = Bindings::Private.compact(h3_set, out, out.size)
 
       raise "Couldn't compact given indexes" if failure
       out.read

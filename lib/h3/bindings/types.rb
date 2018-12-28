@@ -38,6 +38,7 @@ module H3
         attr_reader :ptr, :size
 
         def initialize(set)
+          set = set.uniq
           @size = set.size   
           ptr.write_array_of_ulong_long(set)
         end

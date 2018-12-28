@@ -137,7 +137,6 @@ module H3
     #
     # @return [Array<Array<Array<Float>>>] Nested array of coordinates.
     def h3_set_to_linked_geo(h3_indexes)
-      h3_indexes = h3_indexes.uniq
       h3_set = H3Set.with_contents(h3_indexes)
       linked_geo_polygon = LinkedGeoPolygon.new
       Bindings::Private.h3_set_to_linked_geo(h3_set, h3_indexes.size, linked_geo_polygon)

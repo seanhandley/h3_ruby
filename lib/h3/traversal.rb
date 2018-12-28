@@ -316,11 +316,10 @@ module H3
     end
 
     def hex_ranges_ungrouped(h3_set, k)
-      h3_set = h3_set.uniq
-      h3_set_in = H3Set.with_contents(h3_set)
+      h3_set = H3Set.with_contents(h3_set)
       max_out_size = h3_set.size * max_kring_size(k)
       out = H3Set.of_size(max_out_size)
-      if Bindings::Private.hex_ranges(h3_set_in, h3_set.size, k, out)
+      if Bindings::Private.hex_ranges(h3_set, h3_set.size, k, out)
         raise(ArgumentError, "One of the specified hexagon ranges contains a pentagon")
       end
 
