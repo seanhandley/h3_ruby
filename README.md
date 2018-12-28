@@ -24,23 +24,13 @@ We have also suffixed predicate methods with a question mark, as per the Ruby co
 
 This gem uses FFI to link directly into the H3 library (written in C).
 
-Before using the gem, you will need to install the C lib at https://github.com/uber/h3.
+The H3 library is packaged with the gem and is built as a native extension. H3 is not installed system-wide, so it will not interfere with any other versions you may have installed previously.
 
-Install the build dependencies as instructed here: https://github.com/uber/h3#install-build-time-dependencies
-
-Do *not* follow the Compilation Steps. Instead, use the following:
-
-    git clone git@github.com:uber/h3.git h3_build
-    cd h3_build
-    cmake . -DBUILD_SHARED_LIBS=true
-    make
-    sudo make install
-
-The key difference is the `BUILD_SHARED_LIBS` option.
+Before installing the gem, please install the build dependencies for your system as instructed here: https://github.com/uber/h3#install-build-time-dependencies
 
 ## Installing
 
-You can install the gem directly using
+You can install the gem directly from RubyGems.org using
 
     gem install h3
 
@@ -74,11 +64,27 @@ H3.h3_to_geo_boundary("8819429a9dfffff".to_i(16))
 
 ## Documentation
 
-There is a full reference available here: https://www.rubydoc.info/github/StuartApp/h3_ruby/H3
+Please read [the Gem Documentation](https://www.rubydoc.info/github/StuartApp/h3_ruby/H3) for a full reference of available methods.
 
-## Running Specs
+## Development
 
-    rake
+The development environment requires the H3 library to be compiled from source before tests can be executed.
+
+This is done automatically by the test suite. However, Rake tasks are provided to handle building H3 in a more fine-grained manner.
+
+### Building H3
+
+    rake build
+
+You can remove the compiled H3 library with `rake clean`, or rebuild it with `rake rebuild`.
+
+### Running Tests
+
+The test suite exercises all the H3 functions.
+
+    rake spec
+
+Be aware that errors may be encountered if you have a locally cached H3 binary that's older than the version targeted. Try `rake rebuild` and re-run `rake spec` if this occurs.
 
 ## Contributing
 

@@ -8,7 +8,7 @@ module H3
         base.extend FFI::Library
         base.include Structs
         base.include Types
-        base.ffi_lib ["libh3", "libh3.1"]
+        base.ffi_lib ["ext/h3/src/lib/libh3.dylib", "ext/h3/src/lib/libh3.so"]
         base.typedef :ulong_long, :h3_index
         base.typedef :int, :size
         base.typedef :int, :k_distance
