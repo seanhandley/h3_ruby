@@ -2,7 +2,7 @@
 
 ![h3](https://user-images.githubusercontent.com/98526/50283275-48177300-044d-11e9-8337-eba8d3cc88a2.png)
 
-[![Build Status](https://travis-ci.org/StuartApp/h3_ruby.svg?branch=master)](https://travis-ci.org/seanhandley/h3_ruby) [![Maintainability](https://api.codeclimate.com/v1/badges/c55e1f67421eba8af8d0/maintainability)](https://codeclimate.com/repos/5c18b7f49bc79a02a4000d81/maintainability) [![Coverage Status](https://coveralls.io/repos/github/StuartApp/h3_ruby/badge.svg?branch=master)](https://coveralls.io/github/StuartApp/h3_ruby?branch=master)
+[![Build Status](https://travis-ci.org/StuartApp/h3_ruby.svg?branch=master)](https://travis-ci.org/seanhandley/h3_ruby) [![Maintainability](https://api.codeclimate.com/v1/badges/c55e1f67421eba8af8d0/maintainability)](https://codeclimate.com/repos/5c18b7f49bc79a02a4000d81/maintainability) [![Coverage Status](https://coveralls.io/repos/github/StuartApp/h3_ruby/badge.svg?branch=master)](https://coveralls.io/github/StuartApp/h3_ruby?branch=master) [![Gem Version](https://badge.fury.io/rb/h3.svg)](https://badge.fury.io/rb/h3)
 
 Ruby-to-C bindings for Uber's [H3 library](https://uber.github.io/h3/).
 
