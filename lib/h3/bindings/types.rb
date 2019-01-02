@@ -27,7 +27,7 @@ module H3
         end
       end
 
-      class H3SetIn
+      class H3IndexesIn
         extend FFI::DataConverter
         native_type FFI::Type::POINTER
 
@@ -38,7 +38,6 @@ module H3
         attr_reader :ptr, :size
 
         def initialize(set)
-          set = set.uniq
           @size = set.size   
           ptr.write_array_of_ulong_long(set)
         end
@@ -48,7 +47,7 @@ module H3
         end
       end
 
-      class H3SetOut < H3SetIn
+      class H3IndexesOut < H3IndexesIn
         native_type FFI::Type::POINTER
 
         def initialize(size)
@@ -60,14 +59,14 @@ module H3
         end
       end
 
-      module H3Set
+      module H3Indexes
         class << self
           def of_size(size)
-            H3SetOut.new(size)
+            H3IndexesOut.new(size)
           end
 
           def with_contents(set)
-            H3SetIn.new(set)
+            H3IndexesIn.new(set)
           end
         end
       end

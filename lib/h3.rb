@@ -34,7 +34,7 @@ module H3
                     h3_unidirectional_edge_valid h3_valid].freeze
     private_constant :PREDICATES
     PREDICATES.each do |predicate|
-      alias_method "#{predicate}?".to_sym, predicate
+      alias_method "#{predicate}?", predicate
       undef_method predicate
     end
   end

@@ -99,7 +99,7 @@ module H3
     # @return [Array<Integer>] H3 index array.
     def h3_indexes_from_unidirectional_edge(edge)
       max_hexagons = 2
-      out = H3Set.of_size(max_hexagons)
+      out = H3Indexes.of_size(max_hexagons)
       Bindings::Private.h3_indexes_from_unidirectional_edge(edge, out)
       out.read
     end
@@ -118,7 +118,7 @@ module H3
     # @return [Array<Integer>] H3 index array.
     def h3_unidirectional_edges_from_hexagon(origin)
       max_edges = 6
-      out = H3Set.of_size(max_edges)
+      out = H3Indexes.of_size(max_edges)
       Bindings::Private.h3_unidirectional_edges_from_hexagon(origin, out)
       out.read
     end
