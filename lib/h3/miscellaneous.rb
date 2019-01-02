@@ -29,7 +29,7 @@ module H3
     #   59.81085794
     #
     # @return [Float] Length of edge in kilometres
-    attach_function :edge_length_km, :edgeLengthKm, %i[int], :double
+    attach_function :edge_length_km, :edgeLengthKm, [Resolution], :double
 
     # @!method edge_length_m(resolution)
     #
@@ -42,7 +42,7 @@ module H3
     #   3229.482772
     #
     # @return [Float] Length of edge in metres
-    attach_function :edge_length_m, :edgeLengthM, %i[int], :double
+    attach_function :edge_length_m, :edgeLengthM, [Resolution], :double
 
     # @!method hex_area_km2(resolution)
     #
@@ -55,7 +55,7 @@ module H3
     #   252.9033645
     #
     # @return [Float] Average hexagon area in square kilometres.
-    attach_function :hex_area_km2, :hexAreaKm2, %i[int], :double
+    attach_function :hex_area_km2, :hexAreaKm2, [Resolution], :double
 
     # @!method hex_area_m2(resolution)
     #
@@ -68,7 +68,7 @@ module H3
     #   15047.5
     #
     # @return [Float] Average hexagon area in square metres.
-    attach_function :hex_area_m2, :hexAreaM2, %i[int], :double
+    attach_function :hex_area_m2, :hexAreaM2, [Resolution], :double
 
     # @!method num_hexagons(resolution)
     #
@@ -81,7 +81,7 @@ module H3
     #   14117882
     #
     # @return [Integer] Number of unique hexagons
-    attach_function :num_hexagons, :numHexagons, %i[int], :ulong_long
+    attach_function :num_hexagons, :numHexagons, [Resolution], :ulong_long
 
     # @!method rads_to_degs(rads)
     #
