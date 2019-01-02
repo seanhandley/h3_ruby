@@ -340,4 +340,29 @@ RSpec.describe H3 do
 
     it { is_expected.to eq(result) }
   end
+
+  describe ".h3_line_size" do
+    let(:origin) { "89283082993ffff".to_i(16) }
+    let(:destination) { "89283082827ffff".to_i(16) }
+    let(:result) { 6 }
+
+    subject(:h3_line_size) { H3.h3_line_size(origin, destination) }
+
+    it { is_expected.to eq(result) }
+  end
+
+  describe ".h3_line" do
+    let(:origin) { "89283082993ffff".to_i(16) }
+    let(:destination) { "89283082827ffff".to_i(16) }
+    let(:result) do
+      [
+        "89283082993ffff", "8928308299bffff", "892830829d7ffff",
+        "892830829c3ffff", "892830829cbffff", "89283082827ffff"
+      ].map { |i| i.to_i(16) }
+    end
+
+    subject(:h3_line) { H3.h3_line(origin, destination) }
+
+    it { is_expected.to eq(result) }
+  end
 end
