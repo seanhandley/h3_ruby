@@ -99,9 +99,9 @@ module H3
     # @return [Array<Integer>] H3 index array.
     def h3_indexes_from_unidirectional_edge(edge)
       max_hexagons = 2
-      origin_destination = FFI::MemoryPointer.new(:ulong_long, max_hexagons)
-      Bindings::Private.h3_indexes_from_unidirectional_edge(edge, origin_destination)
-      origin_destination.read_array_of_ulong_long(max_hexagons).reject(&:zero?)
+      out = H3Indexes.of_size(max_hexagons)
+      Bindings::Private.h3_indexes_from_unidirectional_edge(edge, out)
+      out.read
     end
 
     # Derive unidirectional edges for a H3 index.
@@ -118,9 +118,9 @@ module H3
     # @return [Array<Integer>] H3 index array.
     def h3_unidirectional_edges_from_hexagon(origin)
       max_edges = 6
-      edges = FFI::MemoryPointer.new(:ulong_long, max_edges)
-      Bindings::Private.h3_unidirectional_edges_from_hexagon(origin, edges)
-      edges.read_array_of_ulong_long(max_edges).reject(&:zero?)
+      out = H3Indexes.of_size(max_edges)
+      Bindings::Private.h3_unidirectional_edges_from_hexagon(origin, out)
+      out.read
     end
 
     # Derive coordinates for edge boundary.
@@ -137,11 +137,11 @@ module H3
     #
     # @return [Array<Array<Float>>] Edge boundary coordinates for a hexagon
     def h3_unidirectional_edge_boundary(edge)
-      geo_boundary = Bindings::Structs::GeoBoundary.new
+      geo_boundary = GeoBoundary.new
       Bindings::Private.h3_unidirectional_edge_boundary(edge, geo_boundary)
-      geo_boundary[:verts].take(geo_boundary[:num_verts] * 2).map do |d|
-        rads_to_degs(d)
-      end.each_slice(2).to_a
+      geo_boundary[:verts].take(geo_boundary[:num_verts]).map do |d|
+        [rads_to_degs(d[:lat]), rads_to_degs(d[:lon])]
+      end
     end
   end
 end

@@ -14,7 +14,7 @@ RSpec.describe H3 do
       let(:result) { false }
 
       it "returns the expected result" do
-        expect { num_hexagons }.to raise_error(RangeError)
+        expect { num_hexagons }.to raise_error(ArgumentError)
       end
     end
   end

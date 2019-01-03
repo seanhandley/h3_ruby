@@ -48,9 +48,9 @@ module H3
     # @return [Array<Integer>] H3 indexes of child hexagons.
     def h3_to_children(h3_index, child_resolution)
       max_children = max_h3_to_children_size(h3_index, child_resolution)
-      h3_children = FFI::MemoryPointer.new(H3_INDEX, max_children)
-      Bindings::Private.h3_to_children(h3_index, child_resolution, h3_children)
-      h3_children.read_array_of_ulong_long(max_children).reject(&:zero?)
+      out = H3Indexes.of_size(max_children)
+      Bindings::Private.h3_to_children(h3_index, child_resolution, out)
+      out.read
     end
 
     # Find the maximum uncompacted size of the given set of H3 indexes.
@@ -72,13 +72,10 @@ module H3
     #
     # @return [Integer] Maximum size of uncompacted set.
     def max_uncompact_size(compacted_set, resolution)
-      compacted_set = compacted_set.uniq
-      FFI::MemoryPointer.new(H3_INDEX, compacted_set.size) do |hexagons_ptr|
-        hexagons_ptr.write_array_of_ulong_long(compacted_set)
-        size = Bindings::Private.max_uncompact_size(hexagons_ptr, compacted_set.size, resolution)
-        raise(ArgumentError, "Couldn't estimate size. Invalid resolution?") if size.negative?
-        return size
-      end
+      h3_set = H3Indexes.with_contents(compacted_set)
+      size = Bindings::Private.max_uncompact_size(h3_set, compacted_set.size, resolution)
+      raise(ArgumentError, "Couldn't estimate size. Invalid resolution?") if size.negative?
+      size
     end
 
     # Compact a set of H3 indexes as best as possible.
@@ -107,16 +104,12 @@ module H3
     #
     # @return [Array<Integer>] Compacted set of H3 indexes.
     def compact(h3_set)
-      h3_set = h3_set.uniq
-      failure = false
-      out = FFI::MemoryPointer.new(H3_INDEX, h3_set.size)
-      FFI::MemoryPointer.new(H3_INDEX, h3_set.size) do |hexagons_ptr|
-        hexagons_ptr.write_array_of_ulong_long(h3_set)
-        failure = Bindings::Private.compact(hexagons_ptr, out, h3_set.size)
-      end
+      h3_set = H3Indexes.with_contents(h3_set)
+      out = H3Indexes.of_size(h3_set.size)
+      failure = Bindings::Private.compact(h3_set, out, out.size)
 
       raise "Couldn't compact given indexes" if failure
-      out.read_array_of_ulong_long(h3_set.size).reject(&:zero?)
+      out.read
     end
 
     # Uncompact a set of H3 indexes to the given resolution.
@@ -147,16 +140,12 @@ module H3
       max_size = max_uncompact_size(compacted_set, resolution)
 
       failure = false
-      out = FFI::MemoryPointer.new(H3_INDEX, max_size)
-      FFI::MemoryPointer.new(H3_INDEX, compacted_set.size) do |hexagons_ptr|
-        hexagons_ptr.write_array_of_ulong_long(compacted_set)
-        failure = Bindings::Private.uncompact(
-          hexagons_ptr, compacted_set.size, out, max_size, resolution
-        )
-      end
+      out = H3Indexes.of_size(max_size)
+      h3_set = H3Indexes.with_contents(compacted_set)
+      failure = Bindings::Private.uncompact(h3_set, compacted_set.size, out, max_size, resolution)
 
       raise "Couldn't uncompact given indexes" if failure
-      out.read_array_of_ulong_long(max_size).reject(&:zero?)
+      out.read
     end
   end
 end
