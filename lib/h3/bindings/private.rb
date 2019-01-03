@@ -8,7 +8,7 @@ module H3
       extend H3::Bindings::Base
 
       attach_function :compact, [H3IndexesIn, H3IndexesOut, :size], :bool
-      attach_function :geo_to_h3, :geoToH3, [GeoCoord.by_ref, Resolution], :h3_index
+      attach_function :geo_to_h3, :geoToH3, [GeoCoord, Resolution], :h3_index
       attach_function :h3_indexes_from_unidirectional_edge,
                       :getH3IndexesFromUnidirectionalEdge,
                       [:h3_index, H3IndexesOut], :void
@@ -18,18 +18,18 @@ module H3
                       [:h3_index, H3IndexesOut], :void
       attach_function :h3_set_to_linked_geo,
                       :h3SetToLinkedGeo,
-                      [H3IndexesIn, :size, LinkedGeoPolygon.by_ref],
+                      [H3IndexesIn, :size, LinkedGeoPolygon],
                       :void
       attach_function :h3_to_children, :h3ToChildren, [:h3_index, Resolution, H3IndexesOut], :void
-      attach_function :h3_to_geo, :h3ToGeo, [:h3_index, GeoCoord.by_ref], :void
+      attach_function :h3_to_geo, :h3ToGeo, [:h3_index, GeoCoord], :void
       attach_function :h3_to_string, :h3ToString, %i[h3_index output_buffer size], :void
       attach_function :h3_to_geo_boundary,
                       :h3ToGeoBoundary,
-                      [:h3_index, GeoBoundary.by_ref],
+                      [:h3_index, GeoBoundary],
                       :void
       attach_function :h3_unidirectional_edge_boundary,
                       :getH3UnidirectionalEdgeBoundary,
-                      [:h3_index, GeoBoundary.by_ref], :void
+                      [:h3_index, GeoBoundary], :void
       attach_function :hex_range, :hexRange, [:h3_index, :k_distance, H3IndexesOut], :bool
       attach_function :hex_range_distances,
                       :hexRangeDistances,
@@ -43,7 +43,7 @@ module H3
                       :bool
       attach_function :max_polyfill_size,
                       :maxPolyfillSize,
-                      [GeoPolygon.by_ref, Resolution],
+                      [GeoPolygon, Resolution],
                       :int
       attach_function :max_uncompact_size, :maxUncompactSize, [H3IndexesIn, :size, Resolution], :int
       attach_function :polyfill, [GeoPolygon.by_ref, Resolution, H3IndexesOut], :void
