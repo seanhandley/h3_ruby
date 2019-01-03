@@ -5,7 +5,7 @@ module H3
   module Inspection
     extend H3::Bindings::Base
 
-    H3_TO_STR_BUF_SIZE = 32
+    H3_TO_STR_BUF_SIZE = 17
     private_constant :H3_TO_STR_BUF_SIZE
 
     # @!method h3_resolution(h3_index)
