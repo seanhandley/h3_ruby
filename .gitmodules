@@ -1,0 +1,3 @@
+[submodule "ext/h3/src"]
+	path = ext/h3/src
+	url = https://github.com/uber/h3.git
