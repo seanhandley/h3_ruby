@@ -34,7 +34,10 @@ module H3
       attach_function :hex_range_distances,
                       :hexRangeDistances,
                       [:h3_index, :k_distance, H3IndexesOut, :output_buffer], :bool
-      attach_function :hex_ranges, :hexRanges, [H3IndexesIn, :size, :k_distance, H3IndexesOut], :bool
+      attach_function :hex_ranges,
+                      :hexRanges,
+                      [H3IndexesIn, :size, :k_distance, H3IndexesOut],
+                      :bool
       attach_function :hex_ring, :hexRing, [:h3_index, :k_distance, H3IndexesOut], :bool
       attach_function :k_ring, :kRing, [:h3_index, :k_distance, H3IndexesOut], :void
       attach_function :k_ring_distances,

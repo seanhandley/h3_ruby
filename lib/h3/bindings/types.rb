@@ -21,7 +21,7 @@ module H3
           private
 
           def failure
-            raise ArgumentError, 
+            raise ArgumentError,
                   "resolution must be between #{RES_RANGE.first} and #{RES_RANGE.last}"
           end
         end
@@ -35,10 +35,10 @@ module H3
           h3_set_in.ptr
         end
 
-        attr_reader :ptr, :size
+        attr_reader :size
 
         def initialize(set)
-          @size = set.size   
+          @size = set.size
           ptr.write_array_of_ulong_long(set)
         end
 

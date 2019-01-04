@@ -38,7 +38,7 @@ module H3
     #
     # This value is simply `h3_distance(origin, destination) + 1` when a line is computable.
     #
-    # Returns a negative number if a line cannot be computed e.g. 
+    # Returns a negative number if a line cannot be computed e.g.
     # a pentagon was encountered, or the hexagons are too far apart.
     #
     # @param [Integer] origin Origin H3 index

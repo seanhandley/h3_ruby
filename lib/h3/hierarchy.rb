@@ -139,7 +139,6 @@ module H3
     def uncompact(compacted_set, resolution)
       max_size = max_uncompact_size(compacted_set, resolution)
 
-      failure = false
       out = H3Indexes.of_size(max_size)
       h3_set = H3Indexes.with_contents(compacted_set)
       failure = Bindings::Private.uncompact(h3_set, compacted_set.size, out, max_size, resolution)

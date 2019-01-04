@@ -15,10 +15,10 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "ffi", "~> 1.9"
   spec.add_runtime_dependency "rgeo-geojson", "~> 2.1"
 
+  spec.add_development_dependency "coveralls", "~> 0.8"
   spec.add_development_dependency "rake", "~> 12.3"
   spec.add_development_dependency "rspec", "~> 3.8"
   spec.add_development_dependency "yard", "~> 0.9"
-  spec.add_development_dependency "coveralls", "~> 0.8"
 
   spec.extensions << "ext/h3/extconf.rb"
 end

@@ -13,15 +13,15 @@ end
 
 desc "Remove compiled H3 library"
 task :clean do
-  File.delete("ext/h3/src/Makefile") if File.exists?("ext/h3/src/Makefile")
-  FileUtils.remove_dir("ext/h3/src/bin") if Dir.exists?("ext/h3/src/bin")
-  FileUtils.remove_dir("ext/h3/src/generated") if Dir.exists?("ext/h3/src/generated")
-  FileUtils.remove_dir("ext/h3/src/lib") if Dir.exists?("ext/h3/src/lib")
+  File.delete("ext/h3/src/Makefile") if File.exist?("ext/h3/src/Makefile")
+  FileUtils.remove_dir("ext/h3/src/bin") if Dir.exist?("ext/h3/src/bin")
+  FileUtils.remove_dir("ext/h3/src/generated") if Dir.exist?("ext/h3/src/generated")
+  FileUtils.remove_dir("ext/h3/src/lib") if Dir.exist?("ext/h3/src/lib")
 end
 
 task spec: :build
 
 desc "Recompile the H3 C library"
-task rebuild: [:clean, :build]
+task rebuild: %i[clean build]
 
 task default: :spec
