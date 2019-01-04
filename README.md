@@ -88,4 +88,4 @@ Be aware that errors may be encountered if you have a locally cached H3 binary t
 
 ## Contributing
 
-Pull requests and issues are welcome!
+Pull requests and issues are welcome! Please read [the Contributing Guide](./CONTRIBUTING.md) for more info.
