@@ -3,7 +3,7 @@ RSpec::Core::RakeTask.new(:spec)
 
 desc "Build H3 C library"
 task :build do
-  unless File.exists?("ext/h3/src/Makefile")
+  unless File.exist?("ext/h3/src/Makefile")
     `git submodule update --init --recursive`
     print "Building h3..."
     `cd ext/h3; make > /dev/null 2>&1`
