@@ -1,6 +1,7 @@
 # H3 Ruby
 
 ![h3](https://user-images.githubusercontent.com/98526/50283275-48177300-044d-11e9-8337-eba8d3cc88a2.png)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fseanhandley%2Fh3_ruby.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fseanhandley%2Fh3_ruby?ref=badge_shield)
 
 [![Build Status](https://travis-ci.org/StuartApp/h3_ruby.svg?branch=master)](https://travis-ci.org/seanhandley/h3_ruby) [![Maintainability](https://api.codeclimate.com/v1/badges/c55e1f67421eba8af8d0/maintainability)](https://codeclimate.com/repos/5c18b7f49bc79a02a4000d81/maintainability) [![Coverage Status](https://coveralls.io/repos/github/StuartApp/h3_ruby/badge.svg?branch=master)](https://coveralls.io/github/StuartApp/h3_ruby?branch=master) [![Gem Version](https://badge.fury.io/rb/h3.svg)](https://badge.fury.io/rb/h3)
 
@@ -89,3 +90,7 @@ Be aware that errors may be encountered if you have a locally cached H3 binary t
 ## Contributing
 
 Pull requests and issues are welcome!
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fseanhandley%2Fh3_ruby.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fseanhandley%2Fh3_ruby?ref=badge_large)
