@@ -17,16 +17,16 @@ require "h3/unidirectional_edges"
 #
 # @see https://uber.github.io/h3/#/documentation/overview/introduction
 module H3
-  class << self
-    include GeoJSON
-    include Hierarchy
-    include Miscellaneous
-    include Indexing
-    include Inspection
-    include Regions
-    include Traversal
-    include UnidirectionalEdges
+  extend GeoJSON
+  extend Hierarchy
+  extend Miscellaneous
+  extend Indexing
+  extend Inspection
+  extend Regions
+  extend Traversal
+  extend UnidirectionalEdges
 
+  class << self
     # FFI's attach_function doesn't allow method names ending with a
     # question mark. This works around the issue by dynamically
     # renaming those methods afterwards.

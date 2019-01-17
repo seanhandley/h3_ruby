@@ -49,7 +49,7 @@ module H3
                       [GeoPolygon, Resolution],
                       :int
       attach_function :max_uncompact_size, :maxUncompactSize, [H3IndexesIn, :size, Resolution], :int
-      attach_function :polyfill, [GeoPolygon.by_ref, Resolution, H3IndexesOut], :void
+      attach_function :polyfill, [GeoPolygon, Resolution, H3IndexesOut], :void
       attach_function :uncompact, [H3IndexesIn, :size, H3IndexesOut, :size, Resolution], :bool
     end
   end
