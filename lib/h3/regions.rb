@@ -142,6 +142,8 @@ module H3
       Bindings::Private.h3_set_to_linked_geo(h3_set, h3_indexes.size, linked_geo_polygon)
 
       extract_linked_geo_polygon(linked_geo_polygon).first
+    ensure
+      Bindings::Private.destroy_linked_polygon(linked_geo_polygon)
     end
 
     private

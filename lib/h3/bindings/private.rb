@@ -8,6 +8,7 @@ module H3
       extend H3::Bindings::Base
 
       attach_function :compact, [H3IndexesIn, H3IndexesOut, :size], :bool
+      attach_function :destroy_linked_polygon, :destroyLinkedPolygon, [LinkedGeoPolygon], :void
       attach_function :geo_to_h3, :geoToH3, [GeoCoord, Resolution], :h3_index
       attach_function :h3_indexes_from_unidirectional_edge,
                       :getH3IndexesFromUnidirectionalEdge,
