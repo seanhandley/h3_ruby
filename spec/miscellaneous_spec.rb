@@ -72,4 +72,13 @@ RSpec.describe H3 do
 
     it { is_expected.to eq(result) }
   end
+
+  describe ".res_0_indexes" do
+    let(:count) { 122 }
+    subject(:res_0_indexes) { H3.res_0_indexes }
+
+    it "has 122 base cells" do
+      expect(res_0_indexes.count).to eq(count)
+    end
+  end
 end

@@ -95,5 +95,13 @@ module H3
     #
     # @return [Float] Value expressed in degrees.
     attach_function :rads_to_degs, :radsToDegs, %i[double], :double
+
+    attach_function :res_0_index_count, :res0IndexCount, [], :int
+
+    def res_0_indexes
+      out = H3Indexes.of_size(res_0_index_count)
+      Bindings::Private.res_0_indexes(out)
+      out.read
+    end
   end
 end
