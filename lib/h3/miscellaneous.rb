@@ -95,5 +95,29 @@ module H3
     #
     # @return [Float] Value expressed in degrees.
     attach_function :rads_to_degs, :radsToDegs, %i[double], :double
+
+    # @!method res_0_index_count
+    #
+    # Returns the number of resolution 0 hexagons (base cells).
+    #
+    # @example Return the number of base cells
+    #    H3.res_0_index_count
+    #    122
+    #
+    # @return [Integer] The number of resolution 0 hexagons (base cells).
+    attach_function :res_0_index_count, :res0IndexCount, [], :int
+
+    # Returns all resolution 0 hexagons (base cells).
+    #
+    # @example Return all base cells.
+    #   H3.res_0_indexes
+    #   [576495936675512319, 576531121047601151, ..., 580753245698260991]
+    #
+    # @return [Array<Integer>] All resolution 0 hexagons (base cells).
+    def res_0_indexes
+      out = H3Indexes.of_size(res_0_index_count)
+      Bindings::Private.res_0_indexes(out)
+      out.read
+    end
   end
 end
