@@ -6,6 +6,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 We track the MAJOR and MINOR version levels of Uber's H3 project (https://github.com/uber/h3) but maintain independent patch levels so we can make small fixes and non breaking changes.
 
+## [3.4.0] - 2019-1-24
+### Added
+- `res_0_indexes` and `res_0_index_count` support (#51).
+
 ## [3.3.1] - 2019-1-4
 ### Added
 - `h3_line` and `h3_line_size` support (#43).
