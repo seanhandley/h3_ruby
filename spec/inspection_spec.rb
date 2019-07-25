@@ -87,4 +87,36 @@ RSpec.describe H3 do
       it { is_expected.to eq(result) } 
     end
   end
+
+  describe ".max_face_count" do
+    let(:h3_index) { "8928308280fffff".to_i(16) }
+    let(:result) { 2 }
+
+    subject(:max_face_count) { H3.max_face_count(h3_index) }
+
+    it { is_expected.to eq(result) }
+
+    context "when the h3 index is a pentagon" do
+      let(:h3_index) { "821c07fffffffff".to_i(16) }
+      let(:result) { 5 }
+
+      it { is_expected.to eq(result) } 
+    end
+  end
+
+  describe ".h3_faces" do
+    let(:h3_index) { "8928308280fffff".to_i(16) }
+    let(:result) { [7] }
+
+    subject(:max_face_count) { H3.h3_faces(h3_index) }
+
+    it { is_expected.to eq(result) }
+
+    context "when the h3 index is a pentagon" do
+      let(:h3_index) { "821c07fffffffff".to_i(16) }
+      let(:result) { [1, 2, 6, 7, 11] }
+
+      it { is_expected.to eq(result) } 
+    end
+  end
 end
