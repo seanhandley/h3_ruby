@@ -101,5 +101,38 @@ module H3
       Bindings::Private.h3_to_string(h3_index, h3_str, H3_TO_STR_BUF_SIZE)
       h3_str.read_string
     end
+
+    # @!method max_face_count(h3_index)
+    #
+    # Returns the maximum number of icosahedron faces the given H3 index may intersect.
+    #
+    # @param [Integer] h3_index A H3 index.
+    #
+    # @example Check maximum faces
+    #   H3.max_face_count(585961082523222015)
+    #   5
+    #
+    # @return [Integer] Maximum possible number of faces
+    attach_function :max_face_count, :maxFaceCount, %i[h3_index], :int
+
+    # void h3GetFaces(H3Index h, int* out);
+
+    # @!method h3_faces(h3_index)
+    #
+    # Find all icosahedron faces intersected by a given H3 index.
+    #
+    # @param [Integer] h3_index A H3 index.
+    #
+    # @example Find icosahedron faces for given index
+    #   H3.h3_faces(585961082523222015)
+    #   [1, 2, 6, 7, 11]
+    #
+    # @return [Array<Integer>] Faces. Faces are represented as integers from 0-19, inclusive.
+    def h3_faces(h3_index)
+      max_faces = max_face_count(h3_index)
+      out = FFI::MemoryPointer.new(:int, max_faces)
+      Bindings::Private.h3_faces(h3_index, out)
+      out.read_array_of_int(max_faces).reject(&:negative?).sort
+    end
   end
 end

@@ -6,6 +6,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 We track the MAJOR and MINOR version levels of Uber's H3 project (https://github.com/uber/h3) but maintain independent patch levels so we can make small fixes and non breaking changes.
 
+## [3.5.0] - 2019-7-25
+### Added
+- `h3_faces` and `max_face_count` support (#56)
+### Changed
+- New cmake options to prevent unnecessary building of filter apps and benchmarks.
+
 ## [3.4.4] - 2019-6-4
 ### Changed
 - Internal h3 bugfixes.
