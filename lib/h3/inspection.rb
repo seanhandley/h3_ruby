@@ -132,6 +132,7 @@ module H3
       max_faces = max_face_count(h3_index)
       out = FFI::MemoryPointer.new(:int, max_faces)
       Bindings::Private.h3_faces(h3_index, out)
+      # The C function returns a sparse array whose holes are represented by -1.
       out.read_array_of_int(max_faces).reject(&:negative?).sort
     end
   end
