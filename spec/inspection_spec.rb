@@ -1,47 +1,47 @@
 RSpec.describe H3 do
   include_context "constants"
 
-  describe ".h3_resolution" do
+  describe ".resolution" do
     let(:h3_index) { valid_h3_index }
     let(:result) { 8 }
 
-    subject(:h3_resolution) { H3.h3_resolution(h3_index) }
+    subject(:resolution) { H3.resolution(h3_index) }
 
     it { is_expected.to eq(result) }
   end
 
-  describe ".h3_base_cell" do
+  describe ".base_cell" do
     let(:h3_index) { valid_h3_index }
     let(:result) { 12 }
 
-    subject(:h3_base_cell) { H3.h3_base_cell(h3_index) }
+    subject(:base_cell) { H3.base_cell(h3_index) }
 
     it { is_expected.to eq(result) }
   end
 
-  describe ".string_to_h3" do
+  describe ".from_string" do
     let(:h3_index) { "8928308280fffff"}
     let(:result) { h3_index.to_i(16) }
 
-    subject(:string_to_h3) { H3.string_to_h3(h3_index) }
+    subject(:from_string) { H3.from_string(h3_index) }
 
     it { is_expected.to eq(result) }
   end
 
-  describe ".h3_to_string" do
+  describe ".to_string" do
     let(:h3_index) { "8928308280fffff".to_i(16) }
     let(:result) { h3_index.to_s(16) }
 
-    subject(:h3_to_string) { H3.h3_to_string(h3_index) }
+    subject(:to_string) { H3.to_string(h3_index) }
 
     it { is_expected.to eq(result) }
   end
 
-  describe ".h3_valid?" do
+  describe ".valid?" do
     let(:h3_index) { valid_h3_index }
     let(:result) { true }
 
-    subject(:h3_valid?) { H3.h3_valid?(h3_index) }
+    subject(:valid?) { H3.valid?(h3_index) }
 
     it { is_expected.to eq(result) }
 
@@ -51,16 +51,16 @@ RSpec.describe H3 do
       let(:result) { false }
 
       it "returns the expected result" do
-        expect(h3_valid?).to eq(result)
+        expect(valid?).to eq(result)
       end
     end
   end
 
-  describe ".h3_res_class_3?" do
+  describe ".class_3_resolution?" do
     let(:h3_index) { "8928308280fffff".to_i(16) }
     let(:result) { true }
 
-    subject(:h3_res_class_3) { H3.h3_res_class_3?(h3_index) }
+    subject(:class_3_resolution) { H3.class_3_resolution?(h3_index) }
 
     it { is_expected.to eq(result) }
 
@@ -72,11 +72,11 @@ RSpec.describe H3 do
     end
   end
 
-  describe ".h3_pentagon?" do
+  describe ".pentagon?" do
     let(:h3_index) { "821c07fffffffff".to_i(16) }
     let(:result) { true }
 
-    subject(:h3_pentagon?) { H3.h3_pentagon?(h3_index) }
+    subject(:pentagon?) { H3.pentagon?(h3_index) }
 
     it { is_expected.to eq(result) }
 
@@ -104,11 +104,11 @@ RSpec.describe H3 do
     end
   end
 
-  describe ".h3_faces" do
+  describe ".faces" do
     let(:h3_index) { "8928308280fffff".to_i(16) }
     let(:result) { [7] }
 
-    subject(:max_face_count) { H3.h3_faces(h3_index) }
+    subject(:faces) { H3.faces(h3_index) }
 
     it { is_expected.to eq(result) }
 

@@ -331,27 +331,27 @@ RSpec.describe H3 do
     end
   end
 
-  describe ".h3_distance" do
+  describe ".distance" do
     let(:origin) { "89283082993ffff".to_i(16) }
     let(:destination) { "89283082827ffff".to_i(16) }
     let(:result) { 5 }
 
-    subject(:h3_distance) { H3.h3_distance(origin, destination) }
+    subject(:distance) { H3.distance(origin, destination) }
 
     it { is_expected.to eq(result) }
   end
 
-  describe ".h3_line_size" do
+  describe ".line_size" do
     let(:origin) { "89283082993ffff".to_i(16) }
     let(:destination) { "89283082827ffff".to_i(16) }
     let(:result) { 6 }
 
-    subject(:h3_line_size) { H3.h3_line_size(origin, destination) }
+    subject(:h3_line_size) { H3.line_size(origin, destination) }
 
     it { is_expected.to eq(result) }
   end
 
-  describe ".h3_line" do
+  describe ".line" do
     let(:origin) { "89283082993ffff".to_i(16) }
     let(:destination) { "89283082827ffff".to_i(16) }
     let(:result) do
@@ -361,7 +361,7 @@ RSpec.describe H3 do
       ].map { |i| i.to_i(16) }
     end
 
-    subject(:h3_line) { H3.h3_line(origin, destination) }
+    subject(:line) { H3.line(origin, destination) }
 
     it { is_expected.to eq(result) }
   end

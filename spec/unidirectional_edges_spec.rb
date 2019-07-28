@@ -1,12 +1,12 @@
 RSpec.describe H3 do
   include_context "constants"
 
-  describe ".h3_indexes_neighbors?" do
+  describe ".neighbors?" do
     let(:origin) { "8928308280fffff".to_i(16) }
     let(:destination) { "8928308280bffff".to_i(16) }
     let(:result) { true }
 
-    subject(:h3_indexes_neighbors?) { H3.h3_indexes_neighbors?(origin, destination) }
+    subject(:neighbors?) { H3.neighbors?(origin, destination) }
 
     it { is_expected.to eq(result) }
 
@@ -18,21 +18,21 @@ RSpec.describe H3 do
     end
   end
 
-  describe ".h3_unidirectional_edge" do
+  describe ".unidirectional_edge" do
     let(:origin) { "8928308280fffff".to_i(16) }
     let(:destination) { "8928308280bffff".to_i(16) }
     let(:result) { "16928308280fffff".to_i(16) }
 
-    subject(:h3_unidirectional_edge) { H3.h3_unidirectional_edge(origin, destination) }
+    subject(:unidirectional_edge) { H3.unidirectional_edge(origin, destination) }
 
     it { is_expected.to eq(result) }
   end
 
-  describe ".h3_unidirectional_edge_valid?" do
+  describe ".unidirectional_edge_valid?" do
     let(:edge) { "11928308280fffff".to_i(16) }
     let(:result) { true }
 
-    subject(:h3_unidirectional_edge_valid?) { H3.h3_unidirectional_edge_valid?(edge) }
+    subject(:h3_unidirectional_edge_valid?) { H3.unidirectional_edge_valid?(edge) }
 
     it { is_expected.to eq(result) }
 
@@ -62,24 +62,24 @@ RSpec.describe H3 do
     it { is_expected.to eq(result) }
   end
 
-  describe ".h3_indexes_from_unidirectional_edge" do
+  describe ".origin_and_destination_from_unidirectional_edge" do
     let(:h3_index) { "11928308280fffff".to_i(16) }
     let(:expected_indexes) do
       %w(8928308280fffff 8928308283bffff).map { |i| i.to_i(16) }
     end
 
-    subject(:h3_indexes_from_unidirectional_edge) do
-      H3.h3_indexes_from_unidirectional_edge(h3_index)
+    subject(:origin_and_destination_from_unidirectional_edge) do
+      H3.origin_and_destination_from_unidirectional_edge(h3_index)
     end
 
     it "has two expected h3 indexes" do
-      expect(h3_indexes_from_unidirectional_edge).to eq(expected_indexes)
+      expect(origin_and_destination_from_unidirectional_edge).to eq(expected_indexes)
     end
   end
 
-  describe ".h3_unidirectional_edges_from_hexagon" do
-    subject(:h3_unidirectional_edges_from_hexagon) do
-      H3.h3_unidirectional_edges_from_hexagon(h3_index)
+  describe ".unidirectional_edges_from_hexagon" do
+    subject(:unidirectional_edges_from_hexagon) do
+      H3.unidirectional_edges_from_hexagon(h3_index)
     end
 
     context "when index is a hexagon" do
@@ -87,7 +87,7 @@ RSpec.describe H3 do
       let(:count) { 6 }
 
       it "has six expected edges" do
-        expect(h3_unidirectional_edges_from_hexagon.count).to eq(count)
+        expect(unidirectional_edges_from_hexagon.count).to eq(count)
       end
     end
 
@@ -96,21 +96,21 @@ RSpec.describe H3 do
       let(:count) { 5 }
 
       it "has five expected edges" do
-        expect(h3_unidirectional_edges_from_hexagon.count).to eq(count)
+        expect(unidirectional_edges_from_hexagon.count).to eq(count)
       end
     end
   end
 
-  describe ".h3_unidirectional_edge_boundary" do
+  describe ".unidirectional_edge_boundary" do
     let(:edge) { "11928308280fffff".to_i(16) }
     let(:expected) do
       [[37.77820687262237, -122.41971895414808], [37.77652420699321, -122.42079024541876]]
     end
 
-    subject(:h3_unidirectional_edge_boundary) { H3.h3_unidirectional_edge_boundary(edge) }
+    subject(:unidirectional_edge_boundary) { H3.unidirectional_edge_boundary(edge) }
 
     it "matches expected coordinates" do
-      h3_unidirectional_edge_boundary.zip(expected) do |(lat, lon), (exp_lat, exp_lon)|
+      unidirectional_edge_boundary.zip(expected) do |(lat, lon), (exp_lat, exp_lon)|
         expect(lat).to be_within(0.000001).of(exp_lat)
         expect(lon).to be_within(0.000001).of(exp_lon)
       end

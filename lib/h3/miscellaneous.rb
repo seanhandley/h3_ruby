@@ -127,7 +127,7 @@ module H3
     #
     # @return [Array<Integer>] All resolution 0 hexagons (base cells).
     def base_cells
-      out = H3Indexes.of_size(res_0_index_count)
+      out = H3Indexes.of_size(base_cell_count)
       Bindings::Private.res_0_indexes(out)
       out.read
     end

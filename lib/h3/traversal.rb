@@ -300,7 +300,7 @@ module H3
     # @param [Integer] destination Destination H3 index.
     #
     # @example Derive the indexes found in a line.
-    #   H3.h3_line(617700169983721471, 617700169959866367)
+    #   H3.line(617700169983721471, 617700169959866367)
     #   [
     #     617700169983721471, 617700169984245759, 617700169988177919,
     #     617700169986867199, 617700169987391487, 617700169959866367
@@ -309,13 +309,19 @@ module H3
     # @raise [ArgumentError] Could not compute line
     #
     # @return [Array<Integer>] H3 indexes
-    def h3_line(origin, destination)
-      max_hexagons = h3_line_size(origin, destination)
+    def line(origin, destination)
+      max_hexagons = line_size(origin, destination)
       hexagons = H3Indexes.of_size(max_hexagons)
       res = Bindings::Private.h3_line(origin, destination, hexagons)
       raise(ArgumentError, "Could not compute line") if res.negative?
       hexagons.read
     end
+
+    # @deprecated Please use {#line} instead.
+    def h3_line(origin, destination)
+      line(origin, destination)
+    end
+    deprecate :h3_line, :line, 2020, 1
 
     private
 

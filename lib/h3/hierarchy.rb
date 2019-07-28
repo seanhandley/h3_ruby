@@ -59,7 +59,7 @@ module H3
     #
     # @return [Array<Integer>] H3 indexes of child hexagons.
     def children(h3_index, child_resolution)
-      max_children = max_h3_to_children_size(h3_index, child_resolution)
+      max_children = max_children(h3_index, child_resolution)
       out = H3Indexes.of_size(max_children)
       Bindings::Private.h3_to_children(h3_index, child_resolution, out)
       out.read

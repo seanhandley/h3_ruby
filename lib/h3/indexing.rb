@@ -7,21 +7,20 @@ module H3
   #
   # @see https://uber.github.io/h3/#/documentation/api-reference/indexing
   module Indexing
-    include Bindings::Structs
-    extend Gem::Deprecate
+    extend H3::Bindings::Base
     # Derive H3 index for the given set of coordinates.
     #
     # @param [Array<Integer>] coords A coordinate pair.
     # @param [Integer] resolution The desired resolution of the H3 index.
     #
     # @example Derive the H3 index for the given coordinates.
-    #   H3.from_geo([52.24630137198303, -1.7358398437499998], 9)
+    #   H3.from_geo_coordinates([52.24630137198303, -1.7358398437499998], 9)
     #   617439284584775679
     #
     # @raise [ArgumentError] If coordinates are invalid.
     #
     # @return [Integer] H3 index.
-    def from_geo(coords, resolution)
+    def from_geo_coordinates(coords, resolution)
       raise ArgumentError unless coords.is_a?(Array) && coords.count == 2
 
       lat, lon = coords
@@ -36,11 +35,11 @@ module H3
       Bindings::Private.geo_to_h3(coords, resolution)
     end
 
-    # @deprecated Please use {#from_geo} instead.
+    # @deprecated Please use {#from_geo_coordinates} instead.
     def geo_to_h3(coords, resolution)
-      from_geo(coords, resolution)
+      from_geo_coordinates(coords, resolution)
     end
-    deprecate :geo_to_h3, :from_geo, 2020, 1
+    deprecate :geo_to_h3, :from_geo_coordinates, 2020, 1
 
     # Derive coordinates for a given H3 index.
     #
@@ -49,11 +48,11 @@ module H3
     # @param [Integer] h3_index A valid H3 index.
     #
     # @example Derive the central coordinates for the given H3 index.
-    #   H3.to_geo(617439284584775679)
+    #   H3.to_geo_coordinates(617439284584775679)
     #   [52.245519061399506, -1.7363137757391423]
     #
     # @return [Array<Integer>] A coordinate pair.
-    def to_geo(h3_index)
+    def to_geo_coordinates(h3_index)
       coords = GeoCoord.new
       Bindings::Private.h3_to_geo(h3_index, coords)
       [rads_to_degs(coords[:lat]), rads_to_degs(coords[:lon])]
@@ -61,9 +60,9 @@ module H3
 
     # @deprecated Please use {#to_geo_coordinates} instead.
     def h3_to_geo(h3_index)
-      to_geo(h3_index)
+      to_geo_coordinates(h3_index)
     end
-    deprecate :h3_to_geo, :to_geo, 2020, 1
+    deprecate :h3_to_geo, :to_geo_coordinates, 2020, 1
 
     # Derive the geographical boundary as coordinates for a given H3 index.
     #
@@ -75,7 +74,7 @@ module H3
     # @param [Integer] h3_index A valid H3 index.
     #
     # @example Derive the geographical boundary for the given H3 index.
-    #   H3.to_geo_boundary(617439284584775679)
+    #   H3.to_boundary(617439284584775679)
     #   [
     #     [52.247260929171055, -1.736809158397472], [52.24625850761068, -1.7389279144996015],
     #     [52.244516619273476, -1.7384324668792375], [52.243777169245725, -1.7358184256304658],
@@ -83,7 +82,7 @@ module H3
     #   ]
     #
     # @return [Array<Array<Integer>>] An array of six coordinate pairs.
-    def to_geo_boundary(h3_index)
+    def to_boundary(h3_index)
       geo_boundary = GeoBoundary.new
       Bindings::Private.h3_to_geo_boundary(h3_index, geo_boundary)
       geo_boundary[:verts].take(geo_boundary[:num_verts]).map do |d|
@@ -91,10 +90,10 @@ module H3
       end
     end
 
-    # @deprecated Please use {#to_geo_boundary} instead.
+    # @deprecated Please use {#to_boundary} instead.
     def h3_to_geo_boundary(h3_index)
-      to_geo_boundary(h3_index)
+      to_boundary(h3_index)
     end
-    deprecate :h3_to_geo_boundary, :to_geo_boundary, 2020, 1
+    deprecate :h3_to_geo_boundary, :to_boundary, 2020, 1
   end
 end

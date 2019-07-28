@@ -11,15 +11,15 @@ Please consult [the H3 documentation](https://uber.github.io/h3/#/documentation/
 
 ## Supported H3 Versions
 
-The semantic versioning of this gem matches the versioning of the H3 C library. E.g. version `3.2.x` of this gem is targeted for version `3.2.y` of H3 C lib where `x` and `y` are independent patch levels.
+The semantic versioning of this gem matches the versioning of the H3 C library. E.g. version `3.5.x` of this gem is targeted for version `3.5.y` of H3 C lib where `x` and `y` are independent patch levels.
 
 ## Naming Conventions
 
 We have changed camel-case method names to snake-case, as per the Ruby convention.
 
-In addition, some methods using the `get` verb have been renamed i.e. `getH3UnidirectionalEdgesFromHexagon` becomes `h3_unidirectional_edges_from_hexagon`.
+In addition, some methods using the `get` verb have been renamed i.e. `getH3UnidirectionalEdgesFromHexagon` becomes `unidirectional_edges_from_hexagon`.
 
-We have also suffixed predicate methods with a question mark, as per the Ruby convention, and removed `is` from the name i.e. `h3IsPentagon` becomes `h3_pentagon?`
+We have also suffixed predicate methods with a question mark, as per the Ruby convention, and removed `h3Is` from the name i.e. `h3IsPentagon` becomes `pentagon?`
 
 ## Getting Started
 
@@ -53,13 +53,13 @@ require "h3"
 Call H3 functions via the `H3` namespace
 
 ```ruby
-H3.geo_to_h3([53.959130, -1.079230], 8).to_s(16)
+H3.from_geo_coordinates([53.959130, -1.079230], 8).to_s(16)
 => "8819429a9dfffff"
-H3.h3_valid?("8819429a9dfffff".to_i(16))
+H3.valid?("8819429a9dfffff".to_i(16))
 => true
-H3.h3_pentagon?("8819429a9dfffff".to_i(16))
+H3.pentagon?("8819429a9dfffff".to_i(16))
 => false
-H3.h3_to_geo_boundary("8819429a9dfffff".to_i(16))
+H3.to_boundary("8819429a9dfffff".to_i(16))
 => [[53.962987505331384, -1.079984346847996], [53.9618315234061, -1.0870313428985856], [53.95744798515881, -1.0882421079017874], [53.95422067486053, -1.082406760751464], [53.955376670617454, -1.0753609232787642], [53.95975996282198, -1.074149274503605]]
 ```
 
