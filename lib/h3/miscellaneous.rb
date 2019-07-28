@@ -70,18 +70,24 @@ module H3
     # @return [Float] Average hexagon area in square metres.
     attach_function :hex_area_m2, :hexAreaM2, [Resolution], :double
 
-    # @!method num_hexagons(resolution)
+    # @!method hexagon_count(resolution)
     #
     # Number of unique H3 indexes at the given resolution.
     #
     # @param [Integer] resolution Resolution.
     #
     # @example Find number of hexagons at resolution 6
-    #   H3.num_hexagons(6)
+    #   H3.hexagon_count(6)
     #   14117882
     #
     # @return [Integer] Number of unique hexagons
-    attach_function :num_hexagons, :numHexagons, [Resolution], :ulong_long
+    attach_function :hexagon_count, :numHexagons, [Resolution], :ulong_long
+
+    # @deprecated Please use {#hexagon_count} instead.
+    def num_hexagons(resolution)
+      hexagon_count(resolution)
+    end
+    deprecate :num_hexagons, :hexagon_count, 2020, 1
 
     # @!method rads_to_degs(rads)
     #
@@ -96,28 +102,40 @@ module H3
     # @return [Float] Value expressed in degrees.
     attach_function :rads_to_degs, :radsToDegs, %i[double], :double
 
-    # @!method res_0_index_count
+    # @!method base_cell_count
     #
     # Returns the number of resolution 0 hexagons (base cells).
     #
     # @example Return the number of base cells
-    #    H3.res_0_index_count
+    #    H3.base_cell_count
     #    122
     #
     # @return [Integer] The number of resolution 0 hexagons (base cells).
-    attach_function :res_0_index_count, :res0IndexCount, [], :int
+    attach_function :base_cell_count, :res0IndexCount, [], :int
+
+    # @deprecated Please use {#base_cell_count} instead.
+    def res_0_index_count
+      base_cell_count
+    end
+    deprecate :res_0_index_count, :base_cell_count, 2020, 1
 
     # Returns all resolution 0 hexagons (base cells).
     #
     # @example Return all base cells.
-    #   H3.res_0_indexes
+    #   H3.base_cells
     #   [576495936675512319, 576531121047601151, ..., 580753245698260991]
     #
     # @return [Array<Integer>] All resolution 0 hexagons (base cells).
-    def res_0_indexes
+    def base_cells
       out = H3Indexes.of_size(res_0_index_count)
       Bindings::Private.res_0_indexes(out)
       out.read
     end
+
+    # @deprecated Please use {#base_cells} instead.
+    def res_0_indexes
+      base_cells
+    end
+    deprecate :res_0_indexes, :base_cells, 2020, 1
   end
 end
