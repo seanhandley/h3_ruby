@@ -1,15 +1,8 @@
 require "ffi"
 require "rgeo/geo_json"
+require "zeitwerk"
 
-require "h3/bindings"
-require "h3/geo_json"
-require "h3/hierarchy"
-require "h3/indexing"
-require "h3/inspection"
-require "h3/miscellaneous"
-require "h3/regions"
-require "h3/traversal"
-require "h3/unidirectional_edges"
+Zeitwerk::Loader.for_gem.setup
 
 # The main H3 namespace.
 #
@@ -17,7 +10,7 @@ require "h3/unidirectional_edges"
 #
 # @see https://uber.github.io/h3/#/documentation/overview/introduction
 module H3
-  extend GeoJSON
+  extend GeoJson
   extend Hierarchy
   extend Miscellaneous
   extend Indexing
@@ -39,4 +32,10 @@ module H3
       undef_method predicate
     end
   end
+
+  # Internal bindings related modules and classes.
+  #
+  # These are intended to be used by the library's public methods
+  # and not to be used directly by client code.
+  module Bindings; end
 end
