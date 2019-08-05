@@ -7,6 +7,7 @@ module H3
       def self.extended(base)
         lib_path = File.expand_path(__dir__ + "/../../../ext/h3/src/lib")
         base.extend FFI::Library
+        base.extend Gem::Deprecate
         base.include Structs
         base.include Types
         base.ffi_lib ["#{lib_path}/libh3.dylib", "#{lib_path}/libh3.so"]

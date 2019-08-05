@@ -1,11 +1,11 @@
 RSpec.describe H3 do
   include_context "constants"
 
-  describe ".num_hexagons" do
+  describe ".hexagon_count" do
     let(:resolution) { 2 }
     let(:result) { 5882 }
 
-    subject(:num_hexagons) { H3.num_hexagons(resolution) }
+    subject(:hexagon_count) { H3.hexagon_count(resolution) }
 
     it { is_expected.to eq(result) }
 
@@ -14,7 +14,7 @@ RSpec.describe H3 do
       let(:result) { false }
 
       it "returns the expected result" do
-        expect { num_hexagons }.to raise_error(ArgumentError)
+        expect { hexagon_count }.to raise_error(ArgumentError)
       end
     end
   end
@@ -73,12 +73,12 @@ RSpec.describe H3 do
     it { is_expected.to eq(result) }
   end
 
-  describe ".res_0_indexes" do
+  describe ".base_cells" do
     let(:count) { 122 }
-    subject(:res_0_indexes) { H3.res_0_indexes }
+    subject(:base_cells) { H3.base_cells }
 
     it "has 122 base cells" do
-      expect(res_0_indexes.count).to eq(count)
+      expect(base_cells.count).to eq(count)
     end
   end
 end

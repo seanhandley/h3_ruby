@@ -5,7 +5,7 @@ module H3
   module Hierarchy
     extend H3::Bindings::Base
 
-    # @!method h3_to_parent(h3_index, parent_resolution)
+    # @!method parent(h3_index, parent_resolution)
     #
     # Derive the parent hexagon which contains the hexagon at the given H3 index.
     #
@@ -13,13 +13,19 @@ module H3
     # @param [Integer] parent_resoluton The desired resolution of the parent hexagon.
     #
     # @example Find the parent hexagon for a H3 index.
-    #   H3.h3_to_parent(613196570357137407, 6)
+    #   H3.parent(613196570357137407, 6)
     #   604189371209351167
     #
     # @return [Integer] H3 index of parent hexagon.
-    attach_function :h3_to_parent, :h3ToParent, [:h3_index, Resolution], :h3_index
+    attach_function :parent, :h3ToParent, [:h3_index, Resolution], :h3_index
 
-    # @!method max_h3_to_children_size(h3_index, child_resolution)
+    # @deprecated Please use {#parent} instead.
+    def h3_to_parent(h3_index, resolution)
+      parent(h3_index, resolution)
+    end
+    deprecate :h3_to_parent, :parent, 2020, 1
+
+    # @!method max_children(h3_index, child_resolution)
     #
     # Derive maximum number of child hexagons possible at given resolution.
     #
@@ -27,11 +33,17 @@ module H3
     # @param [Integer] child_resoluton The desired resolution of the child hexagons.
     #
     # @example Derive maximum number of child hexagons.
-    #    H3.max_h3_to_children_size(613196570357137407, 10)
+    #    H3.max_children(613196570357137407, 10)
     #    49
     #
     # @return [Integer] Maximum number of child hexagons possible at given resolution.
-    attach_function :max_h3_to_children_size, :maxH3ToChildrenSize, [:h3_index, Resolution], :int
+    attach_function :max_children, :maxH3ToChildrenSize, [:h3_index, Resolution], :int
+
+    # @deprecated Please use {#max_children} instead.
+    def max_h3_to_children_size(h3_index, resolution)
+      max_children(h3_index, resolution)
+    end
+    deprecate :max_h3_to_children_size, :max_children, 2020, 1
 
     # Derive child hexagons contained within the hexagon at the given H3 index.
     #
@@ -39,19 +51,25 @@ module H3
     # @param [Integer] child_resolution The desired resolution of hexagons returned.
     #
     # @example Find the child hexagons for a H3 index.
-    #   H3.h3_to_children(613196570357137407, 9)
+    #   H3.children(613196570357137407, 9)
     #   [
     #     617700169982672895, 617700169982935039, 617700169983197183, 617700169983459327,
     #     617700169983721471, 617700169983983615, 617700169984245759
     #   ]
     #
     # @return [Array<Integer>] H3 indexes of child hexagons.
-    def h3_to_children(h3_index, child_resolution)
-      max_children = max_h3_to_children_size(h3_index, child_resolution)
+    def children(h3_index, child_resolution)
+      max_children = max_children(h3_index, child_resolution)
       out = H3Indexes.of_size(max_children)
       Bindings::Private.h3_to_children(h3_index, child_resolution, out)
       out.read
     end
+
+    # @deprecated Please use {#children} instead.
+    def h3_to_children(h3_index, resolution)
+      children(h3_index, resolution)
+    end
+    deprecate :h3_to_children, :children, 2020, 1
 
     # Find the maximum uncompacted size of the given set of H3 indexes.
     #

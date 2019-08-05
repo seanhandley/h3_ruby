@@ -18,7 +18,7 @@ module H3
     # @return [Integer] Maximum k-ring size.
     attach_function :max_kring_size, :maxKringSize, %i[k_distance], :int
 
-    # @!method h3_distance(origin, h3_index)
+    # @!method distance(origin, h3_index)
     #
     # Derive the distance between two H3 indexes.
     #
@@ -26,13 +26,19 @@ module H3
     # @param [Integer] h3_index H3 index
     #
     # @example Derive the distance between two H3 indexes.
-    #   H3.h3_distance(617700169983721471, 617700169959866367)
+    #   H3.distance(617700169983721471, 617700169959866367)
     #   5
     #
     # @return [Integer] Distance between indexes.
-    attach_function :h3_distance, :h3Distance, %i[h3_index h3_index], :k_distance
+    attach_function :distance, :h3Distance, %i[h3_index h3_index], :k_distance
 
-    # @!method h3_line_size(origin, destination)
+    # @deprecated Please use {#distance} instead.
+    def h3_distance(origin, destination)
+      distance(origin, destination)
+    end
+    deprecate :h3_distance, :distance, 2020, 1
+
+    # @!method line_size(origin, destination)
     #
     # Derive the number of hexagons present in a line between two H3 indexes.
     #
@@ -45,11 +51,17 @@ module H3
     # @param [Integer] destination H3 index
     #
     # @example Derive the number of hexagons present in a line between two H3 indexes.
-    #   H3.h3_line_size(617700169983721471, 617700169959866367)
+    #   H3.line_size(617700169983721471, 617700169959866367)
     #   6
     #
     # @return [Integer] Number of hexagons found between indexes.
-    attach_function :h3_line_size, :h3LineSize, %i[h3_index h3_index], :int
+    attach_function :line_size, :h3LineSize, %i[h3_index h3_index], :int
+
+    # @deprecated Please use {#line_size} instead.
+    def h3_line_size(origin, destination)
+      line_size(origin, destination)
+    end
+    deprecate :h3_line_size, :line_size, 2020, 1
 
     # Derives H3 indexes within k distance of the origin H3 index.
     #
@@ -288,7 +300,7 @@ module H3
     # @param [Integer] destination Destination H3 index.
     #
     # @example Derive the indexes found in a line.
-    #   H3.h3_line(617700169983721471, 617700169959866367)
+    #   H3.line(617700169983721471, 617700169959866367)
     #   [
     #     617700169983721471, 617700169984245759, 617700169988177919,
     #     617700169986867199, 617700169987391487, 617700169959866367
@@ -297,13 +309,19 @@ module H3
     # @raise [ArgumentError] Could not compute line
     #
     # @return [Array<Integer>] H3 indexes
-    def h3_line(origin, destination)
-      max_hexagons = h3_line_size(origin, destination)
+    def line(origin, destination)
+      max_hexagons = line_size(origin, destination)
       hexagons = H3Indexes.of_size(max_hexagons)
       res = Bindings::Private.h3_line(origin, destination, hexagons)
       raise(ArgumentError, "Could not compute line") if res.negative?
       hexagons.read
     end
+
+    # @deprecated Please use {#line} instead.
+    def h3_line(origin, destination)
+      line(origin, destination)
+    end
+    deprecate :h3_line, :line, 2020, 1
 
     private
 

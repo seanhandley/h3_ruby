@@ -1,27 +1,27 @@
 RSpec.describe H3 do
   include_context "constants"
 
-  describe ".h3_to_parent" do
+  describe ".parent" do
     let(:h3_index) { "89283082993ffff".to_i(16) }
     let(:parent_resolution) { 8 }
     let(:result) { "8828308299fffff".to_i(16) }
 
-    subject(:h3_to_parent) { H3.h3_to_parent(h3_index, parent_resolution) }
+    subject(:parent) { H3.parent(h3_index, parent_resolution) }
 
     it { is_expected.to eq(result) }
   end
 
-  describe ".h3_to_children" do
+  describe ".children" do
     let(:h3_index) { "8928308280fffff".to_i(16) }
 
-    subject(:h3_to_children) { H3.h3_to_children(h3_index, child_resolution) }
+    subject(:children) { H3.children(h3_index, child_resolution) }
 
     context "when resolution is 3" do
       let(:child_resolution) { 3 }
       let(:count) { 0 }
 
       it "has 0 children" do
-        expect(h3_to_children.count).to eq count
+        expect(children.count).to eq count
       end
     end
 
@@ -31,11 +31,11 @@ RSpec.describe H3 do
       let(:expected) { "8928308280fffff".to_i(16) }
 
       it "has 1 child" do
-        expect(h3_to_children.count).to eq count
+        expect(children.count).to eq count
       end
 
       it "is the expected value" do
-        expect(h3_to_children.first).to eq expected
+        expect(children.first).to eq expected
       end
     end
 
@@ -44,7 +44,7 @@ RSpec.describe H3 do
       let(:count) { 7 }
 
       it "has 7 children" do
-        expect(h3_to_children.count).to eq count
+        expect(children.count).to eq count
       end
     end
 
@@ -53,7 +53,7 @@ RSpec.describe H3 do
       let(:count) { 117649 }
 
       it "has 117649 children" do
-        expect(h3_to_children.count).to eq count
+        expect(children.count).to eq count
       end
     end
 
@@ -61,7 +61,7 @@ RSpec.describe H3 do
       let(:child_resolution) { -1 }
 
       it "raises an error" do
-        expect { h3_to_children }.to raise_error(ArgumentError)
+        expect { children }.to raise_error(ArgumentError)
       end
     end
 
@@ -69,15 +69,15 @@ RSpec.describe H3 do
       let(:child_resolution) { 16 }
 
       it "raises an error" do
-        expect { h3_to_children }.to raise_error(ArgumentError)
+        expect { children }.to raise_error(ArgumentError)
       end
     end
   end
 
-  describe ".max_h3_to_children_size" do
+  describe ".max_children" do
     let(:h3_index) { "8928308280fffff".to_i(16) }
 
-    subject(:h3_to_children) { H3.max_h3_to_children_size(h3_index, child_resolution) }
+    subject(:max_children) { H3.max_children(h3_index, child_resolution) }
 
     context "when resolution is 3" do
       let(:child_resolution) { 3 }
