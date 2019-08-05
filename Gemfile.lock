@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    h3 (3.5.0)
+    h3 (3.5.1)
       ffi (~> 1.9)
       rgeo-geojson (~> 2.1)
       zeitwerk (~> 2.1.9)
