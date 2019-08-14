@@ -6,6 +6,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 We track the MAJOR and MINOR version levels of Uber's H3 project (https://github.com/uber/h3) but maintain independent patch levels so we can make small fixes and non breaking changes.
 
+## [3.6.0] - 2019-8-14
+### Added
+- `center_child` method to find center child at given resolution (#62).
+- `pentagons` (and `pentagon_count`) method to find pentagons at given resolution (#62).
+
 ## [3.5.1] - 2019-8-5
 ### Changed
 - Renamed 26 methods to be more idiomatic with Ruby conventions. The old names are deprecated until 2020 when they will be removed (#59).

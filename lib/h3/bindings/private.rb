@@ -10,6 +10,7 @@ module H3
       attach_function :compact, [H3IndexesIn, H3IndexesOut, :size], :bool
       attach_function :destroy_linked_polygon, :destroyLinkedPolygon, [LinkedGeoPolygon], :void
       attach_function :geo_to_h3, :geoToH3, [GeoCoord, Resolution], :h3_index
+      attach_function :get_pentagon_indexes, :getPentagonIndexes, [:int, H3IndexesOut], :void
       attach_function :h3_faces, :h3GetFaces, %i[h3_index output_buffer], :void
       attach_function :h3_indexes_from_unidirectional_edge,
                       :getH3IndexesFromUnidirectionalEdge,

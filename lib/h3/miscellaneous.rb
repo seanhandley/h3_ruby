@@ -113,6 +113,18 @@ module H3
     # @return [Integer] The number of resolution 0 hexagons (base cells).
     attach_function :base_cell_count, :res0IndexCount, [], :int
 
+    # @!method pentagon_count
+    #
+    # Number of pentagon H3 indexes per resolution.
+    # This is always 12, but provided as a convenience.
+    #
+    # @example Return the number of pentagons
+    #    H3.pentagon_count
+    #    12
+    #
+    # @return [Integer] The number of pentagons per resolution.
+    attach_function :pentagon_count, :pentagonIndexCount, [], :int
+
     # @deprecated Please use {#base_cell_count} instead.
     def res_0_index_count
       base_cell_count
@@ -129,6 +141,19 @@ module H3
     def base_cells
       out = H3Indexes.of_size(base_cell_count)
       Bindings::Private.res_0_indexes(out)
+      out.read
+    end
+
+    # Returns all pentagon indexes at the given resolution.
+    #
+    # @example Return all pentagons at resolution 4.
+    #   H3.pentagons(4)
+    #   [594615896891195391, 594967740612083711, ..., 598591730937233407]
+    #
+    # @return [Array<Integer>] All pentagon indexes at the given resolution.
+    def pentagons(resolution)
+      out = H3Indexes.of_size(pentagon_count)
+      Bindings::Private.get_pentagon_indexes(resolution, out)
       out.read
     end
 
