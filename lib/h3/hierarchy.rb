@@ -39,6 +39,21 @@ module H3
     # @return [Integer] Maximum number of child hexagons possible at given resolution.
     attach_function :max_children, :maxH3ToChildrenSize, [:h3_index, Resolution], :int
 
+    # @!method center_child(h3_index, child_resolution)
+    #
+    # Returns the center child (finer) index contained by the given index
+    # at the given resolution.
+    #
+    # @param [Integer] h3_index A valid H3 index.
+    # @param [Integer] child_resoluton The desired resolution of the center child hexagon.
+    #
+    # @example Find center child hexagon.
+    #    H3.center_child(613196570357137407, 10)
+    #    622203769609814015
+    #
+    # @return [Integer] H3 index of center child hexagon.
+    attach_function :center_child, :h3ToCenterChild, [:h3_index, Resolution], :h3_index
+
     # @deprecated Please use {#max_children} instead.
     def max_h3_to_children_size(h3_index, resolution)
       max_children(h3_index, resolution)

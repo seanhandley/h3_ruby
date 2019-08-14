@@ -81,4 +81,32 @@ RSpec.describe H3 do
       expect(base_cells.count).to eq(count)
     end
   end
+
+  describe ".pentagon_count" do
+    let(:count) { 12 }
+    subject(:pentagon_count) { H3.pentagon_count }
+
+    it "has 12 pentagons per resolution" do
+      expect(pentagon_count).to eq(count)
+    end
+  end
+
+  describe ".pentagons" do
+    let(:resolution) { 4 }
+    let(:expected) do
+      [
+        594615896891195391, 594967740612083711,
+        595319584332972031, 595812165542215679,
+        596199193635192831, 596515852983992319,
+        596691774844436479, 597008434193235967,
+        597395462286213119, 597888043495456767,
+        598239887216345087, 598591730937233407
+      ]
+    end
+    subject(:pentagons) { H3.pentagons(resolution) }
+
+    it "returns pentagons at the given resolution" do
+      expect(pentagons).to eq(expected)
+    end
+  end
 end
