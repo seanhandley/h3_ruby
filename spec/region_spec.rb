@@ -42,7 +42,7 @@ RSpec.describe H3 do
       File.read(File.join(File.dirname(__FILE__), "support/fixtures/banbury.json"))
     end
     let(:resolution) { 9 }
-    let(:expected_count) { 33_391 }
+    let(:expected_count) { 36_193 }
 
     subject(:max_polyfill_size) { H3.max_polyfill_size(geojson, resolution) }
 
