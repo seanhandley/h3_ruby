@@ -12,11 +12,7 @@ module H3
         base.include Types
         base.ffi_lib ["#{lib_path}/libh3.dylib", "#{lib_path}/libh3.so"]
         base.typedef :ulong_long, :h3_index
-        base.typedef :int, :size
         base.typedef :int, :k_distance
-        base.typedef :pointer, :h3_set
-        base.typedef :pointer, :output_buffer
-        base.const_set("H3_INDEX", :ulong_long)
       end
     end
   end
