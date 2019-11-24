@@ -76,9 +76,7 @@ module H3
     #   true
     #
     # @return [Boolean] True if the H3 index is a pentagon.
-    attach_function :pentagon, :h3IsPentagon, %i[h3_index], :bool
-    alias_method :pentagon?, :pentagon
-    undef_method :pentagon
+    attach_predicate_function :pentagon?, :h3IsPentagon, %i[h3_index], :bool
 
     # @deprecated Please use {#pentagon?} instead.
     def h3_pentagon?(h3_index)
@@ -98,9 +96,7 @@ module H3
     #   true
     #
     # @return [Boolean] True if the H3 index has a class III resolution.
-    attach_function :class_3_resolution, :h3IsResClassIII, %i[h3_index], :bool
-    alias_method :class_3_resolution?, :class_3_resolution
-    undef_method :class_3_resolution
+    attach_predicate_function :class_3_resolution?, :h3IsResClassIII, %i[h3_index], :bool
 
     # @deprecated Please use {#class_3_resolution?} instead.
     def h3_res_class_3?(h3_index)
@@ -119,9 +115,7 @@ module H3
     #   true
     #
     # @return [Boolean] True if the H3 index is valid.
-    attach_function :valid, :h3IsValid, %i[h3_index], :bool
-    alias_method :valid?, :valid
-    undef_method :valid
+    attach_predicate_function :valid?, :h3IsValid, %i[h3_index], :bool
 
     # @deprecated Please use {#valid?} instead.
     def h3_valid?(h3_index)
