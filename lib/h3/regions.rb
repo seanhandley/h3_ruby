@@ -141,6 +141,7 @@ module H3
       linked_geo_polygon = LinkedGeoPolygon.new
       Bindings::Private.h3_set_to_linked_geo(h3_set, h3_indexes.size, linked_geo_polygon)
 
+      # The algorithm in h3 currently only handles 1 polygon
       extract_linked_geo_polygon(linked_geo_polygon).first
     ensure
       Bindings::Private.destroy_linked_polygon(linked_geo_polygon)
@@ -154,6 +155,8 @@ module H3
       geo_polygons = [linked_geo_polygon]
 
       until linked_geo_polygon[:next].null?
+        # Until the h3 algorithm is updated to handle multiple polygons,
+        # this block will never run.
         geo_polygons << linked_geo_polygon[:next]
         linked_geo_polygon = linked_geo_polygon[:next]
       end
