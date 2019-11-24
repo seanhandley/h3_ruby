@@ -32,12 +32,6 @@ module H3
     # @return [Integer] Distance between indexes.
     attach_function :distance, :h3Distance, %i[h3_index h3_index], :k_distance
 
-    # @deprecated Please use {#distance} instead.
-    def h3_distance(origin, destination)
-      distance(origin, destination)
-    end
-    deprecate :h3_distance, :distance, 2020, 1
-
     # @!method line_size(origin, destination)
     #
     # Derive the number of hexagons present in a line between two H3 indexes.
@@ -56,12 +50,6 @@ module H3
     #
     # @return [Integer] Number of hexagons found between indexes.
     attach_function :line_size, :h3LineSize, %i[h3_index h3_index], :int
-
-    # @deprecated Please use {#line_size} instead.
-    def h3_line_size(origin, destination)
-      line_size(origin, destination)
-    end
-    deprecate :h3_line_size, :line_size, 2020, 1
 
     # Derives H3 indexes within k distance of the origin H3 index.
     #
@@ -316,12 +304,6 @@ module H3
       raise(ArgumentError, "Could not compute line") if res.negative?
       hexagons.read
     end
-
-    # @deprecated Please use {#line} instead.
-    def h3_line(origin, destination)
-      line(origin, destination)
-    end
-    deprecate :h3_line, :line, 2020, 1
 
     private
 

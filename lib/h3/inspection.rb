@@ -21,12 +21,6 @@ module H3
     # @return [Integer] Resolution of H3 index
     attach_function :resolution, :h3GetResolution, %i[h3_index], Resolution
 
-    # @deprecated Please use {#resolution} instead.
-    def h3_resolution(h3_index)
-      resolution(h3_index)
-    end
-    deprecate :h3_resolution, :resolution, 2020, 1
-
     # @!method base_cell(h3_index)
     #
     # Derives the base cell number of the given H3 index
@@ -39,12 +33,6 @@ module H3
     #
     # @return [Integer] Base cell number
     attach_function :base_cell, :h3GetBaseCell, %i[h3_index], :int
-
-    # @deprecated Please use {#base_cell} instead.
-    def h3_base_cell(h3_index)
-      base_cell(h3_index)
-    end
-    deprecate :h3_base_cell, :base_cell, 2020, 1
 
     # @!method from_string(h3_string)
     #
@@ -59,12 +47,6 @@ module H3
     # @return [Integer] H3 index
     attach_function :from_string, :stringToH3, %i[string], :h3_index
 
-    # @deprecated Please use {#from_string} instead.
-    def string_to_h3(string)
-      from_string(string)
-    end
-    deprecate :string_to_h3, :from_string, 2020, 1
-
     # @!method pentagon?(h3_index)
     #
     # Determine whether the given H3 index is a pentagon.
@@ -77,12 +59,6 @@ module H3
     #
     # @return [Boolean] True if the H3 index is a pentagon.
     attach_predicate_function :pentagon?, :h3IsPentagon, %i[h3_index], :bool
-
-    # @deprecated Please use {#pentagon?} instead.
-    def h3_pentagon?(h3_index)
-      pentagon?(h3_index)
-    end
-    deprecate :h3_pentagon?, :pentagon?, 2020, 1
 
     # @!method class_3_resolution?(h3_index)
     #
@@ -98,12 +74,6 @@ module H3
     # @return [Boolean] True if the H3 index has a class III resolution.
     attach_predicate_function :class_3_resolution?, :h3IsResClassIII, %i[h3_index], :bool
 
-    # @deprecated Please use {#class_3_resolution?} instead.
-    def h3_res_class_3?(h3_index)
-      class_3_resolution?(h3_index)
-    end
-    deprecate :h3_res_class_3?, :class_3_resolution?, 2020, 1
-
     # @!method valid?(h3_index)
     #
     # Determine whether the given H3 index is valid.
@@ -116,12 +86,6 @@ module H3
     #
     # @return [Boolean] True if the H3 index is valid.
     attach_predicate_function :valid?, :h3IsValid, %i[h3_index], :bool
-
-    # @deprecated Please use {#valid?} instead.
-    def h3_valid?(h3_index)
-      valid?(h3_index)
-    end
-    deprecate :h3_valid?, :valid?, 2020, 1
 
     # Derives the hexadecimal string representation for a given H3 index.
     #
@@ -137,12 +101,6 @@ module H3
       Bindings::Private.h3_to_string(h3_index, h3_str, H3_TO_STR_BUF_SIZE)
       h3_str.read_string
     end
-
-    # @deprecated Please use {#to_string} instead.
-    def h3_to_string(h3_index)
-      to_string(h3_index)
-    end
-    deprecate :h3_to_string, :to_strings, 2020, 1
 
     # @!method max_face_count(h3_index)
     #
@@ -173,11 +131,5 @@ module H3
       # The C function returns a sparse array whose holes are represented by -1.
       out.read_array_of_int(max_faces).reject(&:negative?).sort
     end
-
-    # @deprecated Please use {#faces} instead.
-    def h3_faces(h3_index)
-      faces(h3_index)
-    end
-    deprecate :h3_faces, :faces, 2020, 1
   end
 end

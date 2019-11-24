@@ -19,13 +19,6 @@ module H3
     # @return [Boolean] True if indexes are neighbors
     attach_predicate_function :neighbors?, :h3IndexesAreNeighbors, %i[h3_index h3_index], :bool
 
-    # @deprecated Please use {#neighbors?} instead.
-    def h3_indexes_neighbors?(origin, destination)
-      neighbors?(origin, destination)
-    end
-
-    deprecate :h3_indexes_neighbors?, :neighbors?, 2020, 1
-
     # @!method unidirectional_edge_valid?(h3_index)
     #
     # Determine whether the given H3 index represents an edge.
@@ -41,13 +34,6 @@ module H3
                               :h3UnidirectionalEdgeIsValid,
                               %i[h3_index],
                               :bool
-
-    # @deprecated Please use {#unidirectional_edge_valid?} instead.
-    def h3_unidirectional_edge_valid?(h3_index)
-      unidirectional_edge_valid?(h3_index)
-    end
-
-    deprecate :h3_unidirectional_edge_valid?, :unidirectional_edge_valid?, 2020, 1
 
     # @!method unidirectional_edge(origin, destination)
     #
@@ -65,13 +51,6 @@ module H3
                     :getH3UnidirectionalEdge,
                     %i[h3_index h3_index],
                     :h3_index
-
-    # @deprecated Please use {#unidirectional_edge} instead.
-    def h3_unidirectional_edge(origin, destination)
-      unidirectional_edge(origin, destination)
-    end
-
-    deprecate :h3_unidirectional_edge, :unidirectional_edge, 2020, 1
 
     # @!method destination_from_unidirectional_edge(edge)
     #
@@ -125,16 +104,6 @@ module H3
       out.read
     end
 
-    # @deprecated Please use {#origin_and_destination_from_unidirectional_edge} instead.
-    def h3_indexes_from_unidirectional_edge(edge)
-      origin_and_destination_from_unidirectional_edge(edge)
-    end
-
-    deprecate :h3_indexes_from_unidirectional_edge,
-              :origin_and_destination_from_unidirectional_edge,
-              2020,
-              1
-
     # Derive unidirectional edges for a H3 index.
     #
     # @param [Integer] origin H3 index
@@ -153,16 +122,6 @@ module H3
       Bindings::Private.h3_unidirectional_edges_from_hexagon(origin, out)
       out.read
     end
-
-    # @deprecated Please use {#unidirectional_edges_from_hexagon} instead.
-    def h3_unidirectional_edges_from_hexagon(origin)
-      unidirectional_edges_from_hexagon(origin)
-    end
-
-    deprecate :h3_unidirectional_edges_from_hexagon,
-              :unidirectional_edges_from_hexagon,
-              2020,
-              1
 
     # Derive coordinates for edge boundary.
     #
@@ -184,15 +143,5 @@ module H3
         [rads_to_degs(d[:lat]), rads_to_degs(d[:lon])]
       end
     end
-
-    # @deprecated Please use {#unidirectional_edge_boundary} instead.
-    def h3_unidirectional_edge_boundary(edge)
-      unidirectional_edge_boundary(edge)
-    end
-
-    deprecate :h3_unidirectional_edge_boundary,
-              :unidirectional_edge_boundary,
-              2020,
-              1
   end
 end

@@ -35,12 +35,6 @@ module H3
       Bindings::Private.geo_to_h3(coords, resolution)
     end
 
-    # @deprecated Please use {#from_geo_coordinates} instead.
-    def geo_to_h3(coords, resolution)
-      from_geo_coordinates(coords, resolution)
-    end
-    deprecate :geo_to_h3, :from_geo_coordinates, 2020, 1
-
     # Derive coordinates for a given H3 index.
     #
     # The coordinates map to the centre of the hexagon at the given index.
@@ -57,12 +51,6 @@ module H3
       Bindings::Private.h3_to_geo(h3_index, coords)
       [rads_to_degs(coords[:lat]), rads_to_degs(coords[:lon])]
     end
-
-    # @deprecated Please use {#to_geo_coordinates} instead.
-    def h3_to_geo(h3_index)
-      to_geo_coordinates(h3_index)
-    end
-    deprecate :h3_to_geo, :to_geo_coordinates, 2020, 1
 
     # Derive the geographical boundary as coordinates for a given H3 index.
     #
@@ -89,11 +77,5 @@ module H3
         [rads_to_degs(d[:lat]), rads_to_degs(d[:lon])]
       end
     end
-
-    # @deprecated Please use {#to_boundary} instead.
-    def h3_to_geo_boundary(h3_index)
-      to_boundary(h3_index)
-    end
-    deprecate :h3_to_geo_boundary, :to_boundary, 2020, 1
   end
 end
