@@ -18,6 +18,20 @@ module H3
         base.typedef :pointer, :output_buffer
         base.const_set("H3_INDEX", :ulong_long)
       end
+
+      def attach_predicate_function(name, *args)
+        stripped_name = name.to_s.gsub("?", "")
+        attach_function(stripped_name, *args).tap do
+          rename_function stripped_name, name
+        end
+      end
+
+      private
+
+      def rename_function(from, to)
+        alias_method to, from
+        undef_method from
+      end
     end
   end
 end

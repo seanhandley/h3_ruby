@@ -17,9 +17,7 @@ module H3
     #   true
     #
     # @return [Boolean] True if indexes are neighbors
-    attach_function :neighbors, :h3IndexesAreNeighbors, %i[h3_index h3_index], :bool
-    alias_method :neighbors?, :neighbors
-    undef_method :neighbors
+    attach_predicate_function :neighbors?, :h3IndexesAreNeighbors, %i[h3_index h3_index], :bool
 
     # @deprecated Please use {#neighbors?} instead.
     def h3_indexes_neighbors?(origin, destination)
@@ -39,12 +37,10 @@ module H3
     #   true
     #
     # @return [Boolean] True if H3 index is a valid unidirectional edge
-    attach_function :unidirectional_edge_valid,
-                    :h3UnidirectionalEdgeIsValid,
-                    %i[h3_index],
-                    :bool
-    alias_method :unidirectional_edge_valid?, :unidirectional_edge_valid
-    undef_method :unidirectional_edge_valid
+    attach_predicate_function :unidirectional_edge_valid?,
+                              :h3UnidirectionalEdgeIsValid,
+                              %i[h3_index],
+                              :bool
 
     # @deprecated Please use {#unidirectional_edge_valid?} instead.
     def h3_unidirectional_edge_valid?(h3_index)
