@@ -163,8 +163,6 @@ module H3
     # @return [Integer] Maximum possible number of faces
     attach_function :max_face_count, :maxFaceCount, %i[h3_index], :int
 
-    # @!method faces(h3_index)
-    #
     # Find all icosahedron faces intersected by a given H3 index.
     #
     # @param [Integer] h3_index A H3 index.
