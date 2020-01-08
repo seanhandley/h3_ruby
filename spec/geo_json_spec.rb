@@ -60,6 +60,14 @@ RSpec.describe H3 do
         expect { geo_json_to_coordinates }.to raise_error(ArgumentError)
       end
     end
+
+    context "when given JSON with the wrong structure" do
+      let(:input) { { blah: "blah" }.to_json }
+
+      it "raises an error" do
+        expect { geo_json_to_coordinates }.to raise_error(ArgumentError)
+      end
+    end
   end
 
   describe ".coordinates_to_geo_json" do

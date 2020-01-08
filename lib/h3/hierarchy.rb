@@ -19,12 +19,6 @@ module H3
     # @return [Integer] H3 index of parent hexagon.
     attach_function :parent, :h3ToParent, [:h3_index, Resolution], :h3_index
 
-    # @deprecated Please use {#parent} instead.
-    def h3_to_parent(h3_index, resolution)
-      parent(h3_index, resolution)
-    end
-    deprecate :h3_to_parent, :parent, 2020, 1
-
     # @!method max_children(h3_index, child_resolution)
     #
     # Derive maximum number of child hexagons possible at given resolution.
@@ -54,12 +48,6 @@ module H3
     # @return [Integer] H3 index of center child hexagon.
     attach_function :center_child, :h3ToCenterChild, [:h3_index, Resolution], :h3_index
 
-    # @deprecated Please use {#max_children} instead.
-    def max_h3_to_children_size(h3_index, resolution)
-      max_children(h3_index, resolution)
-    end
-    deprecate :max_h3_to_children_size, :max_children, 2020, 1
-
     # Derive child hexagons contained within the hexagon at the given H3 index.
     #
     # @param [Integer] h3_index A valid H3 index.
@@ -79,12 +67,6 @@ module H3
       Bindings::Private.h3_to_children(h3_index, child_resolution, out)
       out.read
     end
-
-    # @deprecated Please use {#children} instead.
-    def h3_to_children(h3_index, resolution)
-      children(h3_index, resolution)
-    end
-    deprecate :h3_to_children, :children, 2020, 1
 
     # Find the maximum uncompacted size of the given set of H3 indexes.
     #

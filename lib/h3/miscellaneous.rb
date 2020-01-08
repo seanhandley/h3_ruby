@@ -83,12 +83,6 @@ module H3
     # @return [Integer] Number of unique hexagons
     attach_function :hexagon_count, :numHexagons, [Resolution], :ulong_long
 
-    # @deprecated Please use {#hexagon_count} instead.
-    def num_hexagons(resolution)
-      hexagon_count(resolution)
-    end
-    deprecate :num_hexagons, :hexagon_count, 2020, 1
-
     # @!method rads_to_degs(rads)
     #
     # Convert a number expressed in radians to its equivalent in degrees.
@@ -125,12 +119,6 @@ module H3
     # @return [Integer] The number of pentagons per resolution.
     attach_function :pentagon_count, :pentagonIndexCount, [], :int
 
-    # @deprecated Please use {#base_cell_count} instead.
-    def res_0_index_count
-      base_cell_count
-    end
-    deprecate :res_0_index_count, :base_cell_count, 2020, 1
-
     # Returns all resolution 0 hexagons (base cells).
     #
     # @example Return all base cells.
@@ -156,11 +144,5 @@ module H3
       Bindings::Private.get_pentagon_indexes(resolution, out)
       out.read
     end
-
-    # @deprecated Please use {#base_cells} instead.
-    def res_0_indexes
-      base_cells
-    end
-    deprecate :res_0_indexes, :base_cells, 2020, 1
   end
 end
