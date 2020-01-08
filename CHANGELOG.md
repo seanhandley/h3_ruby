@@ -9,6 +9,7 @@ We track the MAJOR and MINOR version levels of Uber's H3 project (https://github
 ## [3.6.2] - 2020-1-8
 ### Changed
 - Revert new polyfill algorithm until reported issues are fixed.
+- Remove deprecated methods: (#66)
 
 ## [3.6.1] - 2019-11-23
 ### Fixed
