@@ -6,6 +6,17 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 We track the MAJOR and MINOR version levels of Uber's H3 project (https://github.com/uber/h3) but maintain independent patch levels so we can make small fixes and non breaking changes.
 
+## [3.6.2] - 2020-1-8
+### Changed
+- Revert new polyfill algorithm until reported issues are fixed.
+
+## [3.6.1] - 2019-11-23
+### Fixed
+- `compact` handles zero length input correctly.
+- `bboxHexRadius` scaling factor adjusted to guarantee containment for `polyfill`.
+- `polyfill` new algorithm for up to 3x perf boost.
+- Fix CMake targets for KML generation.
+
 ## [3.6.0] - 2019-8-14
 ### Added
 - `center_child` method to find center child at given resolution (#62).
