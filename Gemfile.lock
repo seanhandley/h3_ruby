@@ -19,7 +19,7 @@ GEM
     docile (1.3.1)
     ffi (1.11.3)
     json (2.1.0)
-    rake (12.3.2)
+    rake (12.3.3)
     rgeo (2.1.1)
     rgeo-geojson (2.1.1)
       rgeo (>= 1.0.0)
