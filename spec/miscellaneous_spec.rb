@@ -116,7 +116,7 @@ RSpec.describe H3 do
     subject(:cell_area_rads2) { H3.cell_area_rads2(cell) }
 
     it "returns cell area in rads2" do
-      expect(cell_area_rads2).to eq(expected)
+      expect(cell_area_rads2).to be_within(0.0001).of(expected)
     end
   end
 
@@ -126,7 +126,7 @@ RSpec.describe H3 do
     subject(:cell_area_km2) { H3.cell_area_km2(cell) }
 
     it "returns cell area in km2" do
-      expect(cell_area_km2).to eq(expected)
+      expect(cell_area_km2).to be_within(0.0001).of(expected)
     end
   end
 
@@ -136,7 +136,7 @@ RSpec.describe H3 do
     subject(:cell_area_m2) { H3.cell_area_m2(cell) }
 
     it "returns cell area in m2" do
-      expect(cell_area_m2).to eq(expected)
+      expect(cell_area_m2).to be_within(0.0001).of(expected)
     end
   end
 
@@ -146,7 +146,7 @@ RSpec.describe H3 do
     subject(:exact_edge_length_rads) { H3.exact_edge_length_rads(cell) }
 
     it "returns edge length in rads" do
-      expect(exact_edge_length_rads).to eq(expected)
+      expect(exact_edge_length_rads).to be_within(0.0001).of(expected)
     end
   end
 
@@ -156,7 +156,7 @@ RSpec.describe H3 do
     subject(:exact_edge_length_km) { H3.exact_edge_length_km(cell) }
 
     it "returns edge length in km" do
-      expect(exact_edge_length_km).to eq(expected)
+      expect(exact_edge_length_km).to be_within(0.0001).of(expected)
     end
   end
 
@@ -166,7 +166,7 @@ RSpec.describe H3 do
     subject(:exact_edge_length_m) { H3.exact_edge_length_m(cell) }
 
     it "returns edge length in m" do
-      expect(exact_edge_length_m).to eq(expected)
+      expect(exact_edge_length_m).to be_within(0.0001).of(expected)
     end
   end
 
@@ -177,7 +177,7 @@ RSpec.describe H3 do
     subject(:point_distance_rads) { H3.point_distance_rads(a, b) }
 
     it "returns distance between points in rads" do
-      expect(point_distance_rads).to eq(expected)
+      expect(point_distance_rads).to be_within(0.0001).of(expected)
     end
 
     context "when the coordinates are invalid" do
@@ -196,7 +196,7 @@ RSpec.describe H3 do
     subject(:point_distance_km) { H3.point_distance_km(a, b) }
 
     it "returns distance between points in km" do
-      expect(point_distance_km).to eq(expected)
+      expect(point_distance_km).to be_within(0.0001).of(expected)
     end
 
     context "when the coordinates are invalid" do
@@ -215,7 +215,7 @@ RSpec.describe H3 do
     subject(:point_distance_m) { H3.point_distance_m(a, b) }
 
     it "returns distance between points in m" do
-      expect(point_distance_m).to eq(expected)
+      expect(point_distance_m).to be_within(0.0001).of(expected)
     end
 
     context "when the coordinates are invalid" do
