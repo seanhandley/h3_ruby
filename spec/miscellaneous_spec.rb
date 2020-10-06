@@ -179,6 +179,14 @@ RSpec.describe H3 do
     it "returns distance between points in rads" do
       expect(point_distance_rads).to eq(expected)
     end
+
+    context "when the coordinates are invalid" do
+      let(:a) { [91, -18] }
+
+      it "raises an argument error" do
+        expect { point_distance_rads }.to raise_error(ArgumentError)
+      end
+    end
   end
 
   describe ".point_distance_km" do
@@ -190,6 +198,14 @@ RSpec.describe H3 do
     it "returns distance between points in km" do
       expect(point_distance_km).to eq(expected)
     end
+
+    context "when the coordinates are invalid" do
+      let(:a) { [89, -181] }
+
+      it "raises an argument error" do
+        expect { point_distance_km }.to raise_error(ArgumentError)
+      end
+    end
   end
 
   describe ".point_distance_m" do
@@ -200,6 +216,14 @@ RSpec.describe H3 do
 
     it "returns distance between points in m" do
       expect(point_distance_m).to eq(expected)
+    end
+
+    context "when the coordinates are invalid" do
+      let(:a) { "boom" }
+
+      it "raises an argument error" do
+        expect { point_distance_m }.to raise_error(ArgumentError)
+      end
     end
   end
 end
