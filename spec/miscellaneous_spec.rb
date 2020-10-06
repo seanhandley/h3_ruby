@@ -109,4 +109,97 @@ RSpec.describe H3 do
       expect(pentagons).to eq(expected)
     end
   end
+
+  describe ".cell_area_rads2" do
+    let(:cell) { "8928308280fffff".to_i(16) }
+    let(:expected) { 2.6952182709835757e-09 }
+    subject(:cell_area_rads2) { H3.cell_area_rads2(cell) }
+
+    it "returns cell area in rads2" do
+      expect(cell_area_rads2).to eq(expected)
+    end
+  end
+
+  describe ".cell_area_km2" do
+    let(:cell) { "8928308280fffff".to_i(16) }
+    let(:expected) { 0.10939818864648902 }
+    subject(:cell_area_km2) { H3.cell_area_km2(cell) }
+
+    it "returns cell area in km2" do
+      expect(cell_area_km2).to eq(expected)
+    end
+  end
+
+  describe ".cell_area_m2" do
+    let(:cell) { "8928308280fffff".to_i(16) }
+    let(:expected) { 109398.18864648901 }
+    subject(:cell_area_m2) { H3.cell_area_m2(cell) }
+
+    it "returns cell area in m2" do
+      expect(cell_area_m2).to eq(expected)
+    end
+  end
+
+  describe ".exact_edge_length_rads" do
+    let(:cell) { "11928308280fffff".to_i(16) }
+    let(:expected) { 3.287684056071637e-05 }
+    subject(:exact_edge_length_rads) { H3.exact_edge_length_rads(cell) }
+
+    it "returns edge length in rads" do
+      expect(exact_edge_length_rads).to eq(expected)
+    end
+  end
+
+  describe ".exact_edge_length_km" do
+    let(:cell) { "11928308280fffff".to_i(16) }
+    let(:expected) { 0.20945858729823577 }
+    subject(:exact_edge_length_km) { H3.exact_edge_length_km(cell) }
+
+    it "returns edge length in km" do
+      expect(exact_edge_length_km).to eq(expected)
+    end
+  end
+
+  describe ".exact_edge_length_m" do
+    let(:cell) { "11928308280fffff".to_i(16) }
+    let(:expected) { 209.45858729823578 }
+    subject(:exact_edge_length_m) { H3.exact_edge_length_m(cell) }
+
+    it "returns edge length in m" do
+      expect(exact_edge_length_m).to eq(expected)
+    end
+  end
+
+  describe ".point_distance_rads" do
+    let(:a) { [41.3964809, 2.160444] }
+    let(:b) { [41.3870609, 2.164917] }
+    let(:expected) { 0.00017453024784008713 }
+    subject(:point_distance_rads) { H3.point_distance_rads(a, b) }
+
+    it "returns distance between points in rads" do
+      expect(point_distance_rads).to eq(expected)
+    end
+  end
+
+  describe ".point_distance_km" do
+    let(:a) { [41.3964809, 2.160444] }
+    let(:b) { [41.3870609, 2.164917] }
+    let(:expected) { 1.1119334622766763 }
+    subject(:point_distance_km) { H3.point_distance_km(a, b) }
+
+    it "returns distance between points in km" do
+      expect(point_distance_km).to eq(expected)
+    end
+  end
+
+  describe ".point_distance_m" do
+    let(:a) { [41.3964809, 2.160444] }
+    let(:b) { [41.3870609, 2.164917] }
+    let(:expected) { 1111.9334622766764 }
+    subject(:point_distance_m) { H3.point_distance_m(a, b) }
+
+    it "returns distance between points in m" do
+      expect(point_distance_m).to eq(expected)
+    end
+  end
 end

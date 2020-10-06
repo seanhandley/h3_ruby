@@ -119,6 +119,26 @@ module H3
     # @return [Integer] The number of pentagons per resolution.
     attach_function :pentagon_count, :pentagonIndexCount, [], :int
 
+    attach_function :cell_area_rads2, :cellAreaRads2, %i[h3_index], :double
+    attach_function :cell_area_km2, :cellAreaKm2, %i[h3_index], :double
+    attach_function :cell_area_m2, :cellAreaM2, %i[h3_index], :double
+
+    attach_function :exact_edge_length_rads, :exactEdgeLengthRads, %i[h3_index], :double
+    attach_function :exact_edge_length_km, :exactEdgeLengthKm, %i[h3_index], :double
+    attach_function :exact_edge_length_m, :exactEdgeLengthM, %i[h3_index], :double
+
+    def point_distance_rads(origin, destination)
+      Bindings::Private.point_distance_rads(*build_geocoords(origin, destination))
+    end
+
+    def point_distance_km(origin, destination)
+      Bindings::Private.point_distance_km(*build_geocoords(origin, destination))
+    end
+
+    def point_distance_m(origin, destination)
+      Bindings::Private.point_distance_m(*build_geocoords(origin, destination))
+    end
+
     # Returns all resolution 0 hexagons (base cells).
     #
     # @example Return all base cells.
@@ -143,6 +163,30 @@ module H3
       out = H3Indexes.of_size(pentagon_count)
       Bindings::Private.get_pentagon_indexes(resolution, out)
       out.read
+    end
+
+    private
+
+    def build_geocoords(origin, destination)
+      [origin, destination].inject([]) do |acc, coords|
+        validate_coordinate(coords)
+
+        geo_coord = GeoCoord.new
+        lat, lon = coords
+        geo_coord[:lat] = degs_to_rads(lat)
+        geo_coord[:lon] = degs_to_rads(lon)
+        acc << geo_coord
+      end
+    end
+
+    def validate_coordinate(coords)
+      raise ArgumentError unless coords.is_a?(Array) && coords.count == 2
+
+      lat, lon = coords
+
+      if lat > 90 || lat < -90 || lon > 180 || lon < -180
+        raise(ArgumentError, "Invalid coordinates")
+      end
     end
   end
 end
