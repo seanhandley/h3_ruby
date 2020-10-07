@@ -143,13 +143,13 @@ module H3
 
     # @!method cell_area_m2
     #
-    # Area of a given cell expressed in m squared
+    # Area of a given cell expressed in metres squared
     #
     # @example Return the area of the cell
     #    H3.cell_area_m2(617700169958293503)
     #    109398.18864648901
     #
-    # @return [Double] Area of cell in m2
+    # @return [Double] Area of cell in metres squared
     attach_function :cell_area_m2, :cellAreaM2, %i[h3_index], :double
 
     # @!method exact_edge_length_rads
