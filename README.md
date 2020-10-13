@@ -39,7 +39,7 @@ or add it to your Gemfile
 
 ```ruby
 # Gemfile
-gem "h3", "~> 3.2"
+gem "h3", "~> 3.7"
 ```
 
 ## Usage
