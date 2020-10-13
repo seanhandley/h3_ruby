@@ -119,6 +119,105 @@ module H3
     # @return [Integer] The number of pentagons per resolution.
     attach_function :pentagon_count, :pentagonIndexCount, [], :int
 
+    # @!method cell_area_rads2
+    #
+    # Area of a given cell expressed in radians squared
+    #
+    # @example Return the area of the cell
+    #    H3.cell_area_rads2(617700169958293503)
+    #    2.6952182709835757e-09
+    #
+    # @return [Double] Area of cell in rads2
+    attach_function :cell_area_rads2, :cellAreaRads2, %i[h3_index], :double
+
+    # @!method cell_area_km2
+    #
+    # Area of a given cell expressed in km squared
+    #
+    # @example Return the area of the cell
+    #    H3.cell_area_km2(617700169958293503)
+    #    0.10939818864648902
+    #
+    # @return [Double] Area of cell in km2
+    attach_function :cell_area_km2, :cellAreaKm2, %i[h3_index], :double
+
+    # @!method cell_area_m2
+    #
+    # Area of a given cell expressed in metres squared
+    #
+    # @example Return the area of the cell
+    #    H3.cell_area_m2(617700169958293503)
+    #    109398.18864648901
+    #
+    # @return [Double] Area of cell in metres squared
+    attach_function :cell_area_m2, :cellAreaM2, %i[h3_index], :double
+
+    # @!method exact_edge_length_rads
+    #
+    # Exact length of edge in rads
+    #
+    # @example Return the edge length
+    #    H3.exact_edge_length_rads(1266218516299644927)
+    #    3.287684056071637e-05
+    #
+    # @return [Double] Edge length in rads
+    attach_function :exact_edge_length_rads, :exactEdgeLengthRads, %i[h3_index], :double
+
+    # @!method exact_edge_length_km
+    #
+    # Exact length of edge in kilometres
+    #
+    # @example Return the edge length
+    #    H3.exact_edge_length_km(1266218516299644927)
+    #    3.287684056071637e-05
+    #
+    # @return [Double] Edge length in kilometres
+    attach_function :exact_edge_length_km, :exactEdgeLengthKm, %i[h3_index], :double
+
+    # @!method exact_edge_length_m
+    #
+    # Exact length of edge in metres
+    #
+    # @example Return the edge length
+    #    H3.exact_edge_length_m(1266218516299644927)
+    #    3.287684056071637e-05
+    #
+    # @return [Double] Edge length in metres
+    attach_function :exact_edge_length_m, :exactEdgeLengthM, %i[h3_index], :double
+
+    # Returns the radians distance between two points.
+    #
+    # @example Return radians distance.
+    #   H3.point_distance_rads([41.3964809, 2.160444], [41.3870609, 2.164917])
+    #   0.00017453024784008713
+    #
+    # @return [Double] Radians distance between two points.
+    def point_distance_rads(origin, destination)
+      Bindings::Private.point_distance_rads(*build_geocoords(origin, destination))
+    end
+
+    # Returns the kilometres distance between two points.
+    #
+    # @example Return km distance.
+    #   H3.point_distance_km([41.3964809, 2.160444], [41.3870609, 2.164917])
+    #   1.1119334622766763
+    #
+    # @return [Double] KM distance between two points.
+    def point_distance_km(origin, destination)
+      Bindings::Private.point_distance_km(*build_geocoords(origin, destination))
+    end
+
+    # Returns the metre distance between two points.
+    #
+    # @example Return metre distance.
+    #   H3.point_distance_m([41.3964809, 2.160444], [41.3870609, 2.164917])
+    #   1111.9334622766764
+    #
+    # @return [Double] Metre distance between two points.
+    def point_distance_m(origin, destination)
+      Bindings::Private.point_distance_m(*build_geocoords(origin, destination))
+    end
+
     # Returns all resolution 0 hexagons (base cells).
     #
     # @example Return all base cells.
@@ -143,6 +242,30 @@ module H3
       out = H3Indexes.of_size(pentagon_count)
       Bindings::Private.get_pentagon_indexes(resolution, out)
       out.read
+    end
+
+    private
+
+    def build_geocoords(origin, destination)
+      [origin, destination].inject([]) do |acc, coords|
+        validate_coordinate(coords)
+
+        geo_coord = GeoCoord.new
+        lat, lon = coords
+        geo_coord[:lat] = degs_to_rads(lat)
+        geo_coord[:lon] = degs_to_rads(lon)
+        acc << geo_coord
+      end
+    end
+
+    def validate_coordinate(coords)
+      raise ArgumentError unless coords.is_a?(Array) && coords.count == 2
+
+      lat, lon = coords
+
+      if lat > 90 || lat < -90 || lon > 180 || lon < -180
+        raise(ArgumentError, "Invalid coordinates")
+      end
     end
   end
 end

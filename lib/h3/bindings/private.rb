@@ -52,6 +52,9 @@ module H3
                       [GeoPolygon, Resolution],
                       :int
       attach_function :max_uncompact_size, :maxUncompactSize, [H3IndexesIn, :size_t, Resolution], :int
+      attach_function :point_distance_rads, :pointDistRads, [GeoCoord, GeoCoord], :double
+      attach_function :point_distance_km, :pointDistKm, [GeoCoord, GeoCoord], :double
+      attach_function :point_distance_m, :pointDistM, [GeoCoord, GeoCoord], :double
       attach_function :polyfill, [GeoPolygon, Resolution, H3IndexesOut], :void
       attach_function :res_0_indexes, :getRes0Indexes, [H3IndexesOut], :void
       attach_function :uncompact, [H3IndexesIn, :size_t, H3IndexesOut, :size_t, Resolution], :bool

@@ -6,6 +6,25 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 We track the MAJOR and MINOR version levels of Uber's H3 project (https://github.com/uber/h3) but maintain independent patch levels so we can make small fixes and non breaking changes.
 
+## [3.7.1] - 2020-10-7
+### Added
+- Area and haversine distance functions:
+    - `cellAreaRads2`
+    - `cellAreaKm2`
+    - `cellAreaM2`
+    - `pointDistRads`
+    - `pointDistKm`
+    - `pointDistM`
+    - `exactEdgeLengthRads`
+    - `exactEdgeLengthKm`
+    - `exactEdgeLengthM`
+ 
+### Changed
+- Speeds up `getH3UnidirectionalEdgeBoundary` by about 3x.
+
+### Fixed
+- Finding invalid edge boundaries should not crash. 
+
 ## [3.6.4] - 2020-7-2
 ### Changed
 - Reinstate new `polyfill` algorithm for up to 3x perf boost.
