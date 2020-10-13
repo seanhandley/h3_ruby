@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors  = ["Lachlan Laycock", "Sean Handley"]
   spec.email    = "l.laycock@stuart.com"
 
-  spec.required_ruby_version = "> 2.3"
+  spec.required_ruby_version = ">= 2.5"
   spec.files = `git ls-files --recurse-submodules`.split("\n")
 
   spec.add_runtime_dependency "ffi", "~> 1.9"
