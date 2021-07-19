@@ -1,5 +1,5 @@
-require "coveralls"
-Coveralls.wear!
+# require "coveralls"
+# Coveralls.wear!
 
 begin
   require "h3"
