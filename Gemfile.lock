@@ -4,7 +4,7 @@ PATH
     h3 (3.7.2)
       ffi (~> 1.9)
       rgeo-geojson (~> 2.1)
-      zeitwerk (~> 2.1)
+      zeitwerk (~> 2.5)
 
 GEM
   remote: https://rubygems.org/
@@ -41,4 +41,4 @@ DEPENDENCIES
   yard (~> 0.9)
 
 BUNDLED WITH
-   2.1.4
+   2.2.22

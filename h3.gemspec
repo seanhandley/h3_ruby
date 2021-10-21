@@ -14,7 +14,7 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency "ffi", "~> 1.9"
   spec.add_runtime_dependency "rgeo-geojson", "~> 2.1"
-  spec.add_runtime_dependency "zeitwerk", "~> 2.1"
+  spec.add_runtime_dependency "zeitwerk", "~> 2.5"
 
   # spec.add_development_dependency "coveralls", "~> 0.8"
   spec.add_development_dependency "rake", "~> 13.0"
