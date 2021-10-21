@@ -11,7 +11,7 @@ GEM
   specs:
     diff-lcs (1.4.4)
     ffi (1.15.4)
-    rake (12.3.3)
+    rake (13.0.6)
     rgeo (2.3.0)
     rgeo-geojson (2.1.1)
       rgeo (>= 1.0.0)
@@ -36,7 +36,7 @@ PLATFORMS
 
 DEPENDENCIES
   h3!
-  rake (~> 12.3)
+  rake (~> 13.0)
   rspec (~> 3.8)
   yard (~> 0.9)
 
