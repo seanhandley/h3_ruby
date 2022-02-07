@@ -16,7 +16,7 @@ module H3
     #   91
     #
     # @return [Integer] Maximum k-ring size.
-    attach_function :max_kring_size, :maxKringSize, %i[k_distance], :int
+    attach_function :max_kring_size, :maxGridDiskSize, %i[k_distance pointer], :h3_error_code
 
     # @!method distance(origin, h3_index)
     #
@@ -30,7 +30,7 @@ module H3
     #   5
     #
     # @return [Integer] Distance between indexes.
-    attach_function :distance, :h3Distance, %i[h3_index h3_index], :k_distance
+    attach_function :distance, :gridDistance, %i[h3_index h3_index], :k_distance
 
     # @!method line_size(origin, destination)
     #
@@ -49,7 +49,7 @@ module H3
     #   6
     #
     # @return [Integer] Number of hexagons found between indexes.
-    attach_function :line_size, :h3LineSize, %i[h3_index h3_index], :int
+    attach_function :line_size, :gridPathCellsSize, %i[h3_index h3_index], :int
 
     # Derives H3 indexes within k distance of the origin H3 index.
     #
@@ -109,9 +109,14 @@ module H3
     #
     # @return [Array<Integer>] Array of H3 indexes within the k-range.
     def k_ring(origin, k)
-      max_hexagons = max_kring_size(k)
-      out = H3Indexes.of_size(max_hexagons)
-      Bindings::Private.k_ring(origin, k, out)
+      out = FFI::MemoryPointer.new(:int64)
+      max_kring_size(k, out).tap do |code|
+        Bindings::Error::raise_error(code) unless code.zero?
+      end
+      out = H3Indexes.of_size(out.read_int64)
+      Bindings::Private.k_ring(origin, k, out).tap do |code|
+        Bindings::Error::raise_error(code) unless code.zero?
+      end
       out.read
     end
 
