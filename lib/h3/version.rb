@@ -1,3 +1,3 @@
 module H3
-  VERSION = "3.7.2".freeze
+  VERSION = "4.0.0".freeze
 end

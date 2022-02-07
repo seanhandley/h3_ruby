@@ -17,7 +17,7 @@ module H3
     #   true
     #
     # @return [Boolean] True if indexes are neighbors
-    attach_predicate_function :neighbors?, :h3IndexesAreNeighbors, %i[h3_index h3_index], :bool
+    attach_predicate_function :neighbors?, :areNeighborCells, %i[h3_index h3_index], :bool
 
     # @!method unidirectional_edge_valid?(h3_index)
     #
@@ -31,7 +31,7 @@ module H3
     #
     # @return [Boolean] True if H3 index is a valid unidirectional edge
     attach_predicate_function :unidirectional_edge_valid?,
-                              :h3UnidirectionalEdgeIsValid,
+                              :isValidDirectedEdge,
                               %i[h3_index],
                               :bool
 
@@ -48,7 +48,7 @@ module H3
     #
     # @return [Integer] H3 edge index
     attach_function :unidirectional_edge,
-                    :getH3UnidirectionalEdge,
+                    :cellsToDirectedEdge,
                     %i[h3_index h3_index],
                     :h3_index
 
@@ -64,7 +64,7 @@ module H3
     #
     # @return [Integer] H3 index
     attach_function :destination_from_unidirectional_edge,
-                    :getDestinationH3IndexFromUnidirectionalEdge,
+                    :getDirectedEdgeDestination,
                     %i[h3_index],
                     :h3_index
 
@@ -80,7 +80,7 @@ module H3
     #
     # @return [Integer] H3 index
     attach_function :origin_from_unidirectional_edge,
-                    :getOriginH3IndexFromUnidirectionalEdge,
+                    :getDirectedEdgeOrigin,
                     %i[h3_index],
                     :h3_index
 
@@ -137,7 +137,7 @@ module H3
     #
     # @return [Array<Array<Float>>] Edge boundary coordinates for a hexagon
     def unidirectional_edge_boundary(edge)
-      geo_boundary = GeoBoundary.new
+      geo_boundary = CellBoundary.new
       Bindings::Private.h3_unidirectional_edge_boundary(edge, geo_boundary)
       geo_boundary[:verts].take(geo_boundary[:num_verts]).map do |d|
         [rads_to_degs(d[:lat]), rads_to_degs(d[:lon])]
