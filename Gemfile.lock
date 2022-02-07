@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    h3 (3.7.4)
+    h3 (4.0.0)
       ffi (~> 1.9)
       rgeo-geojson (~> 2.1)
       zeitwerk (~> 2.5)
@@ -12,6 +12,10 @@ GEM
     diff-lcs (1.5.1)
     ffi (1.17.1)
     multi_json (1.15.0)
+    method_source (1.0.0)
+    pry (0.14.1)
+      coderay (~> 1.1)
+      method_source (~> 1.0)
     rake (13.2.1)
     rgeo (3.0.0)
     rgeo-geojson (2.2.0)
@@ -38,9 +42,10 @@ PLATFORMS
 
 DEPENDENCIES
   h3!
+  pry (~> 0.14)
   rake (~> 13.0)
   rspec (~> 3.8)
   yard (~> 0.9)
 
 BUNDLED WITH
-   2.2.22
+   2.1.4

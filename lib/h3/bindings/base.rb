@@ -13,6 +13,7 @@ module H3
         base.ffi_lib ["#{lib_path}/libh3.dylib", "#{lib_path}/libh3.so"]
         base.typedef :ulong_long, :h3_index
         base.typedef :int, :k_distance
+        base.typedef :uint, :h3_error_code
       end
 
       def attach_predicate_function(name, *args)
