@@ -64,7 +64,7 @@ H3.to_boundary("8819429a9dfffff".to_i(16))
 
 ## Documentation
 
-Please read [the Gem Documentation](https://www.rubydoc.info/github/StuartApp/h3_ruby/H3) for a full reference of available methods.
+Please read [the Gem Documentation](https://www.rubydoc.info/gems/h3) for a full reference of available methods.
 
 ## Development
 
