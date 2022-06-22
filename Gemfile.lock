@@ -28,7 +28,9 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.11.0)
     rspec-support (3.11.0)
-    yard (0.9.26)
+    webrick (1.7.0)
+    yard (0.9.28)
+      webrick (~> 1.7.0)
     zeitwerk (2.6.0)
 
 PLATFORMS
