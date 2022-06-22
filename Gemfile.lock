@@ -31,7 +31,7 @@ GEM
     webrick (1.7.0)
     yard (0.9.28)
       webrick (~> 1.7.0)
-    zeitwerk (2.5.1)
+    zeitwerk (2.6.0)
 
 PLATFORMS
   ruby
