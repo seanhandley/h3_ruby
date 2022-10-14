@@ -5,9 +5,9 @@ Gem::Specification.new do |spec|
   spec.version  = H3::VERSION
   spec.licenses = ["MIT"]
   spec.summary  = "C Bindings for Uber's H3 library"
-  spec.homepage = "https://github.com/StuartApp/h3_ruby"
-  spec.authors  = ["Lachlan Laycock", "Sean Handley"]
-  spec.email    = "l.laycock@stuart.com"
+  spec.homepage = "https://github.com/seanhandley/h3_ruby"
+  spec.authors  = ["Sean Handley", "Xavier Noria", "Lachlan Laycock"]
+  spec.email    = "sean.handley@gmail.com"
 
   spec.required_ruby_version = ">= 2.5"
   spec.files = `git ls-files --recurse-submodules`.split("\n")
