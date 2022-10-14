@@ -189,13 +189,13 @@ RSpec.describe H3 do
     end
   end
 
-  describe ".center_child" do
-    let(:h3_index) { "8828308299fffff".to_i(16) }
-    let(:resolution) { 10 }
-    let(:result) { "8a2830829807fff".to_i(16) }
+  # describe ".center_child" do
+  #   let(:h3_index) { "8828308299fffff".to_i(16) }
+  #   let(:resolution) { 10 }
+  #   let(:result) { "8a2830829807fff".to_i(16) }
 
-    subject(:center_child) { H3.center_child(h3_index, resolution) }
+  #   subject(:center_child) { H3.center_child(h3_index, resolution) }
 
-    it { is_expected.to eq result }
-  end
+  #   it { is_expected.to eq result }
+  # end
 end
