@@ -3,4 +3,4 @@ make:
 install:
 	: # do nothing, we'll load the lib directly
 clean:
-	: # do nothing, cleanup happens when gem uninstalled
+	rm -rf build
