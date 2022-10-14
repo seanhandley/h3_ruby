@@ -44,7 +44,7 @@ module H3
     #   3229.482772
     #
     # @return [Float] Length of edge in metres
-    attach_function :edge_length_m, :distanceM, [Resolution], :double
+    # attach_function :edge_length_m, :distanceM, [Resolution], :double
 
     # @!method hex_area_km2(resolution)
     #
@@ -169,7 +169,7 @@ module H3
     #    3.287684056071637e-05
     #
     # @return [Double] Edge length in rads
-    attach_function :exact_edge_length_rads, :exactEdgeLengthRads, %i[h3_index], :double
+    # attach_function :exact_edge_length_rads, :exactEdgeLengthRads, %i[h3_index], :double
 
     # @!method exact_edge_length_km
     #
@@ -180,7 +180,7 @@ module H3
     #    3.287684056071637e-05
     #
     # @return [Double] Edge length in kilometres
-    attach_function :exact_edge_length_km, :exactEdgeLengthKm, %i[h3_index], :double
+    # attach_function :exact_edge_length_km, :exactEdgeLengthKm, %i[h3_index], :double
 
     # @!method exact_edge_length_m
     #
@@ -191,7 +191,7 @@ module H3
     #    3.287684056071637e-05
     #
     # @return [Double] Edge length in metres
-    attach_function :exact_edge_length_m, :exactEdgeLengthM, %i[h3_index], :double
+    # attach_function :exact_edge_length_m, :exactEdgeLengthM, %i[h3_index], :double
 
     # Returns the radians distance between two points.
     #
