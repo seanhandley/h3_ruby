@@ -19,7 +19,7 @@ module H3
     #   9
     #
     # @return [Integer] Resolution of H3 index
-    attach_function :resolution, :h3GetResolution, %i[h3_index], Resolution
+    attach_function :resolution, :getResolution, %i[h3_index], Resolution
 
     # @!method base_cell(h3_index)
     #
@@ -32,7 +32,7 @@ module H3
     #   20
     #
     # @return [Integer] Base cell number
-    attach_function :base_cell, :h3GetBaseCell, %i[h3_index], :int
+    attach_function :base_cell, :getBaseCellNumber, %i[h3_index], :int
 
     # @!method from_string(h3_string)
     #
@@ -45,7 +45,9 @@ module H3
     #   617700169958293503
     #
     # @return [Integer] H3 index
-    attach_function :from_string, :stringToH3, %i[string], :h3_index
+    def from_string(str)
+      Bindings::Private.safe_call(:ulong_long, :from_string, str)
+    end
 
     # @!method pentagon?(h3_index)
     #
@@ -58,7 +60,7 @@ module H3
     #   true
     #
     # @return [Boolean] True if the H3 index is a pentagon.
-    attach_predicate_function :pentagon?, :h3IsPentagon, %i[h3_index], :bool
+    attach_predicate_function :pentagon?, :isPentagon, %i[h3_index], :bool
 
     # @!method class_3_resolution?(h3_index)
     #
@@ -72,7 +74,7 @@ module H3
     #   true
     #
     # @return [Boolean] True if the H3 index has a class III resolution.
-    attach_predicate_function :class_3_resolution?, :h3IsResClassIII, %i[h3_index], :bool
+    attach_predicate_function :class_3_resolution?, :isResClassIII, %i[h3_index], :bool
 
     # @!method valid?(h3_index)
     #
@@ -85,7 +87,7 @@ module H3
     #   true
     #
     # @return [Boolean] True if the H3 index is valid.
-    attach_predicate_function :valid?, :h3IsValid, %i[h3_index], :bool
+    attach_predicate_function :valid?, :isValidCell, %i[h3_index], :bool
 
     # Derives the hexadecimal string representation for a given H3 index.
     #
@@ -113,7 +115,9 @@ module H3
     #   5
     #
     # @return [Integer] Maximum possible number of faces
-    attach_function :max_face_count, :maxFaceCount, %i[h3_index], :int
+    def max_face_count(h3_index)
+      Bindings::Private.safe_call(:int, :max_face_count, h3_index)
+    end
 
     # Find all icosahedron faces intersected by a given H3 index.
     #
@@ -127,7 +131,9 @@ module H3
     def faces(h3_index)
       max_faces = max_face_count(h3_index)
       out = FFI::MemoryPointer.new(:int, max_faces)
-      Bindings::Private.h3_faces(h3_index, out)
+      Bindings::Private.h3_faces(h3_index, out).tap do |code|
+        Bindings::Error::raise_error(code) unless code.zero?
+      end
       # The C function returns a sparse array whose holes are represented by -1.
       out.read_array_of_int(max_faces).reject(&:negative?).sort
     end

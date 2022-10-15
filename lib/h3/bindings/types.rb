@@ -21,9 +21,26 @@ module H3
           private
 
           def failure
-            raise ArgumentError,
+            raise Error::ResolutionDomainError,
                   "resolution must be between #{RES_RANGE.first} and #{RES_RANGE.last}"
           end
+        end
+      end
+
+      class H3Index
+        extend FFI::DataConverter
+        native_type FFI::Type::POINTER
+
+        def initialize(value)
+          ptr.write(value)
+        end
+
+        def size
+          FFI.type_size(FFI::Type::ULONG_LONG)
+        end
+
+        def ptr
+          @ptr ||= FFI::MemoryPointer.new(:ulong_long)
         end
       end
 
