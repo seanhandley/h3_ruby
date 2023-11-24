@@ -20,12 +20,21 @@ RSpec.describe H3 do
   end
 
   describe ".from_string" do
-    let(:h3_index) { "8928308280fffff"}
-    let(:result) { h3_index.to_i(16) }
-
     subject(:from_string) { H3.from_string(h3_index) }
+    context "- valid" do
+      let(:h3_index) { "8928308280fffff"}
+      let(:result) { h3_index.to_i(16) }
 
-    it { is_expected.to eq(result) }
+      it { is_expected.to eq(result) }
+    end
+
+    context "- nil" do
+      let(:h3_index) { nil }
+
+      it "raises an error" do
+        expect { subject }.to raise_error(ArgumentError)
+      end
+    end
   end
 
   describe ".to_string" do

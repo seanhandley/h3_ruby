@@ -57,6 +57,7 @@ module H3
       attach_function :point_distance_m, :pointDistM, [GeoCoord, GeoCoord], :double
       attach_function :polyfill, [GeoPolygon, Resolution, H3IndexesOut], :void
       attach_function :res_0_indexes, :getRes0Indexes, [H3IndexesOut], :void
+      attach_function :string_to_h3, :stringToH3, %i[string], :h3_index
       attach_function :uncompact, [H3IndexesIn, :size_t, H3IndexesOut, :size_t, Resolution], :bool
     end
   end
