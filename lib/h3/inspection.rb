@@ -44,8 +44,13 @@ module H3
     #   H3.from_string("8928308280fffff")
     #   617700169958293503
     #
+    # @raise [ArgumentError] If h3_string is nil
+    #
     # @return [Integer] H3 index
-    attach_function :from_string, :stringToH3, %i[string], :h3_index
+    def from_string(h3_string)
+      raise ArgumentError if h3_string.nil?
+      Bindings::Private.string_to_h3(h3_string)
+    end
 
     # @!method pentagon?(h3_index)
     #

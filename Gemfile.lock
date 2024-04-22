@@ -11,7 +11,7 @@ GEM
   specs:
     diff-lcs (1.5.0)
     ffi (1.16.3)
-    rake (13.0.6)
+    rake (13.2.1)
     rgeo (2.3.0)
     rgeo-geojson (2.1.1)
       rgeo (>= 1.0.0)
