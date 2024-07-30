@@ -29,7 +29,7 @@ GEM
       rspec-support (~> 3.13.0)
     rspec-support (3.13.1)
     yard (0.9.36)
-    zeitwerk (2.6.13)
+    zeitwerk (2.6.17)
 
 PLATFORMS
   ruby
