@@ -9,10 +9,12 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
+    coderay (1.1.3)
     diff-lcs (1.5.1)
     ffi (1.17.1)
+    ffi (1.17.1-arm64-darwin)
     method_source (1.0.0)
-    pry (0.14.1)
+    pry (0.15.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
     rake (13.2.1)
@@ -36,7 +38,7 @@ GEM
     zeitwerk (2.6.18)
 
 PLATFORMS
-  ruby
+  arm64-darwin-24
 
 DEPENDENCIES
   h3!
@@ -46,4 +48,4 @@ DEPENDENCIES
   yard (~> 0.9)
 
 BUNDLED WITH
-   2.1.4
+   2.6.6
