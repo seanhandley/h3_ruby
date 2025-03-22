@@ -10,13 +10,24 @@ module H3
     # Derive the maximum k-ring size for distance k.
     #
     # @param [Integer] k K value.
+    # @param [FFI::MemoryPointer] out Optional memory pointer for storing result (for internal use).
     #
     # @example Derive the maximum k-ring size for k=5
     #   H3.max_kring_size(5)
     #   91
     #
-    # @return [Integer] Maximum k-ring size.
-    attach_function :max_kring_size, :maxGridDiskSize, %i[k_distance pointer], :h3_error_code
+    # @return [Integer] Maximum k-ring size if out is nil, otherwise returns error code.
+    def max_kring_size(k, out = nil)
+      if out
+        return Bindings::Private.max_kring_size(k, out)
+      else
+        out_ptr = FFI::MemoryPointer.new(:int64)
+        Bindings::Private.max_kring_size(k, out_ptr).tap do |code|
+          Bindings::Error::raise_error(code) unless code.zero?
+        end
+        out_ptr.read_int64
+      end
+    end
 
     # @!method distance(origin, h3_index)
     #
@@ -80,10 +91,17 @@ module H3
     #
     # @return [Array<Integer>] Array of H3 indexes within the k-range.
     def hex_range(origin, k)
-      max_hexagons = max_kring_size(k)
-      out = H3Indexes.of_size(max_hexagons)
-      pentagonal_distortion = Bindings::Private.hex_range(origin, k, out)
-      raise(ArgumentError, "Specified hexagon range contains a pentagon") if pentagonal_distortion
+      max_size = FFI::MemoryPointer.new(:int64)
+      max_kring_size(k, max_size).tap do |code|
+        Bindings::Error::raise_error(code) unless code.zero?
+      end
+      
+      out = H3Indexes.of_size(max_size.read_int64)
+      Bindings::Private.hex_range(origin, k, out).tap do |code|
+        # The 'pentagon distortion' error in H3 v4 is error code 9
+        raise(ArgumentError, "Specified hexagon range contains a pentagon") if code == 9
+        Bindings::Error::raise_error(code) unless code.zero?
+      end
       out.read
     end
 
@@ -141,8 +159,13 @@ module H3
     def hex_ring(origin, k)
       max_hexagons = max_hex_ring_size(k)
       out = H3Indexes.of_size(max_hexagons)
-      pentagonal_distortion = Bindings::Private.hex_ring(origin, k, out)
-      raise(ArgumentError, "The hex ring contains a pentagon") if pentagonal_distortion
+      
+      Bindings::Private.hex_ring(origin, k, out).tap do |code|
+        # The 'pentagon distortion' error in H3 v4 is error code 9
+        raise(ArgumentError, "The hex ring contains a pentagon") if code == 9
+        Bindings::Error::raise_error(code) unless code.zero?
+      end
+      
       out.read
     end
 
@@ -236,11 +259,20 @@ module H3
     #
     # @return [Hash] Hex range grouped by distance.
     def hex_range_distances(origin, k)
-      max_out_size = max_kring_size(k)
+      max_size = FFI::MemoryPointer.new(:int64)
+      max_kring_size(k, max_size).tap do |code|
+        Bindings::Error::raise_error(code) unless code.zero?
+      end
+      
+      max_out_size = max_size.read_int64
       out = H3Indexes.of_size(max_out_size)
       distances = FFI::MemoryPointer.new(:int, max_out_size)
-      pentagonal_distortion = Bindings::Private.hex_range_distances(origin, k, out, distances)
-      raise(ArgumentError, "Specified hexagon range contains a pentagon") if pentagonal_distortion
+      
+      Bindings::Private.hex_range_distances(origin, k, out, distances).tap do |code|
+        # The 'pentagon distortion' error in H3 v4 is error code 9
+        raise(ArgumentError, "Specified hexagon range contains a pentagon") if code == 9
+        Bindings::Error::raise_error(code) unless code.zero?
+      end
 
       hexagons = out.read
       distances = distances.read_array_of_int(max_out_size)
@@ -273,10 +305,18 @@ module H3
     #
     # @return [Hash] Hash of k-ring distances grouped by distance.
     def k_ring_distances(origin, k)
-      max_out_size = max_kring_size(k)
+      max_size = FFI::MemoryPointer.new(:int64)
+      max_kring_size(k, max_size).tap do |code|
+        Bindings::Error::raise_error(code) unless code.zero?
+      end
+      
+      max_out_size = max_size.read_int64
       out = H3Indexes.of_size(max_out_size)
       distances = FFI::MemoryPointer.new(:int, max_out_size)
-      Bindings::Private.k_ring_distances(origin, k, out, distances)
+      
+      Bindings::Private.k_ring_distances(origin, k, out, distances).tap do |code|
+        Bindings::Error::raise_error(code) unless code.zero?
+      end
 
       hexagons = out.read
       distances = distances.read_array_of_int(max_out_size)
@@ -305,8 +345,12 @@ module H3
     def line(origin, destination)
       max_hexagons = line_size(origin, destination)
       hexagons = H3Indexes.of_size(max_hexagons)
-      res = Bindings::Private.h3_line(origin, destination, hexagons)
-      raise(ArgumentError, "Could not compute line") if res.negative?
+      
+      Bindings::Private.h3_line(origin, destination, hexagons).tap do |code|
+        # In H3 v4, this could be various error codes
+        Bindings::Error::raise_error(code) unless code.zero?
+      end
+      
       hexagons.read
     end
 
@@ -322,10 +366,20 @@ module H3
 
     def hex_ranges_ungrouped(h3_set, k)
       h3_set = H3Indexes.with_contents(h3_set)
-      max_out_size = h3_set.size * max_kring_size(k)
+      
+      # Calculate max output size
+      max_out_per_cell = FFI::MemoryPointer.new(:int64)
+      Bindings::Private.max_kring_size(k, max_out_per_cell).tap do |code|
+        Bindings::Error::raise_error(code) unless code.zero?
+      end
+      max_out_size = h3_set.size * max_out_per_cell.read_int64
+      
       out = H3Indexes.of_size(max_out_size)
-      if Bindings::Private.hex_ranges(h3_set, h3_set.size, k, out)
-        raise(ArgumentError, "One of the specified hexagon ranges contains a pentagon")
+      
+      Bindings::Private.hex_ranges(h3_set, h3_set.size, k, out).tap do |code|
+        # The 'pentagon distortion' error in H3 v4 is error code 9
+        raise(ArgumentError, "One of the specified hexagon ranges contains a pentagon") if code == 9
+        Bindings::Error::raise_error(code) unless code.zero?
       end
 
       out.read

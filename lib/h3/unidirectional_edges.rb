@@ -100,7 +100,9 @@ module H3
     def origin_and_destination_from_unidirectional_edge(edge)
       max_hexagons = 2
       out = H3Indexes.of_size(max_hexagons)
-      Bindings::Private.h3_indexes_from_unidirectional_edge(edge, out)
+      Bindings::Private.h3_indexes_from_unidirectional_edge(edge, out).tap do |code|
+        Bindings::Error::raise_error(code) unless code.zero?
+      end
       out.read
     end
 
@@ -119,7 +121,9 @@ module H3
     def unidirectional_edges_from_hexagon(origin)
       max_edges = 6
       out = H3Indexes.of_size(max_edges)
-      Bindings::Private.h3_unidirectional_edges_from_hexagon(origin, out)
+      Bindings::Private.h3_unidirectional_edges_from_hexagon(origin, out).tap do |code|
+        Bindings::Error::raise_error(code) unless code.zero?
+      end
       out.read
     end
 
@@ -138,7 +142,9 @@ module H3
     # @return [Array<Array<Float>>] Edge boundary coordinates for a hexagon
     def unidirectional_edge_boundary(edge)
       geo_boundary = CellBoundary.new
-      Bindings::Private.h3_unidirectional_edge_boundary(edge, geo_boundary)
+      Bindings::Private.h3_unidirectional_edge_boundary(edge, geo_boundary).tap do |code|
+        Bindings::Error::raise_error(code) unless code.zero?
+      end
       geo_boundary[:verts].take(geo_boundary[:num_verts]).map do |d|
         [rads_to_degs(d[:lat]), rads_to_degs(d[:lon])]
       end
