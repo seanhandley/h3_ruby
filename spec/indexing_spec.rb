@@ -1,3 +1,5 @@
+require "spec_helper"
+
 RSpec.describe H3 do
   include_context "constants"
 

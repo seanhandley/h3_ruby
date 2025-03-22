@@ -7,14 +7,14 @@ module H3
     module Structs
       extend FFI::Library
 
-      class GeoCoord < FFI::Struct
+      class LatLng < FFI::Struct
         layout :lat, :double,
                :lon, :double
       end
 
-      class GeoBoundary < FFI::Struct
+      class CellBoundary < FFI::Struct
         layout :num_verts, :int,
-               :verts, [GeoCoord, 10] # array of GeoCoord structs (must be fixed length)
+               :verts, [LatLng, 10] # array of GeoCoord structs (must be fixed length)
       end
 
       class GeoFence < FFI::Struct
@@ -34,7 +34,7 @@ module H3
       end
 
       class LinkedGeoCoord < FFI::Struct
-        layout :vertex, GeoCoord,
+        layout :vertex, LatLng,
                :next, LinkedGeoCoord.ptr
       end
 
