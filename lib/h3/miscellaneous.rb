@@ -44,7 +44,9 @@ module H3
     #   3229.482772
     #
     # @return [Float] Length of edge in metres
-    # attach_function :edge_length_m, :distanceM, [Resolution], :double
+    def edge_length_m(resolution)
+      Bindings::Private.safe_call(:double, :edge_length_m, resolution)
+    end
 
     # @!method hex_area_km2(resolution)
     #
@@ -169,7 +171,7 @@ module H3
     #    3.287684056071637e-05
     #
     # @return [Double] Edge length in rads
-    # attach_function :exact_edge_length_rads, :exactEdgeLengthRads, %i[h3_index], :double
+    attach_function :exact_edge_length_rads, :getDirectedEdgeLengthRads, %i[h3_index], :double
 
     # @!method exact_edge_length_km
     #
@@ -180,7 +182,7 @@ module H3
     #    3.287684056071637e-05
     #
     # @return [Double] Edge length in kilometres
-    # attach_function :exact_edge_length_km, :exactEdgeLengthKm, %i[h3_index], :double
+    attach_function :exact_edge_length_km, :getDirectedEdgeLengthKm, %i[h3_index], :double
 
     # @!method exact_edge_length_m
     #
@@ -191,7 +193,7 @@ module H3
     #    3.287684056071637e-05
     #
     # @return [Double] Edge length in metres
-    # attach_function :exact_edge_length_m, :exactEdgeLengthM, %i[h3_index], :double
+    attach_function :exact_edge_length_m, :getDirectedEdgeLengthM, %i[h3_index], :double
 
     # Returns the radians distance between two points.
     #
@@ -235,7 +237,9 @@ module H3
     # @return [Array<Integer>] All resolution 0 hexagons (base cells).
     def base_cells
       out = H3Indexes.of_size(base_cell_count)
-      Bindings::Private.res_0_indexes(out)
+      Bindings::Private.res_0_indexes(out).tap do |code|
+        Bindings::Error::raise_error(code) unless code.zero?
+      end
       out.read
     end
 
@@ -248,7 +252,9 @@ module H3
     # @return [Array<Integer>] All pentagon indexes at the given resolution.
     def pentagons(resolution)
       out = H3Indexes.of_size(pentagon_count)
-      Bindings::Private.get_pentagon_indexes(resolution, out)
+      Bindings::Private.get_pentagon_indexes(resolution, out).tap do |code|
+        Bindings::Error::raise_error(code) unless code.zero?
+      end
       out.read
     end
 

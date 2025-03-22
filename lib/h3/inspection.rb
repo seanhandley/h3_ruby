@@ -103,7 +103,9 @@ module H3
     # @return [String] H3 index in hexadecimal form.
     def to_string(h3_index)
       h3_str = FFI::MemoryPointer.new(:char, H3_TO_STR_BUF_SIZE)
-      Bindings::Private.h3_to_string(h3_index, h3_str, H3_TO_STR_BUF_SIZE)
+      Bindings::Private.h3_to_string(h3_index, h3_str, H3_TO_STR_BUF_SIZE).tap do |code|
+        Bindings::Error::raise_error(code) unless code.zero?
+      end
       h3_str.read_string
     end
 
