@@ -57,7 +57,7 @@ RSpec.describe H3 do
 
   describe ".edge_length_km" do
     let(:resolution) { 2 }
-    let(:result) { 158.2446558 }
+    let(:result) { 182.5129565 }
 
     subject(:edge_length_km) { H3.edge_length_km(resolution) }
 

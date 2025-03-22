@@ -38,6 +38,7 @@ module H3
       attach_function :hex_ranges, :gridDisksUnsafe, [H3IndexesIn, :size_t, :k_distance, H3IndexesOut], :h3_error_code
       attach_function :hex_ring, :gridRingUnsafe, [:h3_index, :k_distance, H3IndexesOut], :h3_error_code
       attach_function :h3_line, :gridPathCells, [:h3_index, :h3_index, H3IndexesOut], :h3_error_code
+      attach_function :max_kring_size, :maxGridDiskSize, [:k_distance, :pointer], :h3_error_code
 
       # Directed edge functions (formerly unidirectional_edge)
       attach_function :h3_indexes_from_unidirectional_edge, :directedEdgeToCells, [:h3_index, H3IndexesOut], :h3_error_code
@@ -50,7 +51,7 @@ module H3
       attach_function :edge_length_m, :getHexagonEdgeLengthAvgM, [Resolution, :pointer], :h3_error_code
       attach_function :h3_faces, :getIcosahedronFaces, %i[h3_index buffer_out], :h3_error_code
       attach_function :max_face_count, :maxFaceCount, %i[h3_index pointer], :h3_error_code
-      attach_function :get_pentagon_indexes, :getPentagonCells, [:int, H3IndexesOut], :h3_error_code
+      attach_function :get_pentagon_indexes, :getPentagons, [:int, H3IndexesOut], :h3_error_code
       attach_function :res_0_indexes, :getRes0Cells, [H3IndexesOut], :h3_error_code
 
       # Distance functions
