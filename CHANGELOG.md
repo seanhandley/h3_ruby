@@ -6,9 +6,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 We track the MAJOR and MINOR version levels of Uber's H3 project (https://github.com/uber/h3) but maintain independent patch levels so we can make small fixes and non breaking changes.
 
-## [3.7.3] - Unreleased
+## [3.7.3] - 2025-04-04
 ### Fixed
 - `H3.from_string(nil)` should not crash
+- Cmake fixed
 
 ## [3.7.2] - 2020-07-17
 ### Fixed
