@@ -57,7 +57,7 @@ RSpec.describe H3 do
       let(:input) { "blah" }
 
       it "raises an error" do
-        expect { geo_json_to_coordinates }.to raise_error(ArgumentError)
+        expect { geo_json_to_coordinates }.to raise_error(MultiJson::ParseError)
       end
     end
 
