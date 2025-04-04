@@ -1,3 +1,5 @@
+require 'json'
+
 module H3
   # GeoJSON helper methods.
   #
