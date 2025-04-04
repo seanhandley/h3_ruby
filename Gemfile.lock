@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    h3 (3.7.2)
+    h3 (3.7.3)
       ffi (~> 1.9)
       rgeo-geojson (~> 2.1)
       zeitwerk (~> 2.5)
@@ -11,9 +11,11 @@ GEM
   specs:
     diff-lcs (1.5.1)
     ffi (1.17.1)
+    multi_json (1.15.0)
     rake (13.2.1)
-    rgeo (2.3.0)
-    rgeo-geojson (2.1.1)
+    rgeo (3.0.0)
+    rgeo-geojson (2.2.0)
+      multi_json (~> 1.15)
       rgeo (>= 1.0.0)
     rspec (3.13.0)
       rspec-core (~> 3.13.0)
