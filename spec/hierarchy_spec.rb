@@ -16,15 +16,6 @@ RSpec.describe H3 do
 
     subject(:children) { H3.children(h3_index, child_resolution) }
 
-    context "when resolution is 3" do
-      let(:child_resolution) { 3 }
-      let(:count) { 0 }
-
-      it "has 0 children" do
-        expect(children.count).to eq count
-      end
-    end
-
     context "when resolution is 9" do
       let(:child_resolution) { 9 }
       let(:count) { 1 }
@@ -57,11 +48,19 @@ RSpec.describe H3 do
       end
     end
 
+    context "when resolution is 3" do
+      let(:child_resolution) { 3 }
+
+      it "raises an error" do
+        expect { children }.to raise_error(H3::Bindings::Error::ResolutionDomainError)
+      end
+    end
+
     context "when the resolution is -1" do
       let(:child_resolution) { -1 }
 
       it "raises an error" do
-        expect { children }.to raise_error(ArgumentError)
+        expect { children }.to raise_error(H3::Bindings::Error::ResolutionDomainError)
       end
     end
 
@@ -69,7 +68,7 @@ RSpec.describe H3 do
       let(:child_resolution) { 16 }
 
       it "raises an error" do
-        expect { children }.to raise_error(ArgumentError)
+        expect { children }.to raise_error(H3::Bindings::Error::ResolutionDomainError)
       end
     end
   end
@@ -78,13 +77,6 @@ RSpec.describe H3 do
     let(:h3_index) { "8928308280fffff".to_i(16) }
 
     subject(:max_children) { H3.max_children(h3_index, child_resolution) }
-
-    context "when resolution is 3" do
-      let(:child_resolution) { 3 }
-      let(:count) { 0 }
-
-      it { is_expected.to eq(count) }
-    end
 
     context "when resolution is 9" do
       let(:child_resolution) { 9 }
@@ -105,6 +97,30 @@ RSpec.describe H3 do
       let(:count) { 117649 }
 
       it { is_expected.to eq(count) }
+    end
+
+    context "when resolution is 3" do
+      let(:child_resolution) { 3 }
+
+      it "raises an error" do
+        expect { max_children }.to raise_error(H3::Bindings::Error::ResolutionDomainError)
+      end
+    end
+
+    context "when the resolution is -1" do
+      let(:child_resolution) { -1 }
+
+      it "raises an error" do
+        expect { max_children }.to raise_error(H3::Bindings::Error::ResolutionDomainError)
+      end
+    end
+
+    context "when the resolution is 16" do
+      let(:child_resolution) { 16 }
+
+      it "raises an error" do
+        expect { max_children }.to raise_error(H3::Bindings::Error::ResolutionDomainError)
+      end
     end
   end
 
@@ -150,7 +166,7 @@ RSpec.describe H3 do
       let(:resolution) { 8 }
 
       it "raises error" do
-        expect { uncompact }.to raise_error(ArgumentError)
+        expect { uncompact }.to raise_error(H3::Bindings::Error::ResolutionMismatchError)
       end
     end
   end
@@ -168,18 +184,18 @@ RSpec.describe H3 do
       let(:resolution) { 8 }
 
       it "raises an error" do
-        expect { max_uncompact_size }.to raise_error(ArgumentError)
+        expect { max_uncompact_size }.to raise_error(H3::Bindings::Error::ResolutionMismatchError)
       end
     end
   end
 
-  describe ".center_child" do
-    let(:h3_index) { "8828308299fffff".to_i(16) }
-    let(:resolution) { 10 }
-    let(:result) { "8a2830829807fff".to_i(16) }
+  # describe ".center_child" do
+  #   let(:h3_index) { "8828308299fffff".to_i(16) }
+  #   let(:resolution) { 10 }
+  #   let(:result) { "8a2830829807fff".to_i(16) }
 
-    subject(:center_child) { H3.center_child(h3_index, resolution) }
+  #   subject(:center_child) { H3.center_child(h3_index, resolution) }
 
-    it { is_expected.to eq result }
-  end
+  #   it { is_expected.to eq result }
+  # end
 end

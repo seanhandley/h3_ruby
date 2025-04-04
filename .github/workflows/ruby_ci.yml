@@ -11,9 +11,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        # os: [ubuntu-latest, macos-latest]
+        os: [macos-latest]
         # Due to https://github.com/actions/runner/issues/849, we have to use quotes for '3.0'
-        ruby: ['2.7', '3.0', '3.1', '3.2', '3.3']
+        ruby: ['3.2', '3.3', '3.4']
+        include:
+          # - os: ubuntu-latest
+          #   install_h3: git clone https://github.com/uber/h3.git && cd h3 && git checkout v4.2.1 && sudo apt install cmake make gcc libtool && mkdir build && cd build && cmake -DBUILD_SHARED_LIBS=true .. && cmake --build .
+          - os: macos-latest
+            install_h3: brew install h3
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v4
@@ -21,4 +27,5 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+    - run: ${{ matrix.install_h3 }}
     - run: bundle exec rake

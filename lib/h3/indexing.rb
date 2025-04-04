@@ -29,10 +29,11 @@ module H3
         raise(ArgumentError, "Invalid coordinates")
       end
 
-      coords = GeoCoord.new
+      coords = LatLng.new
       coords[:lat] = degs_to_rads(lat)
       coords[:lon] = degs_to_rads(lon)
-      Bindings::Private.geo_to_h3(coords, resolution)
+
+      Bindings::Private.safe_call(:ulong_long, :geo_to_h3, coords, resolution)
     end
 
     # Derive coordinates for a given H3 index.
@@ -47,8 +48,10 @@ module H3
     #
     # @return [Array<Integer>] A coordinate pair.
     def to_geo_coordinates(h3_index)
-      coords = GeoCoord.new
-      Bindings::Private.h3_to_geo(h3_index, coords)
+      coords = LatLng.new
+      Bindings::Private.h3_to_geo(h3_index, coords).tap do |code|
+        Bindings::Error::raise_error(code) unless code.zero?
+      end
       [rads_to_degs(coords[:lat]), rads_to_degs(coords[:lon])]
     end
 
@@ -71,7 +74,7 @@ module H3
     #
     # @return [Array<Array<Integer>>] An array of six coordinate pairs.
     def to_boundary(h3_index)
-      geo_boundary = GeoBoundary.new
+      geo_boundary = CellBoundary.new
       Bindings::Private.h3_to_geo_boundary(h3_index, geo_boundary)
       geo_boundary[:verts].take(geo_boundary[:num_verts]).map do |d|
         [rads_to_degs(d[:lat]), rads_to_degs(d[:lon])]
