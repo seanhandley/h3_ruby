@@ -10,7 +10,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     diff-lcs (1.5.1)
-    ffi (1.17.1)
+    ffi (1.17.2)
     multi_json (1.15.0)
     rake (13.2.1)
     rgeo (3.0.0)
