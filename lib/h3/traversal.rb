@@ -299,9 +299,12 @@ module H3
     # @return [Array<Integer>] H3 indexes
     def line(origin, destination)
       max_hexagons = line_size(origin, destination)
+      raise(ArgumentError, "Could not compute line") if max_hexagons.negative?
+
       hexagons = H3Indexes.of_size(max_hexagons)
       res = Bindings::Private.h3_line(origin, destination, hexagons)
       raise(ArgumentError, "Could not compute line") if res.negative?
+
       hexagons.read
     end
 
