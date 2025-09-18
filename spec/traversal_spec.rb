@@ -64,7 +64,7 @@ RSpec.describe H3 do
       it "raises an error" do
         expect { max_kring_size }.to raise_error(RangeError)
       end
-    end  
+    end
   end
 
   describe ".k_ring_distances" do
@@ -364,5 +364,14 @@ RSpec.describe H3 do
     subject(:line) { H3.line(origin, destination) }
 
     it { is_expected.to eq(result) }
+
+    context "when a line cannot be drawn" do
+      let(:origin) { "872889b8affffff".to_i(16) }
+      let(:destination) { "872aa6c80ffffff".to_i(16) }
+
+      it "should raise an ArgumentError" do
+        expect { subject }.to raise_error(ArgumentError)
+      end
+    end
   end
 end
